@@ -947,18 +947,18 @@ const ViewApplication = () => {
       )}
 
       {/* Header */}
-      <header className="bg-indigo-700 text-white py-6 shadow-lg">
-        <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
-          <div className="flex items-center space-x-3 mb-4 md:mb-0">
+      <header className="bg-indigo-700 text-white py-4 sm:py-6 shadow-lg">
+        <div className="container mx-auto px-4 flex flex-col sm:flex-row justify-between items-center">
+          <div className="flex items-center space-x-3 mb-3 sm:mb-0">
             <img
               src="https://www.valmo.in/static-assets/valmo-web/valmo-logo-white.svg"
               alt="VALMO"
-              className="h-8"
+              className="h-6 sm:h-8"
             />
-            <h1 className="text-2xl font-bold">VALMO Logistics</h1>
+            <h1 className="text-xl sm:text-2xl font-bold">VALMO Logistics</h1>
           </div>
-          <div className="text-center md:text-right">
-            <div className="text-sm">
+          <div className="text-center sm:text-right">
+            <div className="text-xs sm:text-sm">
               Application No:{" "}
               <span className="font-mono">{applicationNumber}</span>
             </div>
