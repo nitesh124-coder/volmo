@@ -87,17 +87,17 @@ const CustomerLogin = () => {
     >
       <Navbar />
 
-      <div className="flex min-h-screen">
+      <div className="flex flex-col lg:flex-row min-h-screen">
         <div
-          className="hidden lg:flex lg:w-1/2 items-center justify-center p-8"
+          className="hidden lg:flex lg:w-1/2 items-center justify-center p-4 sm:p-8"
           style={{
             background:
               "linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(30, 58, 138, 0.1) 100%)",
           }}
         >
           <div className="relative">
-            <div className="absolute -top-10 -right-10 w-32 h-32 bg-blue-400 rounded-full opacity-20"></div>
-            <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-blue-300 rounded-full opacity-30"></div>
+            <div className="absolute -top-6 -right-6 sm:-top-10 sm:-right-10 w-24 h-24 sm:w-32 sm:h-32 bg-blue-400 rounded-full opacity-20"></div>
+            <div className="absolute -bottom-6 -left-6 sm:-bottom-10 sm:-left-10 w-16 h-16 sm:w-24 sm:h-24 bg-blue-300 rounded-full opacity-30"></div>
             <img
               src="/images/truck_image.png"
               alt="VALMO Truck"
@@ -106,18 +106,18 @@ const CustomerLogin = () => {
           </div>
         </div>
 
-        <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
-          <div className="w-full max-w-md p-8 bg-white rounded-xl shadow-2xl">
-            <div className="text-center mb-8">
-              <div className="inline-block bg-green-600 rounded-lg p-4 mb-6">
+        <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-8">
+          <div className="w-full max-w-md p-6 sm:p-8 bg-white rounded-xl shadow-2xl">
+            <div className="text-center mb-6 sm:mb-8">
+              <div className="inline-block bg-green-600 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
                 <img
                   src="/images/valmo-logo.svg"
                   alt="VALMO Logo"
-                  className="h-8"
+                  className="h-6 sm:h-8"
                 />
               </div>
-              <p className="text-gray-600 text-sm mb-2">Welcome back !!</p>
-              <h2 className="text-2xl font-bold text-gray-900">Sign In</h2>
+              <p className="text-gray-600 text-xs sm:text-sm mb-1 sm:mb-2">Welcome back !!</p>
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Sign In</h2>
             </div>
 
             {message.text && (
@@ -136,7 +136,7 @@ const CustomerLogin = () => {
               <div>
                 <label
                   htmlFor="userId"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                  className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2"
                 >
                   Email
                 </label>
@@ -147,7 +147,7 @@ const CustomerLogin = () => {
                   value={formData.userId}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-3 border rounded-lg transition-all duration-200"
+                  className="w-full px-3 py-2 sm:px-4 sm:py-3 border rounded-lg transition-all duration-200 text-sm sm:text-base"
                   style={{
                     border: "1px solid #d1fae5",
                     backgroundColor: "#f0fdf4",
@@ -159,7 +159,7 @@ const CustomerLogin = () => {
               <div>
                 <label
                   htmlFor="password"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                  className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2"
                 >
                   Password
                 </label>
@@ -170,7 +170,7 @@ const CustomerLogin = () => {
                   value={formData.password}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-3 border rounded-lg transition-all duration-200"
+                  className="w-full px-3 py-2 sm:px-4 sm:py-3 border rounded-lg transition-all duration-200 text-sm sm:text-base"
                   style={{
                     border: "1px solid #d1fae5",
                     backgroundColor: "#f0fdf4",
@@ -182,7 +182,7 @@ const CustomerLogin = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-3 text-white font-medium rounded-lg flex items-center justify-center transition-all duration-200 disabled:opacity-50"
+                className="w-full py-2 sm:py-3 text-white font-medium rounded-lg flex items-center justify-center transition-all duration-200 disabled:opacity-50 text-sm sm:text-base"
                 style={{
                   background: "#1e293b",
                 }}
@@ -191,8 +191,8 @@ const CustomerLogin = () => {
               </button>
             </form>
 
-            <div className="mt-8 text-center">
-              <p className="text-sm text-gray-600 mb-2">
+            <div className="mt-6 sm:mt-8 text-center">
+              <p className="text-xs sm:text-sm text-gray-600 mb-1 sm:mb-2">
                 Can't Find Your confirmation Details?
               </p>
               <p className="text-xs text-gray-500">

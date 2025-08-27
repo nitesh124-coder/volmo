@@ -161,10 +161,10 @@ const MultiLogin = () => {
       <Navbar />
 
       {/* MAIN CONTENT */}
-      <main className="flex flex-1 items-center justify-center">
-        <div className="flex w-full max-w-4xl bg-white shadow-lg rounded-lg overflow-hidden">
+      <main className="flex flex-1 items-center justify-center p-4">
+        <div className="flex flex-col lg:flex-row w-full max-w-4xl bg-white shadow-lg rounded-lg overflow-hidden">
           {/* LEFT SIDE IMAGE */}
-          <div className="hidden md:flex w-1/2 items-center justify-center bg-gray-50">
+          <div className="hidden lg:flex lg:w-1/2 items-center justify-center bg-gray-50 p-4">
             <img
               src="/images/truck_image.png"
               alt="Login Illustration"
@@ -173,17 +173,17 @@ const MultiLogin = () => {
           </div>
 
           {/* RIGHT SIDE FORM */}
-          <div className="w-full md:w-1/2 p-8 flex flex-col justify-center bg-gradient-to-b from-gray-50 to-white">
+          <div className="w-full lg:w-1/2 p-6 flex flex-col justify-center bg-gradient-to-b from-gray-50 to-white">
             {/* Login Type Selection */}
             {!showForm && (
               <div className="space-y-4 mb-6">
-                <h2 className="text-2xl font-bold text-center text-blue-600 mb-4">
+                <h2 className="text-xl sm:text-2xl font-bold text-center text-blue-600 mb-4">
                   Select Login Type
                 </h2>
 
                 <button
                   onClick={() => showLoginForm("admin")}
-                  className="w-full bg-green-600 text-white py-3 rounded hover:bg-green-700 transition flex items-center justify-center space-x-2"
+                  className="w-full bg-green-600 text-white py-2 sm:py-3 rounded hover:bg-green-700 transition flex items-center justify-center space-x-2 text-sm sm:text-base"
                 >
                   <i className="fas fa-user-shield"></i>
                   <span>Admin Login</span>
@@ -191,7 +191,7 @@ const MultiLogin = () => {
 
                 <button
                   onClick={() => showLoginForm("agent")}
-                  className="w-full bg-purple-600 text-white py-3 rounded hover:bg-purple-700 transition flex items-center justify-center space-x-2"
+                  className="w-full bg-purple-600 text-white py-2 sm:py-3 rounded hover:bg-purple-700 transition flex items-center justify-center space-x-2 text-sm sm:text-base"
                 >
                   <i className="fas fa-user-tie"></i>
                   <span>Agent Login</span>
@@ -205,23 +205,23 @@ const MultiLogin = () => {
                 <div className="flex items-center mb-4">
                   <button
                     onClick={showLoginTypeSelection}
-                    className="text-blue-600 hover:text-blue-800"
+                    className="text-blue-600 hover:text-blue-800 text-sm"
                   >
                     <i className="fas fa-arrow-left mr-2"></i>Back
                   </button>
                 </div>
 
-                <h2 className="text-2xl font-bold text-center text-blue-600 mb-2">
+                <h2 className="text-xl sm:text-2xl font-bold text-center text-blue-600 mb-2">
                   {getLoginTitle()}
                 </h2>
-                <p className="text-gray-500 text-center mb-6">
+                <p className="text-gray-500 text-center mb-4 sm:mb-6 text-sm">
                   Please enter your credentials
                 </p>
 
                 {/* Alert messages */}
                 {message.text && (
                   <div
-                    className={`text-center py-2 mb-4 rounded ${
+                    className={`text-center py-2 mb-4 rounded text-sm ${
                       message.type === "error"
                         ? "bg-red-100 text-red-600"
                         : "bg-green-100 text-green-600"
@@ -233,7 +233,7 @@ const MultiLogin = () => {
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
-                    <label htmlFor="userId" className="block mb-1 font-medium">
+                    <label htmlFor="userId" className="block mb-1 font-medium text-sm">
                       {getUserIdLabel()}
                     </label>
                     <input
@@ -242,14 +242,14 @@ const MultiLogin = () => {
                       name="userId"
                       value={formData.userId}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-black"
+                      className="w-full px-3 py-2 sm:px-4 sm:py-2 border rounded focus:outline-none focus:ring-2 focus:ring-black text-sm"
                       placeholder={getUserIdPlaceholder()}
                     />
                   </div>
                   <div>
                     <label
                       htmlFor="password"
-                      className="block mb-1 font-medium"
+                      className="block mb-1 font-medium text-sm"
                     >
                       Password
                     </label>
@@ -259,7 +259,7 @@ const MultiLogin = () => {
                       name="password"
                       value={formData.password}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-black"
+                      className="w-full px-3 py-2 sm:px-4 sm:py-2 border rounded focus:outline-none focus:ring-2 focus:ring-black text-sm"
                       placeholder={getPasswordPlaceholder()}
                     />
                   </div>
@@ -267,7 +267,7 @@ const MultiLogin = () => {
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full bg-black text-white py-2 rounded hover:bg-gray-800 transition"
+                    className="w-full bg-black text-white py-2 rounded hover:bg-gray-800 transition text-sm"
                   >
                     {isLoading ? "Logging in..." : "Login"}
                   </button>
@@ -279,17 +279,17 @@ const MultiLogin = () => {
       </main>
 
       {/* FOOTER */}
-      <footer className="bg-gray-900 text-gray-300 py-6">
+      <footer className="bg-gray-900 text-gray-300 py-4 sm:py-6">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="text-center md:text-left">
               <div className="flex items-center justify-center md:justify-start space-x-2 mb-2">
-                <i className="fas fa-envelope text-blue-400"></i>
-                <span className="text-sm">support@valmodeliver.in</span>
+                <i className="fas fa-envelope text-blue-400 text-xs sm:text-sm"></i>
+                <span className="text-xs sm:text-sm">support@valmodeliver.in</span>
               </div>
               <p className="text-xs">© 2025 Valmo. All rights reserved.</p>
             </div>
-            <div className="flex space-x-6 text-sm">
+            <div className="flex space-x-4 sm:space-x-6 text-xs sm:text-sm">
               <a href="/privacy" className="hover:text-white transition-colors">
                 Privacy Policy
               </a>
