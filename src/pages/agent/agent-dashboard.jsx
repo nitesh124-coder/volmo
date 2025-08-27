@@ -190,7 +190,7 @@ const AgentDashboard = () => {
   };
 
   const handleViewApplication = (applicationId) => {
-    navigate(`/view-application?id=${applicationId}`);
+    navigate(`/view-application/${applicationId}`);
   };
 
   const handleEditApplication = (application) => {
@@ -610,7 +610,7 @@ const AgentDashboard = () => {
                           <div className="flex items-center space-x-2">
                             <button
                               onClick={() =>
-                                handleViewApplication(application._id)
+                                handleViewApplication(application.email)
                               }
                               className="text-blue-600 hover:text-blue-900 bg-gray-100 hover:bg-gray-200 p-2 rounded-full transition-all duration-200 shadow-sm hover:shadow-md"
                               title="View Application"
