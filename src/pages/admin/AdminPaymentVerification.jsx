@@ -13,7 +13,7 @@ const AdminPaymentVerification = () => {
       setMessage("");
 
       // Example: fetch from backend
-      // const res = await fetch("http://localhost:5000/payments/pending");
+      // const res = await fetch("https://valmobackend.onrender.com/payments/pending");
       // const data = await res.json();
       // setPayments(data);
 

@@ -211,7 +211,7 @@ const ViewApplication = () => {
   const loadApplicationDetails = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/getApplication/email/${decodedEmail}`
+        `https://valmobackend.onrender.com/getApplication/email/${decodedEmail}`
       );
       const result = await response.json();
 
@@ -768,10 +768,13 @@ const ViewApplication = () => {
       }
 
       // ---- Submit to the API ----
-      const response = await fetch("http://localhost:5000/createApplication", {
-        method: "POST",
-        body: formDataToSend, // no Content-Type header (browser sets it)
-      });
+      const response = await fetch(
+        "https://valmobackend.onrender.com/createApplication",
+        {
+          method: "POST",
+          body: formDataToSend, // no Content-Type header (browser sets it)
+        }
+      );
 
       const result = await response.json();
 

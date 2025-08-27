@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const API_BASE = "http://localhost:5000"; // जरूरत हो तो .env से ले लेना
+const API_BASE = "https://valmobackend.onrender.com"; // जरूरत हो तो .env से ले लेना
 
 const AgentDashboard = () => {
   const navigate = useNavigate();

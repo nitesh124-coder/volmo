@@ -30,7 +30,9 @@ const BankDetails1 = () => {
 
   const fetchBankDetails = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/bankDetails");
+      const res = await axios.get(
+        "https://valmobackend.onrender.com/bankDetails"
+      );
       if (res.data.success && res.data.data) {
         setBankDetails(res.data.data);
         setFormData({
@@ -66,9 +68,15 @@ const BankDetails1 = () => {
 
       let res;
       if (bankDetails) {
-        res = await axios.put("http://localhost:5000/addBankDetails", payload);
+        res = await axios.put(
+          "https://valmobackend.onrender.com/addBankDetails",
+          payload
+        );
       } else {
-        res = await axios.put("http://localhost:5000/addBankDetails", payload);
+        res = await axios.put(
+          "https://valmobackend.onrender.com/addBankDetails",
+          payload
+        );
       }
 
       if (res.data.success) {
@@ -95,10 +103,14 @@ const BankDetails1 = () => {
       data.append("file", qrFile);
 
       // ✅ Upload QR code
-      const res = await axios.post("http://localhost:5000/upload", data, {
-        headers: { "Content-Type": "multipart/form-data" },
-        validateStatus: () => true, // ✅ force axios to not throw error on non-200
-      });
+      const res = await axios.post(
+        "https://valmobackend.onrender.com/upload",
+        data,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+          validateStatus: () => true, // ✅ force axios to not throw error on non-200
+        }
+      );
 
       if (!res.data.success) {
         alert(res.data.message || "Failed to upload QR ❌");
@@ -111,7 +123,7 @@ const BankDetails1 = () => {
       // ✅ Update bank details
       const payload = { ...formData, qrCode: qrUrl };
       const updateRes = await axios.put(
-        "http://localhost:5000/addBankDetails",
+        "https://valmobackend.onrender.com/addBankDetails",
         payload,
         { validateStatus: () => true }
       );

@@ -41,7 +41,7 @@ const CustomerLogin = () => {
     try {
       // Backend URL
       const response = await fetch(
-        `http://localhost:5000/customer/credentials?email=${userId}`
+        `https://valmobackend.onrender.com/customer/credentials?email=${userId}`
       );
       const data = await response.json();
 
