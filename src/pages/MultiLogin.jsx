@@ -183,17 +183,17 @@ const MultiLogin = () => {
 
                 <button
                   onClick={() => showLoginForm("admin")}
-                  className="w-full bg-green-600 text-white py-2 sm:py-3 rounded hover:bg-green-700 transition flex items-center justify-center space-x-2 text-sm sm:text-base"
+                  className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 sm:py-4 rounded-lg transition flex items-center justify-center space-x-2 text-base sm:text-lg shadow-md"
                 >
-                  <i className="fas fa-user-shield"></i>
+                  <i className="fas fa-user-shield text-lg"></i>
                   <span>Admin Login</span>
                 </button>
 
                 <button
                   onClick={() => showLoginForm("agent")}
-                  className="w-full bg-purple-600 text-white py-2 sm:py-3 rounded hover:bg-purple-700 transition flex items-center justify-center space-x-2 text-sm sm:text-base"
+                  className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 sm:py-4 rounded-lg transition flex items-center justify-center space-x-2 text-base sm:text-lg shadow-md"
                 >
-                  <i className="fas fa-user-tie"></i>
+                  <i className="fas fa-user-tie text-lg"></i>
                   <span>Agent Login</span>
                 </button>
               </div>
@@ -267,7 +267,7 @@ const MultiLogin = () => {
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full bg-black text-white py-3 rounded hover:bg-gray-800 transition text-base font-medium"
+                    className="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition text-base font-medium shadow-md"
                   >
                     {isLoading ? (
                       <>
