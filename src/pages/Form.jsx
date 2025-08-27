@@ -7,6 +7,7 @@ const Form = () => {
   const [inviteToken, setInviteToken] = useState(null);
   const [agentInfo, setAgentInfo] = useState(null);
   const [applicationNumber, setApplicationNumber] = useState("");
+  const [passportPhotoFile, setPassportPhotoFile] = useState(null);
   const [formData, setFormData] = useState({
     // Personal Information
     fullName: "",
@@ -121,6 +122,7 @@ const Form = () => {
     businessProof: useRef(null),
     cancelledCheque: useRef(null),
     addressProof: useRef(null),
+    passportPhoto: useRef(null),
   };
 
   // Generate application number
@@ -227,19 +229,19 @@ const Form = () => {
   const handlePhotoUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Validate file size (5MB max)
       if (file.size > 5 * 1024 * 1024) {
         showToastMessage("File size must be less than 5MB", "error");
         e.target.value = "";
         return;
       }
 
-      // Validate file type
       if (!file.type.startsWith("image/")) {
         showToastMessage("Please select a valid image file", "error");
         e.target.value = "";
         return;
       }
+
+      setPassportPhotoFile(file); // 👈 yaha file save ho gayi
 
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -699,8 +701,11 @@ const Form = () => {
       });
 
       // Append files with backend field names
+      if (passportPhotoFile) {
+        formDataToSend.append("photo", passportPhotoFile); // 👈 backend schema me "photo"
+      }
       if (filePreviews.passport?.file) {
-        formDataToSend.append("photo", filePreviews.passport.file);
+        formDataToSend.append("aadharBack", filePreviews.passport.file);
       }
       if (filePreviews.aadharCard?.file) {
         formDataToSend.append("aadharCard", filePreviews.aadharCard.file);
@@ -1226,6 +1231,7 @@ const Form = () => {
                     id="passportPhoto"
                     name="passportPhoto"
                     accept="image/*"
+                    ref={fileInputRefs.passportPhoto}
                     onChange={handlePhotoUpload}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />

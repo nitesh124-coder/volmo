@@ -344,40 +344,10 @@ const CustomerDashboard = () => {
                       )}
                     </li>
                     <li>
-                      <strong>Cancelled Cheque:</strong>{" "}
+                      <strong>Passbook/Cancelled Cheque:</strong>{" "}
                       {applicationDetails.cancelCheque ? (
                         <a
                           href={applicationDetails.cancelCheque}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="text-blue-600 underline"
-                        >
-                          View
-                        </a>
-                      ) : (
-                        "Not Uploaded"
-                      )}
-                    </li>
-                    <li>
-                      <strong>GST Certificate:</strong>{" "}
-                      {applicationDetails.gstCertificate ? (
-                        <a
-                          href={applicationDetails.gstCertificate}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="text-blue-600 underline"
-                        >
-                          View
-                        </a>
-                      ) : (
-                        "Not Uploaded"
-                      )}
-                    </li>
-                    <li>
-                      <strong>Address Proof:</strong>{" "}
-                      {applicationDetails.addressProof ? (
-                        <a
-                          href={applicationDetails.addressProof}
                           target="_blank"
                           rel="noreferrer"
                           className="text-blue-600 underline"

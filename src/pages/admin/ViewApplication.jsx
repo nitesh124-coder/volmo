@@ -1222,49 +1222,37 @@ const ViewApplication = () => {
             </div>
 
             {/* Passport Photo Upload Section */}
-            <div className="mb-10">
-              <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center">
-                <i className="fas fa-camera mr-2 text-indigo-600"></i> Passport
-                Size Photo
-              </h2>
-              <div className="flex flex-col md:flex-row items-center gap-6">
-                {/* Photo Preview */}
-                <div className="flex-shrink-0">
-                  <div className="w-32 h-32 rounded-full border-4 border-gray-300 bg-gray-100 flex items-center justify-center overflow-hidden">
-                    {photoPreview ? (
-                      <img
-                        src={photoPreview}
-                        alt="Passport Photo"
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <i className="fas fa-user text-gray-400 text-4xl"></i>
-                    )}
-                  </div>
-                </div>
-
-                {/* Upload Controls */}
-                <div className="flex-1">
-                  <label
-                    htmlFor="passportPhoto"
-                    className="block text-sm font-medium text-gray-700 mb-2"
-                  >
-                    Upload Passport Size Photo*
-                  </label>
-                  <input
-                    type="file"
-                    id="passportPhoto"
-                    name="passportPhoto"
-                    accept="image/*"
-                    onChange={handlePhotoUpload}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            <div className="flex-shrink-0">
+              <div className="w-32 h-32 rounded-full border-4 border-gray-300 bg-gray-100 flex items-center justify-center overflow-hidden">
+                {ApplicationDetails?.photo ? (
+                  <img
+                    src={ApplicationDetails.photo}
+                    alt="Passport Photo"
+                    className="w-full h-full object-cover"
                   />
-                  <p className="text-sm text-gray-500 mt-2">
-                    Please upload a clear passport-size photograph (JPG, PNG,
-                    max 5MB)
-                  </p>
-                </div>
+                ) : (
+                  <i className="fas fa-user text-gray-400 text-4xl"></i>
+                )}
               </div>
+            </div>
+
+            {/* View Controls */}
+            <div className="flex-1">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Passport Size Photo
+              </label>
+              {ApplicationDetails?.photo ? (
+                <a
+                  href={ApplicationDetails.photo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-indigo-600 hover:underline text-sm"
+                >
+                  View
+                </a>
+              ) : (
+                <span className="text-gray-500 text-sm">Not Uploaded</span>
+              )}
             </div>
 
             {/* Section 2: Contact Details */}
@@ -2870,247 +2858,49 @@ const ViewApplication = () => {
               <i className="fas fa-file mr-2 text-indigo-600"></i> Documents
             </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-              {/* PAN Card */}
-              {ApplicationDetails?.panCard && (
-                <div className="bg-gray-100 p-4 rounded-lg flex items-center justify-between">
-                  <div className="flex items-center">
-                    <i className="fas fa-file text-indigo-500 mr-2"></i>
-                    <span className="text-sm font-medium text-gray-700">
-                      PAN Card
-                    </span>
-                  </div>
-                  <a
-                    href={ApplicationDetails.panCard}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-indigo-600 hover:underline text-sm"
-                  >
-                    View
-                  </a>
-                </div>
-              )}
-
-              {/* Aadhar Card Front */}
-              {ApplicationDetails?.aadharCardFront && (
-                <div className="bg-gray-100 p-4 rounded-lg flex items-center justify-between">
-                  <div className="flex items-center">
-                    <i className="fas fa-file text-indigo-500 mr-2"></i>
-                    <span className="text-sm font-medium text-gray-700">
-                      Aadhar Card (Front)
-                    </span>
-                  </div>
-                  <a
-                    href={ApplicationDetails.aadharCardFront}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-indigo-600 hover:underline text-sm"
-                  >
-                    View
-                  </a>
-                </div>
-              )}
-
-              {/* Aadhar Card Back */}
-              {ApplicationDetails?.aadharCardBack && (
-                <div className="bg-gray-100 p-4 rounded-lg flex items-center justify-between">
-                  <div className="flex items-center">
-                    <i className="fas fa-file text-indigo-500 mr-2"></i>
-                    <span className="text-sm font-medium text-gray-700">
-                      Aadhar Card (Back)
-                    </span>
-                  </div>
-                  <a
-                    href={ApplicationDetails.aadharCardBack}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-indigo-600 hover:underline text-sm"
-                  >
-                    View
-                  </a>
-                </div>
-              )}
-
-              {/* Bank Passbook / Cheque */}
-              {ApplicationDetails?.cancelledCheque && (
-                <div className="bg-gray-100 p-4 rounded-lg flex items-center justify-between">
-                  <div className="flex items-center">
-                    <i className="fas fa-file text-indigo-500 mr-2"></i>
-                    <span className="text-sm font-medium text-gray-700">
-                      Bank Passbook / Cheque
-                    </span>
-                  </div>
-                  <a
-                    href={ApplicationDetails.cancelledCheque}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-indigo-600 hover:underline text-sm"
-                  >
-                    View
-                  </a>
-                </div>
-              )}
-            </div>
-
-            {/* Section 12: Review & Submit Content */}
             <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center">
-              <i className="fas fa-check-circle mr-2 text-indigo-600"></i> Final
-              Review & Declaration
+              <i className="fas fa-file mr-2 text-indigo-600"></i> Documents
             </h2>
-            <div className="bg-gray-50 p-6 rounded-lg mb-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">
-                Terms & Conditions
-              </h3>
-              <div className="bg-white p-4 rounded-lg shadow-sm max-h-64 overflow-y-auto">
-                <ol className="list-decimal pl-5 space-y-3 text-sm text-gray-700">
-                  <li>
-                    The applicant must meet the minimum space and investment
-                    requirements as set by Volmo Logistics.
-                  </li>
-                  <li>
-                    The franchisee is responsible for obtaining all necessary
-                    local business permits and legal clearances.
-                  </li>
-                  <li>
-                    The franchisee must operate under Volmo Logistics' branding,
-                    policies, and operational guidelines.
-                  </li>
-                  <li>
-                    Any false or misleading information provided in this form
-                    may lead to disqualification.
-                  </li>
-                  <li>
-                    The franchisee must maintain a minimum monthly operational
-                    standard as per company requirements.
-                  </li>
-                  <li>
-                    Volmo Logistics reserves the right to terminate the
-                    franchise agreement if performance benchmarks are not met.
-                  </li>
-                  <li>
-                    The franchisee must not engage in any competing business
-                    that directly affects Volmo Logistics' operations.
-                  </li>
-                  <li>
-                    The investment amount is refundable, except for the
-                    registration fee of ₹18,600.
-                  </li>
-                  <li>
-                    The security deposit earns 7.5% annual interest, and 90% of
-                    it is refundable after the agreement period.
-                  </li>
-                  <li>
-                    Any legal disputes will be resolved under the jurisdiction
-                    of Bangalore, Karnataka.
-                  </li>
-                </ol>
-              </div>
-              <div className="mt-4">
-                <label className="inline-flex items-center">
-                  <input
-                    type="checkbox"
-                    id="agreeTerms"
-                    name="agreeTerms"
-                    checked={ApplicationDetails.agreeTerms || false}
-                    onChange={handleInputChange}
-                    required
-                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
-                  />
-                  <span className="ml-2 text-gray-700">
-                    I agree to the terms and conditions*
-                  </span>
-                </label>
-                {errors.agreeTerms && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.agreeTerms}
-                  </p>
-                )}
-              </div>
-            </div>
-            <div className="bg-gray-50 p-6 rounded-lg mb-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">
-                Disclaimer
-              </h3>
-              <div className="bg-white p-4 rounded-lg shadow-sm max-h-64 overflow-y-auto">
-                <ul className="list-disc pl-5 space-y-3 text-sm text-gray-700">
-                  <li>
-                    Submission of this application does not guarantee approval
-                    of the franchise.
-                  </li>
-                  <li>
-                    Volmo Logistics reserves the right to verify the information
-                    provided and conduct background checks.
-                  </li>
-                  <li>
-                    The company is not liable for any investment made before
-                    official franchise approval.
-                  </li>
-                  <li>
-                    The one-time setup fee, agreement fee, and security deposit
-                    are fully refundable, except for the registration fee.
-                  </li>
-                  <li>
-                    The security deposit earns an annual interest of 7.5%.
-                  </li>
-                  <li>
-                    Any changes to policies, investment requirements, or
-                    operational guidelines will be communicated in writing.
-                  </li>
-                  <li>
-                    Any legal disputes or disagreements will be subject to the
-                    jurisdiction of Bangalore, Karnataka.
-                  </li>
-                  <li>
-                    This form and its contents remain the property of Volmo
-                    Logistics and must not be copied or shared without
-                    permission.
-                  </li>
-                </ul>
-              </div>
-              <div className="mt-4">
-                <label className="inline-flex items-center">
-                  <input
-                    type="checkbox"
-                    id="agreeDisclaimer"
-                    name="agreeDisclaimer"
-                    checked={ApplicationDetails.agreeDisclaimer || false}
-                    onChange={handleInputChange}
-                    required
-                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
-                  />
-                  <span className="ml-2 text-gray-700">
-                    I have read and understood the disclaimer*
-                  </span>
-                </label>
-                {errors.agreeDisclaimer && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.agreeDisclaimer}
-                  </p>
-                )}
-              </div>
-            </div>
 
-            {/* Final Submit Button (Centered) */}
-            <div className="flex justify-center mt-8">
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className={`px-8 py-4 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:from-green-700 hover:to-green-800 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-300 transform hover:scale-105 flex items-center font-semibold text-lg shadow-lg ${
-                  isSubmitting ? "opacity-75 cursor-not-allowed" : ""
-                }`}
-              >
-                {isSubmitting ? (
-                  <>
-                    <i className="fas fa-spinner fa-spin mr-3"></i>{" "}
-                    Submitting...
-                  </>
-                ) : (
-                  <>
-                    <i className="fas fa-paper-plane mr-3"></i> Submit
-                    Application
-                  </>
-                )}
-              </button>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+              {[
+                { key: "panCard", label: "PAN Card" },
+                { key: "aadharCard", label: "Aadhar Card (Front)" },
+                { key: "aadharBack", label: "Aadhar Card (Back)" },
+                { key: "cancelCheque", label: "Bank Passbook / Cheque" },
+              ].map((doc) => (
+                <div
+                  key={doc.key}
+                  className="bg-gray-100 p-4 rounded-lg flex flex-col items-center justify-center"
+                >
+                  <div className="w-full h-60 border-2 border-gray-300 bg-white flex items-center justify-center overflow-hidden mb-3 rounded-lg">
+                    {ApplicationDetails?.[doc.key] ? (
+                      <img
+                        src={ApplicationDetails[doc.key]}
+                        alt={doc.label}
+                        className="w-full h-full object-contain"
+                      />
+                    ) : (
+                      <i className="fas fa-file text-gray-400 text-6xl"></i>
+                    )}
+                  </div>
+                  <span className="text-base font-medium text-gray-700 mb-1">
+                    {doc.label}
+                  </span>
+                  {ApplicationDetails?.[doc.key] ? (
+                    <a
+                      href={ApplicationDetails[doc.key]}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-indigo-600 hover:underline text-sm"
+                    >
+                      View
+                    </a>
+                  ) : (
+                    <span className="text-gray-500 text-sm">Not Uploaded</span>
+                  )}
+                </div>
+              ))}
             </div>
           </form>
         </div>
