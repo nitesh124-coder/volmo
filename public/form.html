@@ -1,0 +1,2568 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Volmo Logistics - Franchisee Application</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/uploads/fevicon.jpg">
+    <link rel="shortcut icon" type="image/x-icon" href="/uploads/fevicon.jpg">
+    <link rel="apple-touch-icon" href="/uploads/fevicon.jpg">
+    <meta name="msapplication-TileImage" content="/uploads/fevicon.jpg">
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <style>
+      body {
+        background: linear-gradient(135deg, rgba(9, 45, 94, 0.1) 0%, rgba(30, 64, 175, 0.1) 100%),
+                    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><pattern id="truck-pattern" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse"><g opacity="0.03"><path d="M20 50h15v10h20v-10h15v20h-50z" fill="%23092d5e"/><circle cx="30" cy="75" r="5" fill="%23092d5e"/><circle cx="60" cy="75" r="5" fill="%23092d5e"/></g></pattern></defs><rect width="100%" height="100%" fill="url(%23truck-pattern)"/></svg>');
+        background-size: 200px 200px, cover;
+        background-attachment: fixed;
+        min-height: 100vh;
+        font-family: 'Inter', sans-serif;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+      }
+
+      /* Mobile-first responsive design */
+      @media (max-width: 320px) {
+        .container { padding: 0 10px; }
+        .form-container { padding: 15px; margin: 10px 0; }
+        h1 { font-size: 1.5rem; }
+        h2 { font-size: 1.2rem; }
+        .grid { grid-template-columns: 1fr; gap: 15px; }
+        .md\\:grid-cols-2 { grid-template-columns: 1fr; }
+        input, select, textarea { font-size: 16px; } /* Prevent zoom on iOS */
+        .company-header { padding: 20px 15px; }
+      }
+
+      @media (max-width: 480px) {
+        .container { padding: 0 15px; }
+        .form-container { padding: 20px; }
+        .grid { gap: 20px; }
+        .file-upload { padding: 20px; }
+        button { padding: 12px 20px; font-size: 14px; }
+        .company-header { padding: 25px 20px; }
+      }
+
+      @media (max-width: 768px) {
+        .md\\:grid-cols-2 { grid-template-columns: 1fr; }
+        .md\\:col-span-2 { grid-column: span 1; }
+        .flex { flex-direction: column; }
+        .justify-end { justify-content: center; }
+        .text-right { text-align: center; }
+        .company-header { text-align: center; }
+      }
+
+      @media (min-width: 769px) and (max-width: 1024px) {
+        .container { max-width: 95%; }
+        .form-container { padding: 30px; }
+      }
+
+      @media (min-width: 1025px) {
+        .container { max-width: 1200px; }
+      }
+
+      .form-container {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .company-header {
+        background: linear-gradient(135deg, #092d5e 0%, #1e40af 100%);
+        border-radius: 20px 20px 0 0;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .company-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><g opacity="0.1"><path d="M10 30h20v15h15v-15h20v25h-55z" fill="white"/><circle cx="25" cy="65" r="7" fill="white"/><circle cx="50" cy="65" r="7" fill="white"/></g></svg>');
+        background-size: 80px 80px;
+      }
+
+      .toast {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 25px;
+        border-radius: 12px;
+        color: white;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        transform: translateX(150%);
+        transition: transform 0.3s ease-in-out;
+        z-index: 1000;
+        backdrop-filter: blur(10px);
+      }
+      .toast.show {
+        transform: translateX(0);
+      }
+      .toast.success {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      }
+      .toast.error {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      }
+
+      .input-field {
+        transition: all 0.3s ease;
+        border: 2px solid #e5e7eb;
+      }
+      .input-field:focus {
+        border-color: #4f46e5;
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        transform: translateY(-1px);
+      }
+      .input-field.error {
+        border-color: #ef4444;
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+      }
+
+      .file-upload {
+        border: 2px dashed #cbd5e0;
+        transition: all 0.3s ease;
+        border-radius: 12px;
+      }
+      .file-upload:hover {
+        border-color: #4f46e5;
+        background-color: #f8fafc;
+      }
+      .file-upload.dragover {
+        border-color: #4f46e5;
+        background-color: #e0e7ff;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 font-sans">
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Header -->
+    <header class="bg-indigo-700 text-white py-6 shadow-lg">
+      <div class="container mx-auto px-4 flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+          <img src="https://www.valmo.in/static-assets/valmo-web/valmo-logo-white.svg" alt="VALMO" class="h-8">
+          <h1 class="text-2xl font-bold">VALMO Logistics</h1>
+        </div>
+        <div class="text-sm">
+          Application No:
+          <span id="applicationNumberDisplay" class="font-mono">VL-XXXXXX</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+      <div class="form-container max-w-4xl mx-auto overflow-hidden">
+        <!-- Company Header -->
+        <div class="company-header text-white py-8 px-8 text-center relative">
+          <div class="relative z-10">
+            <div class="flex items-center justify-center mb-4">
+              <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mr-4">
+                <img src="https://www.valmo.in/static-assets/valmo-web/valmo-logo-white.svg" alt="VALMO" class="h-8 w-8">
+              </div>
+              <div>
+                <h1 class="text-3xl font-bold">VALMO</h1>
+                <p class="text-blue-100">Franchise Application</p>
+              </div>
+            </div>
+            <p class="text-blue-100 text-sm">Join India's Leading Logistics Network</p>
+          </div>
+        </div>
+
+        <form id="franchiseForm" class="p-8">
+          <!-- Section 1: Personal Information -->
+          <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+            <i class="fas fa-user-circle mr-3 text-blue-600"></i> Personal Information
+          </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+          <div>
+            <label
+              for="fullName"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Full Name*</label
+            >
+            <input
+              type="text"
+              id="fullName"
+              name="fullName"
+              required
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+          <div>
+            <label
+              for="fatherHusbandName"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Father's/Husband's Name*</label
+            >
+            <input
+              type="text"
+              id="fatherHusbandName"
+              name="fatherHusbandName"
+              required
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+          <div>
+            <label
+              for="dateOfBirth"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Date of Birth*</label
+            >
+            <input
+              type="date"
+              id="dateOfBirth"
+              name="dateOfBirth"
+              required
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Gender*</label
+            >
+            <div class="flex space-x-4">
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="gender"
+                  value="Male"
+                  required
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">Male</span></label
+              >
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="gender"
+                  value="Female"
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">Female</span></label
+              >
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="gender"
+                  value="Other"
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">Other</span></label
+              >
+            </div>
+          </div>
+          <div>
+            <label
+              for="nationality"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Nationality*</label
+            >
+            <input
+              type="text"
+              id="nationality"
+              name="nationality"
+              required
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Marital Status*</label
+            >
+            <div class="flex space-x-4">
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="maritalStatus"
+                  value="Single"
+                  required
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">Single</span></label
+              >
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="maritalStatus"
+                  value="Married"
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">Married</span></label
+              >
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="maritalStatus"
+                  value="Other"
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">Other</span></label
+              >
+            </div>
+          </div>
+          <div>
+            <label
+              for="panNumber"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >PAN Number*</label
+            >
+            <input
+              type="text"
+              id="panNumber"
+              name="panNumber"
+              required
+              pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}"
+              title="Enter valid PAN (e.g., ABCDE1234F)"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 uppercase"
+            />
+          </div>
+          <div>
+            <label
+              for="aadharNumber"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Aadhar Number*</label
+            >
+            <input
+              type="text"
+              id="aadharNumber"
+              name="aadharNumber"
+              required
+              pattern="[0-9]{12}"
+              title="Enter 12-digit Aadhar number"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+          <div>
+            <label
+              for="passportNumber"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Passport Number (if available)</label
+            >
+            <input
+              type="text"
+              id="passportNumber"
+              name="passportNumber"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+        </div>
+
+        <!-- Passport Photo Upload Section -->
+        <div class="mb-10">
+          <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+            <i class="fas fa-camera mr-2 text-indigo-600"></i> Passport Size Photo
+          </h2>
+          <div class="flex flex-col md:flex-row items-center gap-6">
+            <!-- Photo Preview -->
+            <div class="flex-shrink-0">
+              <div id="photoPreview" class="w-32 h-32 rounded-full border-4 border-gray-300 bg-gray-100 flex items-center justify-center overflow-hidden">
+                <i class="fas fa-user text-gray-400 text-4xl" id="photoPlaceholder"></i>
+                <img id="photoImage" class="w-full h-full object-cover hidden" alt="Passport Photo">
+              </div>
+            </div>
+
+            <!-- Upload Controls -->
+            <div class="flex-1">
+              <label for="passportPhoto" class="block text-sm font-medium text-gray-700 mb-2">
+                Upload Passport Size Photo*
+              </label>
+              <input
+                type="file"
+                id="passportPhoto"
+                name="passportPhoto"
+                accept="image/*"
+                required
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                onchange="previewPhoto(this)"
+              />
+              <p class="text-sm text-gray-500 mt-2">
+                Please upload a clear passport-size photograph (JPG, PNG, max 5MB)
+              </p>
+              <div id="photoError" class="text-red-500 text-sm mt-1 hidden"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Contact Details -->
+        <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+          <i class="fas fa-address-book mr-2 text-indigo-600"></i> Contact
+          Details
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+          <div>
+            <label
+              for="mobileNumber"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Mobile Number*</label
+            >
+            <input
+              type="tel"
+              id="mobileNumber"
+              name="mobileNumber"
+              required
+              pattern="[0-9]{10}"
+              maxlength="10"
+              title="Enter 10-digit mobile number"
+              class="input-field w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              oninput="validatePhoneNumber(this)"
+            />
+            <div id="mobileNumberError" class="text-red-500 text-sm mt-1 hidden"></div>
+          </div>
+          <div>
+            <label
+              for="alternateMobileNumber"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Alternate Mobile Number</label
+            >
+            <input
+              type="tel"
+              id="alternateMobileNumber"
+              name="alternateMobileNumber"
+              pattern="[0-9]{10}"
+              maxlength="10"
+              title="Enter 10-digit mobile number"
+              class="input-field w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              oninput="validatePhoneNumber(this)"
+            />
+            <div id="alternateMobileNumberError" class="text-red-500 text-sm mt-1 hidden"></div>
+          </div>
+          <div>
+            <label
+              for="email"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Email ID*</label
+            >
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              class="input-field w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              oninput="validateEmail(this)"
+            />
+            <div id="emailError" class="text-red-500 text-sm mt-1 hidden"></div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Preferred Mode of Communication*</label
+            >
+            <div class="flex flex-col space-y-2">
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="preferredCommunication"
+                  value="Phone"
+                  required
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">Phone</span></label
+              >
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="preferredCommunication"
+                  value="Email"
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">Email</span></label
+              >
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="preferredCommunication"
+                  value="WhatsApp"
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">WhatsApp</span></label
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: Residential Address -->
+        <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+          <i class="fas fa-home mr-2 text-indigo-600"></i> Residential Address
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+          <div class="md:col-span-2">
+            <label
+              for="residentialStreet"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >House No./Street*</label
+            >
+            <input
+              type="text"
+              id="residentialStreet"
+              name="residentialStreet"
+              required
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+         
+
+<div>
+  <label for="residentialCity" class="block text-sm font-medium text-gray-700 mb-1">City*</label>
+  <input
+    type="text"
+    id="residentialCity"
+    name="residentialCity"
+    required
+    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+  />
+</div>
+<div>
+  <label for="residentialDistrict" class="block text-sm font-medium text-gray-700 mb-1">District*</label>
+  <input
+    type="text"
+    id="residentialDistrict"
+    name="residentialDistrict"
+    required
+    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+  />
+</div>
+<div>
+  <label for="residentialState" class="block text-sm font-medium text-gray-700 mb-1">State*</label>
+  <input
+    type="text"
+    id="residentialState"
+    name="residentialState"
+    required
+    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+  />
+</div>
+<div style="width: 100%; max-width: 400px; margin: 0 auto; font-family: Arial, sans-serif;">
+  <label
+    for="residentialPinCode"
+    style="display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 6px;"
+  >
+    PIN Code*
+  </label>
+  <input
+    type="text"
+    id="residentialPinCode"
+    name="residentialPinCode"
+    required
+    pattern="[0-9]{6}"
+    title="Enter 6-digit PIN code"
+    onchange="fetchResidentialPincodeDetails(this.value)"
+    style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 16px; box-sizing: border-box; outline: none;"
+    onfocus="this.style.border='1px solid #6366f1';"
+    onblur="this.style.border='1px solid #d1d5db';"
+  />
+</div>
+
+<!-- Result Display -->
+<div id="pincodeResult" style="margin-top: 8px; font-size: 14px; color: #374151"></div>
+
+<script>
+function fetchResidentialPincodeDetails(pincode) {
+  if (!/^[0-9]{6}$/.test(pincode)) {
+    document.getElementById("pincodeResult").innerHTML = `<span style="color:#ef4444;">Invalid PIN code</span>`;
+    return;
+  }
+
+  fetch(`https://api.postalpincode.in/pincode/${pincode}`)
+    .then((res) => res.json())
+    .then((data) => {
+      if (data[0].Status === "Success") {
+        let postOffice = data[0].PostOffice[0];
+
+        // Auto-fill residential address fields
+        document.getElementById("residentialCity").value = postOffice.Block || postOffice.Name || "";
+        document.getElementById("residentialDistrict").value = postOffice.District || "";
+        document.getElementById("residentialState").value = postOffice.State || "";
+
+        document.getElementById("pincodeResult").innerHTML = `<span style="color:green;">Details filled successfully</span>`;
+      } else {
+        document.getElementById("pincodeResult").innerHTML = `<span style="color:#ef4444;">No details found</span>`;
+      }
+    })
+    .catch(() => {
+      document.getElementById("pincodeResult").innerHTML = `<span style="color:#ef4444;">Error fetching details</span>`;
+    });
+}
+</script>
+
+<!-- Mobile-friendly handling -->
+<style>
+  @media (max-width: 480px) {
+    #residentialPinCode {
+      font-size: 14px;
+      padding: 8px;
+    }
+    label {
+      font-size: 13px !important;
+    }
+    #pincodeResult {
+      font-size: 13px !important;
+    }
+  }
+</style>
+
+
+
+
+
+
+
+
+        </div>
+
+        <!-- Section 4: Business Information -->
+        <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+          <i class="fas fa-briefcase mr-2 text-indigo-600"></i> Business
+          Information
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+          <div>
+            <label
+              for="businessName"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Business Name (if applicable)</label
+            >
+            <input
+              type="text"
+              id="businessName"
+              name="businessName"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Type of Business*</label
+            >
+            <div class="grid grid-cols-2 gap-2">
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="businessType"
+                  value="Sole Proprietor"
+                  required
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">Sole Proprietor</span></label
+              >
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="businessType"
+                  value="Partnership"
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">Partnership</span></label
+              >
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="businessType"
+                  value="Private Ltd"
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">Private Ltd</span></label
+              >
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="businessType"
+                  value="LLP"
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">LLP</span></label
+              >
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="businessType"
+                  value="Other"
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">Other</span></label
+              >
+            </div>
+          </div>
+          <div>
+            <label
+              for="gstNumber"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >GST Number (if applicable)</label
+            >
+            <input
+              type="text"
+              id="gstNumber"
+              name="gstNumber"
+              pattern="[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}"
+              title="Enter valid GST number"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 uppercase"
+            />
+          </div>
+          <div class="md:col-span-2">
+            <label
+              for="officeAddress"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Office Address*</label
+            >
+            <input
+              type="text"
+              id="officeAddress"
+              name="officeAddress"
+              required
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+
+
+          
+<div>
+  <label for="officeCity" class="block text-sm font-medium text-gray-700 mb-1">City*</label>
+  <input
+    type="text"
+    id="officeCity"
+    name="officeCity"
+    required
+    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+  />
+</div>
+<div>
+  <label for="officeDistrict" class="block text-sm font-medium text-gray-700 mb-1">District*</label>
+  <input
+    type="text"
+    id="officeDistrict"
+    name="officeDistrict"
+    required
+    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+  />
+</div>
+<div>
+  <label for="officeState" class="block text-sm font-medium text-gray-700 mb-1">State*</label>
+  <input
+    type="text"
+    id="officeState"
+    name="officeState"
+    required
+    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+  />
+</div>
+<div>
+  <label for="officePinCode" class="block text-sm font-medium text-gray-700 mb-1">PIN Code*</label>
+  <input
+    type="text"
+    onchange="fetchOfficePincodeDetails(this.value)"
+    id="officePinCode"
+    name="officePinCode"
+    required
+    pattern="[0-9]{6}"
+    title="Enter 6-digit PIN code"
+    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+  />
+</div>
+
+<!-- Result Display -->
+<div id="pincodeResults" style="margin-top: 8px; font-size: 14px; color: #374151"></div>
+
+<script>
+function fetchOfficePincodeDetails(pincode) {
+  if (!/^[0-9]{6}$/.test(pincode)) {
+    document.getElementById("pincodeResults").innerHTML = `<span style="color:#ef4444;">Invalid PIN code</span>`;
+    return;
+  }
+
+  fetch(`https://api.postalpincode.in/pincode/${pincode}`)
+    .then(res => res.json())
+    .then(data => {
+      if (data[0].Status === "Success") {
+        let postOffice = data[0].PostOffice[0];
+
+        // Auto-fill fields
+        document.getElementById("officeCity").value = postOffice.Block || postOffice.Name || "";
+        document.getElementById("officeDistrict").value = postOffice.District || "";
+        document.getElementById("officeState").value = postOffice.State || "";
+
+        document.getElementById("pincodeResults").innerHTML = `<span style="color:green;">Details filled successfully</span>`;
+      } else {
+        document.getElementById("pincodeResults").innerHTML = `<span style="color:#ef4444;">No details found</span>`;
+      }
+    })
+    .catch(() => {
+      document.getElementById("pincodeResults").innerHTML = `<span style="color:#ef4444;">Error fetching details</span>`;
+    });
+}
+</script>
+
+          <div>
+            <label
+              for="numberOfEmployees"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Number of Employees in Your Business (if applicable)</label
+            >
+            <input
+              type="number"
+              id="numberOfEmployees"
+              name="numberOfEmployees"
+              min="0"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+        </div>
+
+        <!-- Section 5: Franchise Location Details -->
+        <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+          <i class="fas fa-map-marker-alt mr-2 text-indigo-600"></i> Franchise
+          Location Details
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+          <div>
+            <label
+              for="franchisePinCode"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Preferred PIN Code for Franchise*</label
+            >
+            <input
+              type="text"
+              id="franchisePinCode"
+              name="franchisePinCode"
+              required
+              pattern="[0-9]{6}"
+              title="Enter 6-digit PIN code"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Do you own or rent the business premises?*</label
+            >
+            <div class="flex space-x-4">
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="premisesOwnership"
+                  value="Own"
+                  required
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">Own</span></label
+              >
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="premisesOwnership"
+                  value="Rent"
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">Rent</span></label
+              >
+            </div>
+          </div>
+          <div>
+            <label
+              for="totalSpace"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Total Available Space for Franchise (sq. ft.)*</label
+            >
+            <input
+              type="number"
+              id="totalSpace"
+              name="totalSpace"
+              required
+              min="100"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+          <div>
+            <label
+              for="warehouseSpace"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Warehouse Space (if any) (sq. ft.)</label
+            >
+            <input
+              type="number"
+              id="warehouseSpace"
+              name="warehouseSpace"
+              min="0"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Parking Facility Available?*</label
+            >
+            <div class="flex space-x-4">
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="parkingFacility"
+                  value="Yes"
+                  required
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">Yes</span></label
+              >
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="parkingFacility"
+                  value="No"
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">No</span></label
+              >
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Office Setup Availability*</label
+            >
+            <div class="flex flex-col space-y-2">
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="officeSetup"
+                  value="Fully Furnished"
+                  required
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">Fully Furnished</span></label
+              >
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="officeSetup"
+                  value="Partially Furnished"
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700"
+                  >Partially Furnished</span
+                ></label
+              >
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="officeSetup"
+                  value="Unfurnished"
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">Unfurnished</span></label
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 6: Investment & Financial Information -->
+        <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+          <i class="fas fa-rupee-sign mr-2 text-indigo-600"></i> Investment &
+          Financial Information
+        </h2>
+        <div class="bg-indigo-50 p-6 rounded-lg mb-6">
+          <h3 class="text-lg font-semibold text-indigo-800 mb-4">
+            Registration & Fees
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-white p-4 rounded-lg shadow-sm">
+              <p class="text-sm text-gray-600">Registration Fee</p>
+              <p class="text-lg font-bold">₹18,600</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-sm">
+              <p class="text-sm text-gray-600">Security Money</p>
+              <p class="text-lg font-bold">
+                90% refundable after the agreement
+              </p>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-sm">
+              <p class="text-sm text-gray-600">
+                Interest Earned on Security Deposit
+              </p>
+              <p class="text-lg font-bold">7.5% annually</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-sm">
+              <p class="text-sm text-gray-600">One-time Setup Fee</p>
+              <p class="text-lg font-bold">₹2,00,000 (lifetime investment)</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-sm">
+              <p class="text-sm text-gray-600">Agreement Fee</p>
+              <p class="text-lg font-bold">₹90,100 (fully refundable)</p>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Investment Capacity*</label
+            >
+            <div class="flex flex-col space-y-2">
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="investmentCapacity"
+                  value="Below ₹5 Lakhs"
+                  required
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">Below ₹5 Lakhs</span></label
+              >
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="investmentCapacity"
+                  value="₹5-10 Lakhs"
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">₹5-10 Lakhs</span></label
+              >
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="investmentCapacity"
+                  value="₹10-20 Lakhs"
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">₹10-20 Lakhs</span></label
+              >
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="investmentCapacity"
+                  value="Above ₹20 Lakhs"
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">Above ₹20 Lakhs</span></label
+              >
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Source of Investment*</label
+            >
+            <div class="flex flex-col space-y-2">
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="investmentSource"
+                  value="Self-Funded"
+                  required
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">Self-Funded</span></label
+              >
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="investmentSource"
+                  value="Loan"
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">Loan</span></label
+              >
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="investmentSource"
+                  value="Business Partner"
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700"
+                  >Business Partner</span
+                ></label
+              >
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="investmentSource"
+                  value="Other"
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">Other</span></label
+              >
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Do you have existing loans or liabilities?*</label
+            >
+            <div class="flex space-x-4">
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="hasLoans"
+                  value="Yes"
+                  required
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">Yes</span></label
+              >
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="hasLoans"
+                  value="No"
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                  checked
+                /><span class="ml-2 text-gray-700">No</span></label
+              >
+            </div>
+          </div>
+          <div id="loanDetailsContainer" class="hidden">
+            <label
+              for="loanDetails"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Loan/Liability Details</label
+            >
+            <textarea
+              id="loanDetails"
+              name="loanDetails"
+              rows="3"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            ></textarea>
+          </div>
+          <div>
+            <label
+              for="expectedRevenue"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Expected Monthly Revenue from Franchise (Approx.)*</label
+            >
+            <div class="relative rounded-md shadow-sm">
+              <div
+                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+              >
+                <span class="text-gray-500 sm:text-sm">₹</span>
+              </div>
+              <input
+                type="number"
+                id="expectedRevenue"
+                name="expectedRevenue"
+                required
+                min="0"
+                class="block w-full pl-8 pr-12 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+              <div
+                class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none"
+              >
+                <span class="text-gray-500 sm:text-sm">.00</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 7: Logistics & Operational Readiness -->
+        <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+          <img src="https://www.valmo.in/static-assets/valmo-web/valmo-logo-white.svg" alt="VALMO" class="h-5 w-5 mr-2 filter invert"> Logistics &
+          Operational Readiness
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Do you own commercial vehicles for logistics?*</label
+            >
+            <div class="flex space-x-4">
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="hasCommercialVehicles"
+                  value="Yes"
+                  required
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">Yes</span></label
+              >
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="hasCommercialVehicles"
+                  value="No"
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                  checked
+                /><span class="ml-2 text-gray-700">No</span></label
+              >
+            </div>
+          </div>
+          <div id="vehicleDetailsContainer" class="hidden">
+            <label
+              for="vehicleDetails"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Vehicle Details</label
+            >
+            <textarea
+              id="vehicleDetails"
+              name="vehicleDetails"
+              rows="3"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            ></textarea>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Are you familiar with logistics and transportation
+              operations?*</label
+            >
+            <div class="flex space-x-4">
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="isFamiliarWithLogistics"
+                  value="Yes"
+                  required
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">Yes</span></label
+              >
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="isFamiliarWithLogistics"
+                  value="No"
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">No</span></label
+              >
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Do you have experience with courier/logistics services?*</label
+            >
+            <div class="flex space-x-4">
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="hasLogisticsExperience"
+                  value="Yes"
+                  required
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">Yes</span></label
+              >
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="hasLogisticsExperience"
+                  value="No"
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                  checked
+                /><span class="ml-2 text-gray-700">No</span></label
+              >
+            </div>
+          </div>
+          <div id="experienceDetailsContainer" class="hidden md:col-span-2">
+            <label
+              for="experienceDetails"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Company Details</label
+            >
+            <textarea
+              id="experienceDetails"
+              name="experienceDetails"
+              rows="3"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            ></textarea>
+          </div>
+          <div>
+            <label
+              for="staffCount"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Number of Staff You Can Employ for the Franchise*</label
+            >
+            <input
+              type="number"
+              id="staffCount"
+              name="staffCount"
+              required
+              min="1"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+        </div>
+
+        <!-- Section 8: Qualification Details -->
+        <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+          <i class="fas fa-graduation-cap mr-2 text-indigo-600"></i>
+          Qualification Details
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Highest Educational Qualification*</label
+            >
+            <div class="flex flex-col space-y-2">
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="education"
+                  value="10th Pass"
+                  required
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">10th Pass</span></label
+              >
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="education"
+                  value="12th Pass"
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">12th Pass</span></label
+              >
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="education"
+                  value="Diploma"
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">Diploma</span></label
+              >
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="education"
+                  value="Graduate"
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">Graduate</span></label
+              >
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="education"
+                  value="Postgraduate"
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">Postgraduate</span></label
+              >
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="education"
+                  value="Other"
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">Other</span></label
+              >
+            </div>
+          </div>
+          <div>
+            <label
+              for="professionalBackground"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Professional Background (if any)</label
+            >
+            <textarea
+              id="professionalBackground"
+              name="professionalBackground"
+              rows="4"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            ></textarea>
+          </div>
+          <div class="md:col-span-2">
+            <label
+              for="certifications"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Relevant Certifications (if any)</label
+            >
+            <textarea
+              id="certifications"
+              name="certifications"
+              rows="3"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- Section 9: Past Business Experience & References -->
+        <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+          <i class="fas fa-history mr-2 text-indigo-600"></i> Past Business
+          Experience & References
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Do you currently own any other franchise?*</label
+            >
+            <div class="flex space-x-4">
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="hasOtherFranchise"
+                  value="Yes"
+                  required
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">Yes</span></label
+              >
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="hasOtherFranchise"
+                  value="No"
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                  checked
+                /><span class="ml-2 text-gray-700">No</span></label
+              >
+            </div>
+          </div>
+          <div id="franchiseDetailsContainer" class="hidden">
+            <label
+              for="franchiseDetails"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Company Name</label
+            >
+            <input
+              type="text"
+              id="franchiseDetails"
+              name="franchiseDetails"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Have you been involved in any business disputes or legal
+              issues?*</label
+            >
+            <div class="flex space-x-4">
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="hasLegalIssues"
+                  value="Yes"
+                  required
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                /><span class="ml-2 text-gray-700">Yes</span></label
+              >
+              <label class="inline-flex items-center"
+                ><input
+                  type="radio"
+                  name="hasLegalIssues"
+                  value="No"
+                  class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                  checked
+                /><span class="ml-2 text-gray-700">No</span></label
+              >
+            </div>
+          </div>
+          <div id="legalDetailsContainer" class="hidden">
+            <label
+              for="legalDetails"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Details</label
+            >
+            <textarea
+              id="legalDetails"
+              name="legalDetails"
+              rows="3"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            ></textarea>
+          </div>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-800 mt-8 mb-4">
+          Business References
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+          <div class="bg-gray-50 p-4 rounded-lg">
+            <h4 class="text-md font-medium text-gray-700 mb-3">Reference 1</h4>
+            <div class="space-y-4">
+              <div>
+                <label
+                  for="reference1Name"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >Name*</label
+                ><input
+                  type="text"
+                  id="reference1Name"
+                  name="reference1Name"
+                  required
+                  class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+              <div>
+                <label
+                  for="reference1Contact"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >Contact No.*</label
+                ><input
+                  type="tel"
+                  id="reference1Contact"
+                  name="reference1Contact"
+                  required
+                  pattern="[0-9]{10}"
+                  title="Enter 10-digit contact number"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+              <div>
+                <label
+                  for="reference1Relationship"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >Relationship*</label
+                ><input
+                  type="text"
+                  id="reference1Relationship"
+                  name="reference1Relationship"
+                  required
+                  class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="bg-gray-50 p-4 rounded-lg">
+            <h4 class="text-md font-medium text-gray-700 mb-3">Reference 2</h4>
+            <div class="space-y-4">
+              <div>
+                <label
+                  for="reference2Name"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >Name*</label
+                ><input
+                  type="text"
+                  id="reference2Name"
+                  name="reference2Name"
+                  required
+                  class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+              <div>
+                <label
+                  for="reference2Contact"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >Contact No.*</label
+                ><input
+                  type="tel"
+                  id="reference2Contact"
+                  name="reference2Contact"
+                  required
+                  pattern="[0-9]{10}"
+                  title="Enter 10-digit contact number"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+              <div>
+                <label
+                  for="reference2Relationship"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >Relationship*</label
+                ><input
+                  type="text"
+                  id="reference2Relationship"
+                  name="reference2Relationship"
+                  required
+                  class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 10: Bank Details -->
+        <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+          <i class="fas fa-university mr-2 text-indigo-600"></i> Bank Details
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+          <div>
+            <label
+              for="bankName"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Bank Name*</label
+            ><input
+              type="text"
+              id="bankName"
+              name="bankName"
+              required
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+          <div>
+            <label
+              for="bankBranch"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Branch*</label
+            ><input
+              type="text"
+              id="bankBranch"
+              name="bankBranch"
+              required
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+          <div>
+            <label
+              for="accountHolderName"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Account Holder's Name*</label
+            ><input
+              type="text"
+              id="accountHolderName"
+              name="accountHolderName"
+              required
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+          <div>
+            <label
+              for="accountNumber"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Account Number*</label
+            ><input
+              type="text"
+              id="accountNumber"
+              name="accountNumber"
+              required
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+          <div>
+            <label
+              for="ifscCode"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >IFSC Code*</label
+            ><input
+              type="text"
+              id="ifscCode"
+              name="ifscCode"
+              required
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 uppercase"
+            />
+          </div>
+          <div>
+            <label
+              for="upiId"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >UPI ID (if any)</label
+            ><input
+              type="text"
+              id="upiId"
+              name="upiId"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+        </div>
+
+        <!-- Section 11: Document Upload -->
+        <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+          <i class="fas fa-file-upload mr-2 text-indigo-600"></i> Document
+          Upload
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+          <div class="file-upload-container">
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >PAN Card*</label
+            >
+            <div
+              id="panCardUpload"
+              class="file-upload relative p-6 text-center cursor-pointer"
+            >
+              <input
+                type="file"
+                id="panCard"
+                name="panCard"
+                accept="image/*,.pdf"
+                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                required
+              /><i
+                class="fas fa-cloud-upload-alt text-4xl text-indigo-500 mb-2"
+              ></i>
+              <p class="text-sm text-gray-600">
+                Click to upload or drag and drop
+              </p>
+              <p class="text-xs text-gray-500 mt-1">PNG, JPG, PDF up to 5MB</p>
+              <div id="panCardPreview" class="mt-4 hidden">
+                <div
+                  class="flex items-center justify-between bg-gray-100 p-2 rounded"
+                >
+                  <div class="flex items-center">
+                    <i class="fas fa-file text-indigo-500 mr-2"></i
+                    ><span
+                      id="panCardFileName"
+                      class="text-sm text-gray-700 truncate"
+                    ></span>
+                  </div>
+                  <button
+                    type="button"
+                    onclick="removeFile('panCard')"
+                    class="text-red-500 hover:text-red-700"
+                  >
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="file-upload-container">
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Aadhar Card Frontend*</label
+            >
+            <div
+              id="aadharCardUpload"
+              class="file-upload relative p-6 text-center cursor-pointer"
+            >
+              <input
+                type="file"
+                id="aadharCard"
+                name="aadharCard"
+                accept="image/*,.pdf"
+                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                required
+              /><i
+                class="fas fa-cloud-upload-alt text-4xl text-indigo-500 mb-2"
+              ></i>
+              <p class="text-sm text-gray-600">
+                Click to upload or drag and drop
+              </p>
+              <p class="text-xs text-gray-500 mt-1">PNG, JPG, PDF up to 5MB</p>
+              <div id="aadharCardPreview" class="mt-4 hidden">
+                <div
+                  class="flex items-center justify-between bg-gray-100 p-2 rounded"
+                >
+                  <div class="flex items-center">
+                    <i class="fas fa-file text-indigo-500 mr-2"></i
+                    ><span
+                      id="aadharCardFileName"
+                      class="text-sm text-gray-700 truncate"
+                    ></span>
+                  </div>
+                  <button
+                    type="button"
+                    onclick="removeFile('aadharCard')"
+                    class="text-red-500 hover:text-red-700"
+                  >
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="file-upload-container">
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Adhar Card Backside (if available)</label
+            >
+            <div
+              id="passportUpload"
+              class="file-upload relative p-6 text-center cursor-pointer"
+            >
+              <input
+                type="file"
+                id="passport"
+                name="passport"
+                accept="image/*,.pdf"
+                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              /><i
+                class="fas fa-cloud-upload-alt text-4xl text-indigo-500 mb-2"
+              ></i>
+              <p class="text-sm text-gray-600">
+                Click to upload or drag and drop
+              </p>
+              <p class="text-xs text-gray-500 mt-1">PNG, JPG, PDF up to 5MB</p>
+              <div id="passportPreview" class="mt-4 hidden">
+                <div
+                  class="flex items-center justify-between bg-gray-100 p-2 rounded"
+                >
+                  <div class="flex items-center">
+                    <i class="fas fa-file text-indigo-500 mr-2"></i
+                    ><span
+                      id="passportFileName"
+                      class="text-sm text-gray-700 truncate"
+                    ></span>
+                  </div>
+                  <button
+                    type="button"
+                    onclick="removeFile('passport')"
+                    class="text-red-500 hover:text-red-700"
+                  >
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- GST Certificate field removed as per requirements -->
+          <div class="file-upload-container">
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Passport side photo (if applicable)</label
+            >
+            <div
+              id="businessProofUpload"
+              class="file-upload relative p-6 text-center cursor-pointer"
+            >
+              <input
+                type="file"
+                id="businessProof"
+                name="businessProof"
+                accept="image/*,.pdf"
+                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              /><i
+                class="fas fa-cloud-upload-alt text-4xl text-indigo-500 mb-2"
+              ></i>
+              <p class="text-sm text-gray-600">
+                Click to upload or drag and drop
+              </p>
+              <p class="text-xs text-gray-500 mt-1">PNG, JPG, PDF up to 5MB</p>
+              <div id="businessProofPreview" class="mt-4 hidden">
+                <div
+                  class="flex items-center justify-between bg-gray-100 p-2 rounded"
+                >
+                  <div class="flex items-center">
+                    <i class="fas fa-file text-indigo-500 mr-2"></i
+                    ><span
+                      id="businessProofFileName"
+                      class="text-sm text-gray-700 truncate"
+                    ></span>
+                  </div>
+                  <button
+                    type="button"
+                    onclick="removeFile('businessProof')"
+                    class="text-red-500 hover:text-red-700"
+                  >
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="file-upload-container">
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Bank Document*</label
+            >
+            <div
+              id="cancelledChequeUpload"
+              class="file-upload relative p-6 text-center cursor-pointer"
+            >
+              <input
+                type="file"
+                id="cancelledCheque"
+                name="cancelledCheque"
+                accept="image/*,.pdf"
+                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                required
+              /><i
+                class="fas fa-cloud-upload-alt text-4xl text-indigo-500 mb-2"
+              ></i>
+              <p class="text-sm text-gray-600">
+                Click to upload or drag and drop
+              </p>
+              <p class="text-xs text-gray-500 mt-1">PNG, JPG, PDF up to 5MB</p>
+              <div id="cancelledChequePreview" class="mt-4 hidden">
+                <div
+                  class="flex items-center justify-between bg-gray-100 p-2 rounded"
+                >
+                  <div class="flex items-center">
+                    <i class="fas fa-file text-indigo-500 mr-2"></i
+                    ><span
+                      id="cancelledChequeFileName"
+                      class="text-sm text-gray-700 truncate"
+                    ></span>
+                  </div>
+                  <button
+                    type="button"
+                    onclick="removeFile('cancelledCheque')"
+                    class="text-red-500 hover:text-red-700"
+                  >
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 12: Review & Submit Content -->
+        <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+          <i class="fas fa-check-circle mr-2 text-indigo-600"></i> Final Review
+          & Declaration
+        </h2>
+        <div class="bg-gray-50 p-6 rounded-lg mb-6">
+          <h3 class="text-lg font-semibold text-gray-800 mb-4">
+            Terms & Conditions
+          </h3>
+          <div
+            class="bg-white p-4 rounded-lg shadow-sm max-h-64 overflow-y-auto"
+          >
+            <ol class="list-decimal pl-5 space-y-3 text-sm text-gray-700">
+              <li>
+                The applicant must meet the minimum space and investment
+                requirements as set by Volmo Logistics.
+              </li>
+              <li>
+                The franchisee is responsible for obtaining all necessary local
+                business permits and legal clearances.
+              </li>
+              <li>
+                The franchisee must operate under Volmo Logistics' branding,
+                policies, and operational guidelines.
+              </li>
+              <li>
+                Any false or misleading information provided in this form may
+                lead to disqualification.
+              </li>
+              <li>
+                The franchisee must maintain a minimum monthly operational
+                standard as per company requirements.
+              </li>
+              <li>
+                Volmo Logistics reserves the right to terminate the franchise
+                agreement if performance benchmarks are not met.
+              </li>
+              <li>
+                The franchisee must not engage in any competing business that
+                directly affects Volmo Logistics' operations.
+              </li>
+              <li>
+                The investment amount is refundable, except for the registration
+                fee of ₹18,600.
+              </li>
+              <li>
+                The security deposit earns 7.5% annual interest, and 90% of it
+                is refundable after the agreement period.
+              </li>
+              <li>
+                Any legal disputes will be resolved under the jurisdiction of
+                Bangalore, Karnataka.
+              </li>
+            </ol>
+          </div>
+          <div class="mt-4">
+            <label class="inline-flex items-center"
+              ><input
+                type="checkbox"
+                id="agreeTerms"
+                name="agreeTerms"
+                required
+                class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+              /><span class="ml-2 text-gray-700"
+                >I agree to the terms and conditions*</span
+              ></label
+            >
+          </div>
+        </div>
+        <div class="bg-gray-50 p-6 rounded-lg mb-6">
+          <h3 class="text-lg font-semibold text-gray-800 mb-4">Disclaimer</h3>
+          <div
+            class="bg-white p-4 rounded-lg shadow-sm max-h-64 overflow-y-auto"
+          >
+            <ul class="list-disc pl-5 space-y-3 text-sm text-gray-700">
+              <li>
+                Submission of this application does not guarantee approval of
+                the franchise.
+              </li>
+              <li>
+                Volmo Logistics reserves the right to verify the information
+                provided and conduct background checks.
+              </li>
+              <li>
+                The company is not liable for any investment made before
+                official franchise approval.
+              </li>
+              <li>
+                The one-time setup fee, agreement fee, and security deposit are
+                fully refundable, except for the registration fee.
+              </li>
+              <li>The security deposit earns an annual interest of 7.5%.</li>
+              <li>
+                Any changes to policies, investment requirements, or operational
+                guidelines will be communicated in writing.
+              </li>
+              <li>
+                Any legal disputes or disagreements will be subject to the
+                jurisdiction of Bangalore, Karnataka.
+              </li>
+              <li>
+                This form and its contents remain the property of Volmo
+                Logistics and must not be copied or shared without permission.
+              </li>
+            </ul>
+          </div>
+          <div class="mt-4">
+            <label class="inline-flex items-center"
+              ><input
+                type="checkbox"
+                id="agreeDisclaimer"
+                name="agreeDisclaimer"
+                required
+                class="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+              /><span class="ml-2 text-gray-700"
+                >I have read and understood the disclaimer*</span
+              ></label
+            >
+          </div>
+        </div>
+
+        <!-- Final Submit Button (Centered) -->
+        <div class="flex justify-center mt-8">
+          <button
+            type="button"
+            id="submitBtn"
+            class="px-8 py-4 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:from-green-700 hover:to-green-800 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-300 transform hover:scale-105 flex items-center font-semibold text-lg shadow-lg"
+          >
+            <i class="fas fa-paper-plane mr-3"></i> Submit Application
+          </button>
+        </div>
+      </form>
+      </div>
+    </main>
+
+    <footer class="bg-gray-900 text-gray-300 py-6">
+      <div class="container mx-auto px-4 max-w-6xl">
+        <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+          <div class="text-center md:text-left">
+            <div class="flex items-center justify-center md:justify-start space-x-2 mb-2">
+              <i class="fas fa-envelope text-blue-400"></i>
+              <span class="text-sm">support@valmodeliver.in</span>
+            </div>
+            <p class="text-xs">© 2025 Valmo. All rights reserved.</p>
+            <p class="text-xs text-gray-500 mt-1">
+              Application Number:
+              <span id="applicationNumberDisplayFooter" class="font-mono">VL-XXXXXX</span>
+            </p>
+          </div>
+          <div class="flex space-x-6 text-sm">
+            <a href="/privacy" class="hover:text-white transition-colors">Privacy Policy</a>
+            <a href="/terms" class="hover:text-white transition-colors">Terms of Use</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // --- TOKEN VALIDATION AND AGENT MAPPING ---
+      let inviteToken = null;
+      let agentInfo = null;
+
+      // Check for invite token on page load
+      async function validateInviteToken() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+
+        if (!token) {
+          showTokenError('This form requires a valid invitation link. Please contact your agent for a proper invitation.');
+          return false;
+        }
+
+        try {
+          const response = await fetch(`/api/validate-token/${token}`);
+          const result = await response.json();
+
+          if (!response.ok || !result.valid) {
+            showTokenError(result.message || 'Invalid or expired invitation token. Please request a new invitation link from your agent.');
+            return false;
+          }
+
+          // Store token and agent info
+          inviteToken = token;
+          agentInfo = {
+            agentId: result.agentId,
+            agentName: result.agentName,
+            agentPhone: result.agentPhone
+          };
+
+          // Pre-fill customer name if provided
+          if (result.customerName) {
+            document.getElementById('fullName').value = result.customerName;
+          }
+
+          console.log('Valid invitation token. Agent:', agentInfo.agentName);
+          return true;
+
+        } catch (error) {
+          console.error('Error validating token:', error);
+          showTokenError('Unable to validate invitation token. Please check your internet connection and try again.');
+          return false;
+        }
+      }
+
+      // Show token error and disable form
+      function showTokenError(message) {
+        const form = document.querySelector('form');
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6';
+        errorDiv.innerHTML = `
+          <div class="flex items-center">
+            <i class="fas fa-exclamation-triangle mr-3"></i>
+            <div>
+              <strong class="font-bold">Access Denied</strong>
+              <p class="text-sm mt-1">${message}</p>
+            </div>
+          </div>
+        `;
+
+        form.insertBefore(errorDiv, form.firstChild);
+
+        // Disable all form inputs
+        const inputs = form.querySelectorAll('input, select, textarea, button');
+        inputs.forEach(input => {
+          input.disabled = true;
+          input.style.opacity = '0.5';
+        });
+      }
+
+      // --- VALIDATION FUNCTIONS ---
+      function validatePhoneNumber(input) {
+        const value = input.value;
+        const errorDiv = document.getElementById(input.id + 'Error');
+
+        // Remove non-numeric characters
+        const numericValue = value.replace(/[^0-9]/g, '');
+
+        // Update input value to only numeric
+        if (value !== numericValue) {
+          input.value = numericValue;
+        }
+
+        // Validate length
+        if (numericValue.length > 10) {
+          input.value = numericValue.slice(0, 10);
+        }
+
+        // Show/hide error message
+        if (numericValue.length > 0 && numericValue.length < 10) {
+          errorDiv.textContent = 'Mobile number must be exactly 10 digits';
+          errorDiv.classList.remove('hidden');
+          input.classList.add('error');
+        } else {
+          errorDiv.classList.add('hidden');
+          input.classList.remove('error');
+        }
+      }
+
+      // --- PHOTO PREVIEW FUNCTION ---
+      function previewPhoto(input) {
+        const file = input.files[0];
+        const photoImage = document.getElementById('photoImage');
+        const photoPlaceholder = document.getElementById('photoPlaceholder');
+        const photoError = document.getElementById('photoError');
+
+        if (file) {
+          // Validate file size (5MB max)
+          if (file.size > 5 * 1024 * 1024) {
+            photoError.textContent = 'File size must be less than 5MB';
+            photoError.classList.remove('hidden');
+            input.value = '';
+            return;
+          }
+
+          // Validate file type
+          if (!file.type.startsWith('image/')) {
+            photoError.textContent = 'Please select a valid image file';
+            photoError.classList.remove('hidden');
+            input.value = '';
+            return;
+          }
+
+          // Hide error and show preview
+          photoError.classList.add('hidden');
+
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            photoImage.src = e.target.result;
+            photoImage.classList.remove('hidden');
+            photoPlaceholder.classList.add('hidden');
+          };
+          reader.readAsDataURL(file);
+        } else {
+          // Reset to placeholder
+          photoImage.classList.add('hidden');
+          photoPlaceholder.classList.remove('hidden');
+        }
+      }
+
+      function validateEmail(input) {
+        const value = input.value;
+        const errorDiv = document.getElementById(input.id + 'Error');
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (value && !emailRegex.test(value)) {
+          if (!errorDiv) {
+            const newErrorDiv = document.createElement('div');
+            newErrorDiv.id = input.id + 'Error';
+            newErrorDiv.className = 'text-red-500 text-sm mt-1';
+            input.parentNode.appendChild(newErrorDiv);
+          }
+          document.getElementById(input.id + 'Error').textContent = 'Please enter a valid email address';
+          document.getElementById(input.id + 'Error').classList.remove('hidden');
+          input.classList.add('error');
+        } else {
+          if (errorDiv) {
+            errorDiv.classList.add('hidden');
+          }
+          input.classList.remove('error');
+        }
+      }
+
+      function validatePincode(input) {
+        const value = input.value;
+        const numericValue = value.replace(/[^0-9]/g, '');
+
+        if (value !== numericValue) {
+          input.value = numericValue;
+        }
+
+        if (numericValue.length > 6) {
+          input.value = numericValue.slice(0, 6);
+        }
+      }
+
+      // --- CORE FUNCTIONS ---
+      function generateApplicationNumber() {
+        const prefix = "VL";
+        const randomNum = Math.floor(100000 + Math.random() * 900000);
+        const appNum = `${prefix}-${randomNum}`;
+        document.getElementById("applicationNumberDisplay").textContent =
+          appNum;
+        document.getElementById("applicationNumberDisplayFooter").textContent =
+          appNum;
+        return appNum;
+      }
+
+      function showToast(message, type = "success") {
+        const toast = document.getElementById("toast");
+        toast.textContent = message;
+        toast.className = "toast";
+        toast.classList.add(type, "show");
+        setTimeout(() => {
+          toast.classList.remove("show");
+        }, 5000);
+      }
+
+      // --- FORM VALIDATION AND SUBMISSION ---
+      function validateForm() {
+        const form = document.getElementById("franchiseForm");
+        const requiredInputs = form.querySelectorAll("[required]");
+        let isValid = true;
+        let firstErrorField = null;
+
+        requiredInputs.forEach((input) => {
+          let fieldIsValid = true;
+          // Handle radio buttons
+          if (input.type === "radio") {
+            const name = input.name;
+            const group = form.querySelectorAll(`input[name="${name}"]`);
+            if (!form.querySelector(`input[name="${name}"]:checked`)) {
+              fieldIsValid = false;
+              group.forEach((item) =>
+                item.parentElement.classList.add("text-red-500")
+              );
+            } else {
+              group.forEach((item) =>
+                item.parentElement.classList.remove("text-red-500")
+              );
+            }
+            // Handle checkboxes
+          } else if (input.type === "checkbox") {
+            if (!input.checked) {
+              fieldIsValid = false;
+              input.parentElement.classList.add("text-red-500");
+            } else {
+              input.parentElement.classList.remove("text-red-500");
+            }
+            // Handle other inputs (text, file, etc.)
+          } else {
+            if (!input.value.trim()) {
+              fieldIsValid = false;
+              input.classList.add("border-red-500");
+            } else {
+              input.classList.remove("border-red-500");
+            }
+          }
+
+          if (!fieldIsValid) {
+            isValid = false;
+            if (!firstErrorField) {
+              firstErrorField = input;
+            }
+          }
+        });
+
+        if (firstErrorField) {
+          firstErrorField.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+          firstErrorField.focus();
+        }
+        return isValid;
+      }
+
+      async function submitForm() {
+        if (!validateForm()) {
+          showToast("Please fill all required fields.", "error");
+          return;
+        }
+
+        const form = document.getElementById("franchiseForm");
+        const formData = new FormData(form);
+        formData.append(
+          "applicationNumber",
+          document.getElementById("applicationNumberDisplay").textContent
+        );
+
+        // Add invite token for agent mapping
+        if (inviteToken) {
+          formData.append("token", inviteToken);
+        }
+
+        // Add agent information if available
+        if (agentInfo) {
+          formData.append("agentId", agentInfo.agentId || '');
+          formData.append("agentName", agentInfo.agentName || '');
+          formData.append("agentPhone", agentInfo.agentPhone || '');
+        }
+
+        const submitBtn = document.getElementById("submitBtn");
+        submitBtn.disabled = true;
+        submitBtn.innerHTML =
+          '<i class="fas fa-spinner fa-spin mr-2"></i> Submitting...';
+
+        try {
+          // --- REPLACE WITH YOUR ACTUAL API ENDPOINT ---
+          const response = await fetch(
+            "http://localhost:3000/api/submit-application",
+            { method: "POST", body: formData }
+          );
+          // const result = await response.json();
+
+          // --- SIMULATED API CALL FOR DEMO ---
+          await new Promise((resolve) => setTimeout(resolve, 2000));
+          const result = { success: true };
+
+          if (result.success) {
+            showThankYouMessage();
+            form.reset();
+            document
+              .querySelectorAll('[id$="Preview"]')
+              .forEach((p) => p.classList.add("hidden"));
+            document.getElementById("declarationName").textContent = "";
+            toggleAllDetails(false); // Hide all conditional fields
+            generateApplicationNumber();
+            window.scrollTo(0, 0);
+          } else {
+            showToast("Submission failed. Please try again.", "error");
+          }
+        } catch (error) {
+          console.error("Error submitting form:", error);
+          showToast("An error occurred. Please check the console.", "error");
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML =
+            '<i class="fas fa-paper-plane mr-2"></i> Submit Application';
+        }
+      }
+
+      // --- DYNAMIC FIELD VISIBILITY ---
+      function toggleDetail(show, containerId, requiredInputIds) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        container.classList.toggle("hidden", !show);
+        requiredInputIds.forEach((id) => {
+          const input = document.getElementById(id);
+          if (input) input.required = show;
+        });
+      }
+      function toggleAllDetails(show) {
+        toggleDetail(show, "loanDetailsContainer", ["loanDetails"]);
+        toggleDetail(show, "vehicleDetailsContainer", ["vehicleDetails"]);
+        toggleDetail(show, "experienceDetailsContainer", ["experienceDetails"]);
+        toggleDetail(show, "franchiseDetailsContainer", ["franchiseDetails"]);
+        toggleDetail(show, "legalDetailsContainer", ["legalDetails"]);
+      }
+
+      // --- FILE UPLOAD LOGIC ---
+      function setupFileUploads() {
+        const fileInputs = [
+          { id: "panCard" },
+          { id: "aadharCard" },
+          { id: "passport" },
+          { id: "businessProof" },
+          { id: "cancelledCheque" },
+        ];
+        fileInputs.forEach((file) => {
+          const inputEl = document.getElementById(file.id);
+          const uploadDiv = document.getElementById(`${file.id}Upload`);
+          if (!inputEl || !uploadDiv) return;
+
+          ["dragenter", "dragover", "dragleave", "drop"].forEach((evt) => {
+            uploadDiv.addEventListener(
+              evt,
+              (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              },
+              false
+            );
+          });
+          ["dragenter", "dragover"].forEach((evt) => {
+            uploadDiv.addEventListener(
+              evt,
+              () => uploadDiv.classList.add("dragover"),
+              false
+            );
+          });
+          ["dragleave", "drop"].forEach((evt) => {
+            uploadDiv.addEventListener(
+              evt,
+              () => uploadDiv.classList.remove("dragover"),
+              false
+            );
+          });
+
+          uploadDiv.addEventListener(
+            "drop",
+            (e) => {
+              inputEl.files = e.dataTransfer.files;
+              handleFileSelect({ target: inputEl });
+            },
+            false
+          );
+
+          inputEl.addEventListener("change", (e) => handleFileSelect(e), false);
+        });
+      }
+      function handleFileSelect(e) {
+        const input = e.target;
+        const file = input.files[0];
+        const previewDiv = document.getElementById(`${input.id}Preview`);
+        const fileNameSpan = document.getElementById(`${input.id}FileName`);
+        if (!previewDiv || !fileNameSpan) return;
+
+        if (file) {
+          if (file.size > 5 * 1024 * 1024) {
+            // 5MB limit
+            showToast("File size must be under 5MB.", "error");
+            input.value = ""; // Clear the invalid file
+            return;
+          }
+          fileNameSpan.textContent = file.name;
+          previewDiv.classList.remove("hidden");
+        }
+      }
+      function removeFile(inputId) {
+        document.getElementById(inputId).value = "";
+        document.getElementById(`${inputId}Preview`).classList.add("hidden");
+      }
+
+      // --- AGENT TRACKING ---
+      agentInfo = null; // Reset the already declared variable
+
+      async function loadAgentInfo() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const agentId = urlParams.get('agent');
+
+        if (agentId) {
+          try {
+            const response = await fetch(`http://localhost:3000/api/agent-by-id/${agentId}`);
+            if (response.ok) {
+              agentInfo = await response.json();
+              console.log('Agent info loaded:', agentInfo);
+
+              // Show agent info in header
+              const headerDiv = document.querySelector('header .container');
+              if (headerDiv && agentInfo) {
+                const agentInfoDiv = document.createElement('div');
+                agentInfoDiv.className = 'text-sm text-right';
+                agentInfoDiv.innerHTML = `
+                  <p>Referred by: <strong>${agentInfo.name}</strong></p>
+                  <p>Agent ID: ${agentInfo.agentId}</p>
+                `;
+                headerDiv.appendChild(agentInfoDiv);
+              }
+            }
+          } catch (err) {
+            console.error('Error loading agent info:', err);
+          }
+        }
+      }
+
+      // --- INITIALIZATION ---
+      document.addEventListener("DOMContentLoaded", async function () {
+        // Validate invite token first
+        const tokenValid = await validateInviteToken();
+        if (!tokenValid) {
+          return; // Stop initialization if token is invalid
+        }
+
+        // Load agent information first
+        loadAgentInfo();
+
+        // Generate initial application number
+        generateApplicationNumber();
+
+        // Setup file uploads
+        setupFileUploads();
+
+        // Link full name to declaration
+        document
+          .getElementById("fullName")
+          .addEventListener("input", function () {
+            document.getElementById("declarationName").textContent =
+              this.value || "...";
+          });
+
+        // Main submit button listener
+        document
+          .getElementById("submitBtn")
+          .addEventListener("click", submitForm);
+
+        // Add listeners for conditional fields
+        document
+          .querySelectorAll('input[name="hasLoans"]')
+          .forEach((el) =>
+            el.addEventListener("change", (e) =>
+              toggleDetail(e.target.value === "Yes", "loanDetailsContainer", [
+                "loanDetails",
+              ])
+            )
+          );
+        document
+          .querySelectorAll('input[name="hasCommercialVehicles"]')
+          .forEach((el) =>
+            el.addEventListener("change", (e) =>
+              toggleDetail(
+                e.target.value === "Yes",
+                "vehicleDetailsContainer",
+                ["vehicleDetails"]
+              )
+            )
+          );
+        document
+          .querySelectorAll('input[name="hasLogisticsExperience"]')
+          .forEach((el) =>
+            el.addEventListener("change", (e) =>
+              toggleDetail(
+                e.target.value === "Yes",
+                "experienceDetailsContainer",
+                ["experienceDetails"]
+              )
+            )
+          );
+        document
+          .querySelectorAll('input[name="hasOtherFranchise"]')
+          .forEach((el) =>
+            el.addEventListener("change", (e) =>
+              toggleDetail(
+                e.target.value === "Yes",
+                "franchiseDetailsContainer",
+                ["franchiseDetails"]
+              )
+            )
+          );
+        document
+          .querySelectorAll('input[name="hasLegalIssues"]')
+          .forEach((el) =>
+            el.addEventListener("change", (e) =>
+              toggleDetail(e.target.value === "Yes", "legalDetailsContainer", [
+                "legalDetails",
+              ])
+            )
+          );
+      });
+
+      // Thank You Message Function
+      function showThankYouMessage() {
+        // Create modal overlay
+        const modal = document.createElement('div');
+        modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+        modal.style.backdropFilter = 'blur(5px)';
+
+        // Create modal content
+        modal.innerHTML = `
+          <div class="bg-white rounded-2xl p-8 max-w-md mx-4 text-center shadow-2xl transform animate-pulse">
+            <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <i class="fas fa-check text-3xl text-green-600"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Thank You!</h2>
+            <div class="text-gray-600 mb-6 leading-relaxed">
+              <p class="mb-3">Thank you for showing interest in the Valmo Franchise! ✅</p>
+              <p class="mb-3">Your form has been successfully submitted.</p>
+              <p class="mb-3">Our team will contact you shortly with the next steps. 🚚📦</p>
+            </div>
+            <button onclick="closeThankYouModal()" class="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-300 transform hover:scale-105">
+              <i class="fas fa-thumbs-up mr-2"></i>Awesome!
+            </button>
+          </div>
+        `;
+
+        document.body.appendChild(modal);
+
+        // Add animation
+        setTimeout(() => {
+          modal.querySelector('div').style.transform = 'scale(1)';
+          modal.querySelector('div').style.animation = 'none';
+        }, 100);
+      }
+
+      function closeThankYouModal() {
+        const modal = document.querySelector('.fixed.inset-0');
+        if (modal) {
+          modal.remove();
+        }
+      }
+    </script>
+  </body>
+</html>

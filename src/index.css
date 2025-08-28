@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* Custom responsive utilities */
+@media (max-width: 640px) {
+  .mobile-grid-cols-1 {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .mobile-flex-col {
+    flex-direction: column !important;
+  }
+  
+  .mobile-w-full {
+    width: 100% !important;
+  }
+  
+  .mobile-text-center {
+    text-align: center !important;
+  }
+  
+  .mobile-p-4 {
+    padding: 1rem !important;
+  }
+  
+  .mobile-mb-4 {
+    margin-bottom: 1rem !important;
+  }
+  
+  .mobile-space-y-4 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 1rem !important;
+  }
+}
+
+/* Ensure modals are responsive */
+@media (max-width: 768px) {
+  .modal-container {
+    margin: 1rem;
+    max-width: calc(100% - 2rem);
+  }
+  
+  .modal-content {
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+}
+
+/* Fix for table responsiveness */
+@media (max-width: 768px) {
+  .responsive-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
