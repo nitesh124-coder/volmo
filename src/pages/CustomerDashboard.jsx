@@ -243,7 +243,13 @@ const CustomerDashboard = () => {
                       </span>
                     </div>
                     <div>
+<<<<<<< HEAD
                       <strong className="text-gray-700 text-sm">Address:</strong>{" "}
+=======
+                      <strong className="text-gray-700 text-sm">
+                        Address:
+                      </strong>{" "}
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                       <span className="text-gray-900 text-sm">
                         {applicationDetails.residentialStreet},{" "}
                         {applicationDetails.residentialCity},{" "}
@@ -263,7 +269,13 @@ const CustomerDashboard = () => {
                       </span>
                     </div>
                     <div>
+<<<<<<< HEAD
                       <strong className="text-gray-700 text-sm">Experience:</strong>{" "}
+=======
+                      <strong className="text-gray-700 text-sm">
+                        Experience:
+                      </strong>{" "}
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                       <span className="text-gray-900 text-sm">
                         {applicationDetails.professionalBackground || "N/A"}
                       </span>
@@ -389,6 +401,7 @@ const CustomerDashboard = () => {
           {/* Payment Status Card */}
           <div className="bg-white rounded-2xl shadow-xl p-4 sm:p-6 hover:shadow-2xl transition-shadow duration-300">
             <h3 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4 sm:mb-6">
+<<<<<<< HEAD
               <i className="fas fa-credit-card mr-2 sm:mr-3 text-green-600"></i>Payment
               Status
             </h3>
@@ -406,6 +419,26 @@ const CustomerDashboard = () => {
                       </p>
                     </div>
                   )}
+=======
+              <i className="fas fa-credit-card mr-2 sm:mr-3 text-green-600"></i>
+              Payment Status
+            </h3>
+
+            <div className="text-center py-4">
+              {applicationDetails?.assignedBank && (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                  <i className="fas fa-info-circle text-xl sm:text-2xl text-blue-600 mb-2"></i>
+                  <p className="text-blue-800 font-semibold text-sm sm:text-base">
+                    Bank Details Assigned by Agent
+                  </p>
+                  <p className="text-blue-600 text-xs sm:text-sm mt-1">
+                    Your agent has assigned specific payment details for your
+                    application. Please use the bank details or QR code shown
+                    below to complete your payment.
+                  </p>
+                </div>
+              )}
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
               {applicationDetails?.approved ? (
                 <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                   <i className="fas fa-check-circle text-xl sm:text-2xl text-green-600 mb-2"></i>
@@ -441,7 +474,13 @@ const CustomerDashboard = () => {
               ) : applicationDetails?.agreementSent ? (
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                   <i className="fas fa-file-contract text-xl sm:text-2xl text-blue-600 mb-2"></i>
+<<<<<<< HEAD
                   <p className="text-blue-800 font-semibold text-sm sm:text-base">Agreement Sent</p>
+=======
+                  <p className="text-blue-800 font-semibold text-sm sm:text-base">
+                    Agreement Sent
+                  </p>
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                   <p className="text-blue-600 text-xs sm:text-sm mt-1">
                     Please check your email for the agreement document.
                   </p>
@@ -473,14 +512,25 @@ const CustomerDashboard = () => {
             </button>
 
             {/* QR Code ya Bank Details */}
+<<<<<<< HEAD
             {(applicationDetails?.assignedBank?.qrCode || (applicationDetails?.assignedBank && applicationDetails.assignedBank.bankName) || Bank?.data?.qrCode) ? (
+=======
+            {applicationDetails?.assignedBank?.qrCode ||
+            (applicationDetails?.assignedBank &&
+              applicationDetails.assignedBank.bankName) ||
+            Bank?.data?.qrCode ? (
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
               <>
                 {/* Offer Section */}
                 {status.data.status === "approved" ? (
                   <div className="bg-gray-50 p-4 rounded-xl shadow-sm space-y-2 text-sm text-gray-800">
                     <p>
+<<<<<<< HEAD
                       Kindly pay your booking fee of <strong>₹18,600</strong>
                       .
+=======
+                      Kindly pay your booking fee of <strong>₹18,600</strong>.
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                     </p>
                     <p>
                       <strong>Offer:</strong> If you pay through PhonePe, pay
@@ -506,8 +556,12 @@ const CustomerDashboard = () => {
                 ) : (
                   <div className="bg-gray-50 p-4 rounded-xl shadow-sm space-y-2 text-sm text-gray-800">
                     <p>
+<<<<<<< HEAD
                       Kindly pay your Agreement Fee of{" "}
                       <strong>₹90,100</strong>.
+=======
+                      Kindly pay your Agreement Fee of <strong>₹90,100</strong>.
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                     </p>
                     <p>
                       <strong>Offer:</strong> If you pay through PhonePe, pay
@@ -552,12 +606,18 @@ const CustomerDashboard = () => {
                       </p>
                     </div>
                   </>
+<<<<<<< HEAD
                 ) : applicationDetails?.assignedBank && applicationDetails.assignedBank.bankName ? (
+=======
+                ) : applicationDetails?.assignedBank &&
+                  applicationDetails.assignedBank.bankName ? (
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                   <>
                     {/* Bank Details Section */}
                     <div className="bg-gray-50 p-4 rounded-xl shadow-sm space-y-1 text-sm text-gray-800 mt-6">
                       <p className="font-semibold">Bank Details:</p>
                       <p>
+<<<<<<< HEAD
                         Bank Name: <strong>{applicationDetails.assignedBank.bankName}</strong>
                       </p>
                       <p>
@@ -576,6 +636,43 @@ const CustomerDashboard = () => {
                       {applicationDetails.assignedBank.upiId && (
                         <p>
                           UPI ID: <strong>{applicationDetails.assignedBank.upiId}</strong>
+=======
+                        Bank Name:{" "}
+                        <strong>
+                          {applicationDetails.assignedBank.bankName}
+                        </strong>
+                      </p>
+                      <p>
+                        Branch:{" "}
+                        <strong>
+                          {applicationDetails.assignedBank.branchName}
+                        </strong>
+                      </p>
+                      <p>
+                        A/C Holder:{" "}
+                        <strong>
+                          {applicationDetails.assignedBank.accountHolderName}
+                        </strong>
+                      </p>
+                      <p>
+                        A/C No.:{" "}
+                        <strong>
+                          {applicationDetails.assignedBank.accountNumber}
+                        </strong>
+                      </p>
+                      <p>
+                        IFSC Code:{" "}
+                        <strong>
+                          {applicationDetails.assignedBank.ifscCode}
+                        </strong>
+                      </p>
+                      {applicationDetails.assignedBank.upiId && (
+                        <p>
+                          UPI ID:{" "}
+                          <strong>
+                            {applicationDetails.assignedBank.upiId}
+                          </strong>
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                         </p>
                       )}
                       <p className="text-gray-600 text-xs mt-1">

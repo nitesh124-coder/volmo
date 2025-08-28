@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+=======
+/** @format */
+
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
 import React, { useState, useEffect, useRef } from "react";
 
 const Form = () => {
@@ -3169,8 +3174,12 @@ const Form = () => {
                 <span className="font-mono">{applicationNumber}</span>
               </p>
             </div>
+<<<<<<< HEAD
             <div className="flex space-x-6 text-sm">
             </div>
+=======
+            <div className="flex space-x-6 text-sm"></div>
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
           </div>
         </div>
       </footer>

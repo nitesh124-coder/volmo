@@ -5,6 +5,7 @@ module.exports = {
     "./public/index.html"
   ],
   theme: {
+<<<<<<< HEAD
     extend: {
       screens: {
         'xs': '475px',
@@ -19,6 +20,9 @@ module.exports = {
         '9xl': '100rem',
       },
     },
+=======
+    extend: {},
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
   },
   plugins: [],
 }

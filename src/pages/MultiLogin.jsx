@@ -1,6 +1,10 @@
 /** @format */
 
+<<<<<<< HEAD
 import React, { useState, useEffect } from "react";
+=======
+import React, { useState } from "react";
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 
@@ -11,6 +15,7 @@ const MultiLogin = () => {
   const [formData, setFormData] = useState({ userId: "", password: "" });
   const [message, setMessage] = useState({ text: "", type: "" });
   const [isLoading, setIsLoading] = useState(false);
+<<<<<<< HEAD
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // Check if user is already logged in
@@ -26,6 +31,8 @@ const MultiLogin = () => {
       }
     }
   }, [navigate]);
+=======
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
 
   // ✅ Show alert messages
   const showMessage = (text, type) => {
@@ -54,6 +61,7 @@ const MultiLogin = () => {
     });
   };
 
+<<<<<<< HEAD
   // ✅ Validate email format
   const isValidEmail = (email) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -64,6 +72,8 @@ const MultiLogin = () => {
     return /^[a-zA-Z0-9]+$/.test(agentId) && agentId.length >= 3;
   };
 
+=======
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
   // ✅ Submit Login
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -73,6 +83,7 @@ const MultiLogin = () => {
       return;
     }
 
+<<<<<<< HEAD
     // Validate input based on login type
     if (currentLoginType === "admin" && !isValidEmail(formData.userId)) {
       showMessage("Please enter a valid email for admin login", "error");
@@ -84,6 +95,8 @@ const MultiLogin = () => {
       return;
     }
 
+=======
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
     setIsLoading(true);
 
     try {
@@ -105,10 +118,17 @@ const MultiLogin = () => {
         return; // ✅ No API call for admin
       }
 
+<<<<<<< HEAD
       // ✅ Agent Login (API) - now using agentId instead of email
       let endpoint = "https://valmobackend.onrender.com/Agentlogin";
       let requestBody = {
         agentId: formData.userId, // Changed from email to agentId for agents
+=======
+      // ✅ Agent Login (API)
+      let endpoint = "https://valmobackend.onrender.com/Agentlogin";
+      let requestBody = {
+        email: formData.userId, // ✅ email ke form se login
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
         password: formData.password,
         userType: currentLoginType,
       };
@@ -171,7 +191,11 @@ const MultiLogin = () => {
       case "admin":
         return "Email";
       case "agent":
+<<<<<<< HEAD
         return "Agent ID"; // Changed from Email to Agent ID
+=======
+        return "Email"; // ✅ Updated: agent login with email
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
       default:
         return "User ID";
     }
@@ -182,7 +206,11 @@ const MultiLogin = () => {
       case "admin":
         return "Enter your Email";
       case "agent":
+<<<<<<< HEAD
         return "Enter your Agent ID"; // Changed placeholder
+=======
+        return "Enter your Email"; // ✅ Updated: no Unique ID
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
       default:
         return "Enter your User ID";
     }
@@ -200,6 +228,7 @@ const MultiLogin = () => {
       <main className="flex flex-1 items-center justify-center p-4">
         <div className="flex flex-col lg:flex-row w-full max-w-4xl bg-white shadow-lg rounded-lg overflow-hidden">
           {/* LEFT SIDE IMAGE */}
+<<<<<<< HEAD
           <div className="hidden lg:flex lg:w-1/2 items-center justify-center p-4 sm:p-8" 
                style={{
                  background: "linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(30, 58, 138, 0.1) 100%)"
@@ -213,6 +242,14 @@ const MultiLogin = () => {
                 className="max-w-full h-auto relative z-10"
               />
             </div>
+=======
+          <div className="hidden lg:flex lg:w-1/2 items-center justify-center bg-gray-50 p-4">
+            <img
+              src="/images/truck_image.png"
+              alt="Login Illustration"
+              className="max-w-[80%] max-h-[80%] object-contain"
+            />
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
           </div>
 
           {/* RIGHT SIDE FORM */}

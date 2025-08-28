@@ -60,7 +60,13 @@ const AdminHome = () => {
                 alt="VALMO"
                 className="h-6 sm:h-8 filter invert"
               />
+<<<<<<< HEAD
               <h1 className="text-xl sm:text-2xl font-bold text-gray-800">VALMO Admin</h1>
+=======
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
+                VALMO Admin
+              </h1>
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-gray-600 text-sm">Welcome, Admin</span>
@@ -93,7 +99,13 @@ const AdminHome = () => {
                 <i className="fas fa-file-alt text-xl sm:text-2xl text-blue-600"></i>
               </div>
               <div className="ml-3 sm:ml-4">
+<<<<<<< HEAD
                 <p className="text-xs sm:text-sm text-gray-600">Total Applications</p>
+=======
+                <p className="text-xs sm:text-sm text-gray-600">
+                  Total Applications
+                </p>
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                 <p className="text-lg sm:text-2xl font-bold text-gray-900">
                   {stats.totalApplications}
                 </p>
@@ -107,7 +119,13 @@ const AdminHome = () => {
                 <i className="fas fa-clock text-xl sm:text-2xl text-yellow-600"></i>
               </div>
               <div className="ml-3 sm:ml-4">
+<<<<<<< HEAD
                 <p className="text-xs sm:text-sm text-gray-600">Pending Review</p>
+=======
+                <p className="text-xs sm:text-sm text-gray-600">
+                  Pending Review
+                </p>
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                 <p className="text-lg sm:text-2xl font-bold text-gray-900">
                   {stats.pendingApplications}
                 </p>
@@ -135,7 +153,13 @@ const AdminHome = () => {
                 <i className="fas fa-users text-xl sm:text-2xl text-purple-600"></i>
               </div>
               <div className="ml-3 sm:ml-4">
+<<<<<<< HEAD
                 <p className="text-xs sm:text-sm text-gray-600">Active Agents</p>
+=======
+                <p className="text-xs sm:text-sm text-gray-600">
+                  Active Agents
+                </p>
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                 <p className="text-lg sm:text-2xl font-bold text-gray-900">
                   {stats.totalAgents}
                 </p>
@@ -219,7 +243,13 @@ const AdminHome = () => {
               <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1 sm:mb-2">
                 Settings
               </h3>
+<<<<<<< HEAD
               <p className="text-gray-600 text-xs sm:text-sm">System configuration and settings</p>
+=======
+              <p className="text-gray-600 text-xs sm:text-sm">
+                System configuration and settings
+              </p>
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
             </div>
           </div>
         </div>

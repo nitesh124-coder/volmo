@@ -41,7 +41,11 @@ const AgentDashboard = () => {
   const [bankDetailApplication, setBankDetailApplication] = useState(null);
   const [sendingBankDetails, setSendingBankDetails] = useState(false);
   const [availableBanks, setAvailableBanks] = useState([]);
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
   // Action loading states to prevent double submissions
   const [approvingApplications, setApprovingApplications] = useState(new Set());
   const [rejectingApplications, setRejectingApplications] = useState(new Set());
@@ -78,6 +82,7 @@ const AgentDashboard = () => {
   // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
+<<<<<<< HEAD
       if (!event.target.closest('.mobile-actions-dropdown') && !event.target.closest('[class*="fa-ellipsis-h"]')) {
         document.querySelectorAll('.mobile-actions-dropdown').forEach(dropdown => {
           dropdown.classList.remove('block');
@@ -88,6 +93,23 @@ const AgentDashboard = () => {
     document.addEventListener('click', handleClickOutside);
     return () => {
       document.removeEventListener('click', handleClickOutside);
+=======
+      if (
+        !event.target.closest(".mobile-actions-dropdown") &&
+        !event.target.closest('[class*="fa-ellipsis-h"]')
+      ) {
+        document
+          .querySelectorAll(".mobile-actions-dropdown")
+          .forEach((dropdown) => {
+            dropdown.classList.remove("block");
+          });
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
     };
   }, [approvingApplications, rejectingApplications, sendingAgreements]);
 
@@ -109,9 +131,17 @@ const AgentDashboard = () => {
 
       if (response.ok && result.success) {
         // Handle both array and single object responses
+<<<<<<< HEAD
         const banksData = Array.isArray(result.data) 
           ? result.data 
           : result.data ? [result.data] : [];
+=======
+        const banksData = Array.isArray(result.data)
+          ? result.data
+          : result.data
+          ? [result.data]
+          : [];
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
         setAvailableBanks(banksData);
       }
     } catch (err) {
@@ -124,7 +154,11 @@ const AgentDashboard = () => {
     try {
       // Get agentId from localStorage
       const agentId = localStorage.getItem("agentId");
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
       // Fetch applications assigned to this agent
       const response = await fetch(`${API_BASE}/application/agent/${agentId}`);
       const result = await response.json();
@@ -167,11 +201,23 @@ const AgentDashboard = () => {
       .slice(0, 5)
       .map((app, index) => ({
         id: index + 1,
+<<<<<<< HEAD
         action: app.approved ? "Approved application" : app.rejected ? "Rejected application" : "Created new proposal",
         applicant: app.name,
         timestamp: app.createdAt || new Date().toISOString()
       }));
     
+=======
+        action: app.approved
+          ? "Approved application"
+          : app.rejected
+          ? "Rejected application"
+          : "Created new proposal",
+        applicant: app.name,
+        timestamp: app.createdAt || new Date().toISOString(),
+      }));
+
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
     setActivities(mockActivities);
   };
 
@@ -209,10 +255,19 @@ const AgentDashboard = () => {
     if (approvingApplications.has(`${appObj.email}-${appObj.name}`)) {
       return;
     }
+<<<<<<< HEAD
     
     // Add to loading set
     setApprovingApplications(prev => new Set([...prev, `${appObj.email}-${appObj.name}`]));
     
+=======
+
+    // Add to loading set
+    setApprovingApplications(
+      (prev) => new Set([...prev, `${appObj.email}-${appObj.name}`])
+    );
+
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
     // UI optimistic
     optimisticUpdate(appObj.email, appObj.name, {
       approved: true,
@@ -237,7 +292,11 @@ const AgentDashboard = () => {
       alert("Approve failed: " + err.message);
     } finally {
       // Remove from loading set
+<<<<<<< HEAD
       setApprovingApplications(prev => {
+=======
+      setApprovingApplications((prev) => {
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
         const newSet = new Set(prev);
         newSet.delete(`${appObj.email}-${appObj.name}`);
         return newSet;
@@ -250,10 +309,19 @@ const AgentDashboard = () => {
     if (rejectingApplications.has(`${appObj.email}-${appObj.name}`)) {
       return;
     }
+<<<<<<< HEAD
     
     // Add to loading set
     setRejectingApplications(prev => new Set([...prev, `${appObj.email}-${appObj.name}`]));
     
+=======
+
+    // Add to loading set
+    setRejectingApplications(
+      (prev) => new Set([...prev, `${appObj.email}-${appObj.name}`])
+    );
+
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
     optimisticUpdate(appObj.email, appObj.name, {
       rejected: true,
       approved: false,
@@ -270,7 +338,11 @@ const AgentDashboard = () => {
       alert("Reject failed: " + err.message);
     } finally {
       // Remove from loading set
+<<<<<<< HEAD
       setRejectingApplications(prev => {
+=======
+      setRejectingApplications((prev) => {
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
         const newSet = new Set(prev);
         newSet.delete(`${appObj.email}-${appObj.name}`);
         return newSet;
@@ -283,10 +355,19 @@ const AgentDashboard = () => {
     if (sendingAgreements.has(`${appObj.email}-${appObj.name}`)) {
       return;
     }
+<<<<<<< HEAD
     
     // Add to loading set
     setSendingAgreements(prev => new Set([...prev, `${appObj.email}-${appObj.name}`]));
     
+=======
+
+    // Add to loading set
+    setSendingAgreements(
+      (prev) => new Set([...prev, `${appObj.email}-${appObj.name}`])
+    );
+
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
     optimisticUpdate(appObj.email, appObj.name, { agreementSent: true });
     try {
       // backend पर /application/agreement route बना होना चाहिए
@@ -300,7 +381,11 @@ const AgentDashboard = () => {
       alert("Agreement failed: " + err.message);
     } finally {
       // Remove from loading set
+<<<<<<< HEAD
       setSendingAgreements(prev => {
+=======
+      setSendingAgreements((prev) => {
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
         const newSet = new Set(prev);
         newSet.delete(`${appObj.email}-${appObj.name}`);
         return newSet;
@@ -593,7 +678,11 @@ VALMO Team`;
       // Find the selected bank details if not QR code
       let bankDetails = null;
       if (selectedBank !== "qr_code") {
+<<<<<<< HEAD
         const bank = availableBanks.find(b => b._id === selectedBank);
+=======
+        const bank = availableBanks.find((b) => b._id === selectedBank);
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
         if (bank) {
           bankDetails = {
             _id: bank._id,
@@ -603,12 +692,17 @@ VALMO Team`;
             accountNumber: bank.accountNumber,
             ifscCode: bank.ifscCode,
             upiId: bank.upiId,
+<<<<<<< HEAD
             qrCode: bank.qrCode
+=======
+            qrCode: bank.qrCode,
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
           };
         }
       }
 
       // Send bank assignment to backend
+<<<<<<< HEAD
       const response = await fetch("https://valmobackend.onrender.com/assignBankDetails", {
         method: "POST",
         headers: {
@@ -620,18 +714,46 @@ VALMO Team`;
           bankDetails: bankDetails
         }),
       });
+=======
+      const response = await fetch(
+        "https://valmobackend.onrender.com/assignBankDetails",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            customerEmail: bankDetailApplication.email,
+            bankOption: selectedBank,
+            bankDetails: bankDetails,
+          }),
+        }
+      );
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
 
       const result = await response.json();
 
       if (response.ok && result.success) {
+<<<<<<< HEAD
         alert(`Bank details assigned successfully to ${bankDetailApplication.name}! The customer will now see these details in their dashboard.`);
+=======
+        alert(
+          `Bank details assigned successfully to ${bankDetailApplication.name}! The customer will now see these details in their dashboard.`
+        );
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
         setIsBankDetailModalOpen(false);
         setSelectedBank("");
         setBankDetailApplication(null);
         // Refresh applications to show updated status
         loadApplications();
       } else {
+<<<<<<< HEAD
         alert(result.message || "Failed to assign bank details. Please try again.");
+=======
+        alert(
+          result.message || "Failed to assign bank details. Please try again."
+        );
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
       }
     } catch (error) {
       console.error("Error assigning bank details:", error);
@@ -662,6 +784,7 @@ VALMO Team`;
   };
 
   const handleCopyEmailContent = () => {
+<<<<<<< HEAD
     navigator.clipboard.writeText(emailContent)
       .then(() => {
         alert('Email content copied to clipboard!');
@@ -669,6 +792,16 @@ VALMO Team`;
       .catch(err => {
         console.error('Failed to copy: ', err);
         alert('Failed to copy email content');
+=======
+    navigator.clipboard
+      .writeText(emailContent)
+      .then(() => {
+        alert("Email content copied to clipboard!");
+      })
+      .catch((err) => {
+        console.error("Failed to copy: ", err);
+        alert("Failed to copy email content");
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
       });
   };
 
@@ -689,7 +822,13 @@ VALMO Team`;
                 alt="VALMO"
                 className="h-6 sm:h-8 filter invert"
               />
+<<<<<<< HEAD
               <h1 className="text-xl sm:text-2xl font-bold text-gray-800">VALMO Agent</h1>
+=======
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
+                VALMO Agent
+              </h1>
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
             </div>
             <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
               <div className="relative w-full sm:w-64">
@@ -712,7 +851,16 @@ VALMO Team`;
                   )}
                 </button>
                 <span className="text-gray-600 text-sm hidden sm:inline">
+<<<<<<< HEAD
                   Welcome{agentData?.agentId ? `, ${agentData.agentId}` : agentData?.userId ? `, ${agentData.userId}` : ", Agent"}
+=======
+                  Welcome
+                  {agentData?.agentId
+                    ? `, ${agentData.agentId}`
+                    : agentData?.userId
+                    ? `, ${agentData.userId}`
+                    : ", Agent"}
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                 </span>
                 <button
                   onClick={handleLogout}
@@ -769,7 +917,11 @@ VALMO Team`;
             </p>
             <div className="flex flex-col sm:flex-row gap-2 justify-center">
               <button
+<<<<<<< HEAD
                 onClick={() => navigate('/admin/admin-applications')}
+=======
+                onClick={() => navigate("/admin/admin-applications")}
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                 className="w-full bg-green-600 hover:bg-green-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg transition-all duration-200 font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5 text-sm sm:text-base"
               >
                 View All
@@ -832,25 +984,50 @@ VALMO Team`;
               </div>
               <div className="bg-green-50 p-4 rounded-lg">
                 <div className="text-2xl font-bold text-green-600">
+<<<<<<< HEAD
                   {filteredApplications.filter(app => app.approved).length}
+=======
+                  {filteredApplications.filter((app) => app.approved).length}
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                 </div>
                 <div className="text-gray-600 text-sm">Approved</div>
               </div>
               <div className="bg-yellow-50 p-4 rounded-lg">
                 <div className="text-2xl font-bold text-yellow-600">
+<<<<<<< HEAD
                   {filteredApplications.filter(app => !app.approved && !app.rejected).length}
+=======
+                  {
+                    filteredApplications.filter(
+                      (app) => !app.approved && !app.rejected
+                    ).length
+                  }
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                 </div>
                 <div className="text-gray-600 text-sm">Pending</div>
               </div>
             </div>
             <div className="mt-4">
+<<<<<<< HEAD
               <h4 className="text-sm font-medium text-gray-900 mb-2">Recent Proposals</h4>
+=======
+              <h4 className="text-sm font-medium text-gray-900 mb-2">
+                Recent Proposals
+              </h4>
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
               <div className="space-y-2 max-h-40 overflow-y-auto">
                 {filteredApplications
                   .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
                   .slice(0, 5)
                   .map((app) => (
+<<<<<<< HEAD
                     <div key={app._id} className="flex justify-between items-center text-xs">
+=======
+                    <div
+                      key={app._id}
+                      className="flex justify-between items-center text-xs"
+                    >
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                       <span className="text-gray-600">{app.name}</span>
                       <span className="text-gray-500">
                         {new Date(app.createdAt).toLocaleDateString()}
@@ -894,12 +1071,24 @@ VALMO Team`;
             {loading ? (
               <div className="text-center py-6 sm:py-8">
                 <i className="fas fa-spinner fa-spin text-xl sm:text-2xl text-gray-400 mb-3 sm:mb-4"></i>
+<<<<<<< HEAD
                 <p className="text-gray-600 text-sm sm:text-base">Loading applications...</p>
+=======
+                <p className="text-gray-600 text-sm sm:text-base">
+                  Loading applications...
+                </p>
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
               </div>
             ) : getRecentApplications().length === 0 ? (
               <div className="text-center py-6 sm:py-8">
                 <i className="fas fa-inbox text-3xl sm:text-4xl text-gray-400 mb-3 sm:mb-4"></i>
+<<<<<<< HEAD
                 <p className="text-gray-600 text-sm sm:text-base">No applications found</p>
+=======
+                <p className="text-gray-600 text-sm sm:text-base">
+                  No applications found
+                </p>
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
               </div>
             ) : (
               <div className="overflow-x-auto -mx-4 sm:mx-0">
@@ -956,7 +1145,13 @@ VALMO Team`;
                           </span>
                           {application.assignedBank && (
                             <span className="ml-2 px-2 py-1 inline-flex text-xs leading-4 font-semibold rounded-full bg-blue-100 text-blue-800">
+<<<<<<< HEAD
                               {application.assignedBank.bankName || application.assignedBank.accountHolderName || "Bank Assigned"}
+=======
+                              {application.assignedBank.bankName ||
+                                application.assignedBank.accountHolderName ||
+                                "Bank Assigned"}
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                             </span>
                           )}
                         </td>
@@ -989,18 +1184,43 @@ VALMO Team`;
 
                             <button
                               onClick={() => handleApprove(application)}
+<<<<<<< HEAD
                               disabled={application.approved || application.rejected || approvingApplications.has(`${application.email}-${application.name}`)}
                               className={`px-2 py-1 text-xs rounded font-medium shadow-sm transition-all duration-200 ${
                                 application.approved || application.rejected
                                   ? "bg-green-500 text-white cursor-not-allowed opacity-75"
                                   : approvingApplications.has(`${application.email}-${application.name}`)
+=======
+                              disabled={
+                                application.approved ||
+                                application.rejected ||
+                                approvingApplications.has(
+                                  `${application.email}-${application.name}`
+                                )
+                              }
+                              className={`px-2 py-1 text-xs rounded font-medium shadow-sm transition-all duration-200 ${
+                                application.approved || application.rejected
+                                  ? "bg-green-500 text-white cursor-not-allowed opacity-75"
+                                  : approvingApplications.has(
+                                      `${application.email}-${application.name}`
+                                    )
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                                   ? "bg-blue-500 text-white cursor-not-allowed opacity-75"
                                   : "bg-gray-200 text-gray-700 hover:bg-green-500 hover:text-white hover:shadow-md"
                               } hidden sm:inline-block`}
                             >
+<<<<<<< HEAD
                               {approvingApplications.has(`${application.email}-${application.name}`) ? (
                                 <>
                                   <i className="fas fa-spinner fa-spin mr-1"></i> Approving...
+=======
+                              {approvingApplications.has(
+                                `${application.email}-${application.name}`
+                              ) ? (
+                                <>
+                                  <i className="fas fa-spinner fa-spin mr-1"></i>{" "}
+                                  Approving...
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                                 </>
                               ) : (
                                 "Approve"
@@ -1010,6 +1230,7 @@ VALMO Team`;
                             <button
                               onClick={() => handleAgreement(application)}
                               disabled={
+<<<<<<< HEAD
                                 application.agreementSent !== false &&
                                 application.agreementSent !== undefined ||
                                 application.rejected ||
@@ -1019,13 +1240,38 @@ VALMO Team`;
                                 application.agreementSent || application.rejected
                                   ? "bg-green-500 text-white cursor-not-allowed opacity-75"
                                   : sendingAgreements.has(`${application.email}-${application.name}`)
+=======
+                                (application.agreementSent !== false &&
+                                  application.agreementSent !== undefined) ||
+                                application.rejected ||
+                                sendingAgreements.has(
+                                  `${application.email}-${application.name}`
+                                )
+                              }
+                              className={`px-2 py-1 text-xs rounded font-medium shadow-sm transition-all duration-200 ${
+                                application.agreementSent ||
+                                application.rejected
+                                  ? "bg-green-500 text-white cursor-not-allowed opacity-75"
+                                  : sendingAgreements.has(
+                                      `${application.email}-${application.name}`
+                                    )
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                                   ? "bg-blue-500 text-white cursor-not-allowed opacity-75"
                                   : "bg-gray-200 text-gray-700 hover:bg-green-500 hover:text-white hover:shadow-md"
                               } hidden sm:inline-block`}
                             >
+<<<<<<< HEAD
                               {sendingAgreements.has(`${application.email}-${application.name}`) ? (
                                 <>
                                   <i className="fas fa-spinner fa-spin mr-1"></i> Sending...
+=======
+                              {sendingAgreements.has(
+                                `${application.email}-${application.name}`
+                              ) ? (
+                                <>
+                                  <i className="fas fa-spinner fa-spin mr-1"></i>{" "}
+                                  Sending...
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                                 </>
                               ) : (
                                 "Agreement"
@@ -1034,24 +1280,53 @@ VALMO Team`;
 
                             <button
                               onClick={() => handleReject(application)}
+<<<<<<< HEAD
                               disabled={application.rejected || application.approved || rejectingApplications.has(`${application.email}-${application.name}`)}
                               className={`px-2 py-1 text-xs rounded font-medium shadow-sm transition-all duration-200 ${
                                 application.rejected || application.approved
                                   ? "bg-green-500 text-white cursor-not-allowed opacity-75"
                                   : rejectingApplications.has(`${application.email}-${application.name}`)
+=======
+                              disabled={
+                                application.rejected ||
+                                application.approved ||
+                                rejectingApplications.has(
+                                  `${application.email}-${application.name}`
+                                )
+                              }
+                              className={`px-2 py-1 text-xs rounded font-medium shadow-sm transition-all duration-200 ${
+                                application.rejected || application.approved
+                                  ? "bg-green-500 text-white cursor-not-allowed opacity-75"
+                                  : rejectingApplications.has(
+                                      `${application.email}-${application.name}`
+                                    )
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                                   ? "bg-blue-500 text-white cursor-not-allowed opacity-75"
                                   : "bg-gray-200 text-gray-700 hover:bg-green-500 hover:text-white hover:shadow-md"
                               } hidden sm:inline-block`}
                             >
+<<<<<<< HEAD
                               {rejectingApplications.has(`${application.email}-${application.name}`) ? (
                                 <>
                                   <i className="fas fa-spinner fa-spin mr-1"></i> Processing...
+=======
+                              {rejectingApplications.has(
+                                `${application.email}-${application.name}`
+                              ) ? (
+                                <>
+                                  <i className="fas fa-spinner fa-spin mr-1"></i>{" "}
+                                  Processing...
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                                 </>
                               ) : (
                                 "One Time Fee"
                               )}
                             </button>
+<<<<<<< HEAD
                             
+=======
+
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                             <button
                               onClick={() => handleBankDetail(application)}
                               className="px-2 py-1 text-xs rounded font-medium shadow-sm transition-all duration-200 bg-gray-200 text-gray-700 hover:bg-blue-500 hover:text-white hover:shadow-md hidden sm:inline-block"
@@ -1061,11 +1336,16 @@ VALMO Team`;
 
                             {/* Dropdown for mobile actions */}
                             <div className="sm:hidden relative">
+<<<<<<< HEAD
                               <button 
+=======
+                              <button
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                                 className="text-gray-600 hover:text-gray-900 bg-gray-100 hover:bg-gray-200 p-1.5 rounded-full transition-all duration-200 shadow-sm hover:shadow-md"
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   // Toggle dropdown for this specific row
+<<<<<<< HEAD
                                   const dropdown = e.currentTarget.nextElementSibling;
                                   const isOpen = dropdown.classList.contains('block');
                                   
@@ -1076,6 +1356,25 @@ VALMO Team`;
                                   
                                   // Toggle current dropdown
                                   dropdown.classList.toggle('block', !isOpen);
+=======
+                                  const dropdown =
+                                    e.currentTarget.nextElementSibling;
+                                  const isOpen =
+                                    dropdown.classList.contains("block");
+
+                                  // Close all other dropdowns
+                                  document
+                                    .querySelectorAll(
+                                      ".mobile-actions-dropdown"
+                                    )
+                                    .forEach((d) => {
+                                      if (d !== dropdown)
+                                        d.classList.remove("block");
+                                    });
+
+                                  // Toggle current dropdown
+                                  dropdown.classList.toggle("block", !isOpen);
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                                 }}
                               >
                                 <i className="fas fa-ellipsis-h text-xs"></i>
@@ -1084,7 +1383,15 @@ VALMO Team`;
                                 <button
                                   onClick={() => {
                                     handleViewApplication(application.email);
+<<<<<<< HEAD
                                     document.querySelector('.mobile-actions-dropdown.block')?.classList.remove('block');
+=======
+                                    document
+                                      .querySelector(
+                                        ".mobile-actions-dropdown.block"
+                                      )
+                                      ?.classList.remove("block");
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                                   }}
                                   className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                 >
@@ -1093,12 +1400,21 @@ VALMO Team`;
                                 <button
                                   onClick={() => {
                                     handleEditApplication(application);
+<<<<<<< HEAD
                                     document.querySelector('.mobile-actions-dropdown.block')?.classList.remove('block');
+=======
+                                    document
+                                      .querySelector(
+                                        ".mobile-actions-dropdown.block"
+                                      )
+                                      ?.classList.remove("block");
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                                   }}
                                   className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                 >
                                   <i className="fas fa-edit mr-2"></i>Edit
                                 </button>
+<<<<<<< HEAD
                                 {!application.approved && !application.rejected && (
                                   <button
                                     onClick={() => {
@@ -1164,6 +1480,112 @@ VALMO Team`;
                                   className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                 >
                                   <i className="fas fa-university mr-2"></i>Bank Detail
+=======
+                                {!application.approved &&
+                                  !application.rejected && (
+                                    <button
+                                      onClick={() => {
+                                        handleApprove(application);
+                                        document
+                                          .querySelector(
+                                            ".mobile-actions-dropdown.block"
+                                          )
+                                          ?.classList.remove("block");
+                                      }}
+                                      disabled={approvingApplications.has(
+                                        `${application.email}-${application.name}`
+                                      )}
+                                      className={`block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 ${
+                                        approvingApplications.has(
+                                          `${application.email}-${application.name}`
+                                        )
+                                          ? "opacity-50 cursor-not-allowed"
+                                          : ""
+                                      }`}
+                                    >
+                                      <i className="fas fa-check mr-2"></i>
+                                      {approvingApplications.has(
+                                        `${application.email}-${application.name}`
+                                      )
+                                        ? "Approving..."
+                                        : "Approve"}
+                                    </button>
+                                  )}
+                                {application.approved &&
+                                  !application.agreementSent &&
+                                  !application.rejected && (
+                                    <button
+                                      onClick={() => {
+                                        handleAgreement(application);
+                                        document
+                                          .querySelector(
+                                            ".mobile-actions-dropdown.block"
+                                          )
+                                          ?.classList.remove("block");
+                                      }}
+                                      disabled={sendingAgreements.has(
+                                        `${application.email}-${application.name}`
+                                      )}
+                                      className={`block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 ${
+                                        sendingAgreements.has(
+                                          `${application.email}-${application.name}`
+                                        )
+                                          ? "opacity-50 cursor-not-allowed"
+                                          : ""
+                                      }`}
+                                    >
+                                      <i className="fas fa-file-contract mr-2"></i>
+                                      {sendingAgreements.has(
+                                        `${application.email}-${application.name}`
+                                      )
+                                        ? "Sending..."
+                                        : "Agreement"}
+                                    </button>
+                                  )}
+                                {!application.rejected &&
+                                  !application.approved && (
+                                    <button
+                                      onClick={() => {
+                                        handleReject(application);
+                                        document
+                                          .querySelector(
+                                            ".mobile-actions-dropdown.block"
+                                          )
+                                          ?.classList.remove("block");
+                                      }}
+                                      disabled={rejectingApplications.has(
+                                        `${application.email}-${application.name}`
+                                      )}
+                                      className={`block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 ${
+                                        rejectingApplications.has(
+                                          `${application.email}-${application.name}`
+                                        )
+                                          ? "opacity-50 cursor-not-allowed"
+                                          : ""
+                                      }`}
+                                    >
+                                      <i className="fas fa-money-bill mr-2"></i>
+                                      {rejectingApplications.has(
+                                        `${application.email}-${application.name}`
+                                      )
+                                        ? "Processing..."
+                                        : "One Time Fee"}
+                                    </button>
+                                  )}
+                                <button
+                                  onClick={() => {
+                                    handleBankDetail(application);
+                                    document
+                                      .querySelector(
+                                        ".mobile-actions-dropdown.block"
+                                      )
+                                      ?.classList.remove("block");
+                                  }}
+                                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                >
+                                  <i className="fas fa-university mr-2"></i>Bank
+                                  Detail
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                                 </button>
                               </div>
                             </div>
@@ -1222,8 +1644,13 @@ VALMO Team`;
                         </h3>
                         <div className="mt-2 text-sm text-green-700">
                           <p>
+<<<<<<< HEAD
                             The proposal has been created. Copy the email content below
                             and send it to the client.
+=======
+                            The proposal has been created. Copy the email
+                            content below and send it to the client.
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                           </p>
                         </div>
                       </div>
@@ -1537,12 +1964,21 @@ VALMO Team`;
                     {bankDetailApplication.name} ({bankDetailApplication.email})
                   </p>
                   <p className="text-xs text-blue-600 mt-2">
+<<<<<<< HEAD
                     Note: Once assigned, these bank details will be shown to the customer
                     in their dashboard for payment.
                   </p>
                 </div>
               )}
               
+=======
+                    Note: Once assigned, these bank details will be shown to the
+                    customer in their dashboard for payment.
+                  </p>
+                </div>
+              )}
+
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Select Bank for Customer
@@ -1559,7 +1995,12 @@ VALMO Team`;
                         className="h-4 w-4 text-blue-600 focus:ring-blue-500"
                       />
                       <span className="ml-2 text-sm text-gray-700">
+<<<<<<< HEAD
                         {bank.bankName} - {bank.branchName} ({bank.accountNumber})
+=======
+                        {bank.bankName} - {bank.branchName} (
+                        {bank.accountNumber})
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                       </span>
                     </label>
                   ))}
@@ -1572,11 +2013,21 @@ VALMO Team`;
                       onChange={(e) => setSelectedBank(e.target.value)}
                       className="h-4 w-4 text-blue-600 focus:ring-blue-500"
                     />
+<<<<<<< HEAD
                     <span className="ml-2 text-sm text-gray-700">QR Code Payment</span>
                   </label>
                 </div>
               </div>
               
+=======
+                    <span className="ml-2 text-sm text-gray-700">
+                      QR Code Payment
+                    </span>
+                  </label>
+                </div>
+              </div>
+
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
               <div className="flex justify-end space-x-3 pt-4">
                 <button
                   type="button"
@@ -1601,7 +2052,12 @@ VALMO Team`;
                 >
                   {sendingBankDetails ? (
                     <>
+<<<<<<< HEAD
                       <i className="fas fa-spinner fa-spin mr-2"></i> Assigning...
+=======
+                      <i className="fas fa-spinner fa-spin mr-2"></i>{" "}
+                      Assigning...
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                     </>
                   ) : (
                     <>

@@ -45,9 +45,17 @@ const BankDetails1 = () => {
       );
       if (res.data.success) {
         // Handle both single bank object and array of banks
+<<<<<<< HEAD
         const bankData = Array.isArray(res.data.data) 
           ? res.data.data 
           : res.data.data ? [res.data.data] : [];
+=======
+        const bankData = Array.isArray(res.data.data)
+          ? res.data.data
+          : res.data.data
+          ? [res.data.data]
+          : [];
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
         setBanks(bankData);
       }
     } catch (err) {
@@ -61,9 +69,15 @@ const BankDetails1 = () => {
   };
 
   const handleQrFileChange = (e, bankId) => {
+<<<<<<< HEAD
     setQrFiles(prev => ({
       ...prev,
       [bankId]: e.target.files[0]
+=======
+    setQrFiles((prev) => ({
+      ...prev,
+      [bankId]: e.target.files[0],
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
     }));
   };
 
@@ -137,12 +151,20 @@ const BankDetails1 = () => {
 
   const handleDeleteBank = async (bankId) => {
     if (!window.confirm("Are you sure you want to delete this bank?")) return;
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
     try {
       const res = await axios.delete(
         `https://valmobackend.onrender.com/bankDetails/${bankId}`
       );
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
       if (res.data.success) {
         alert("Bank deleted successfully ✅");
         fetchBankDetails(); // Refresh the list
@@ -191,6 +213,7 @@ const BankDetails1 = () => {
 
       if (updateRes.data.success) {
         // Update local state
+<<<<<<< HEAD
         setBanks(prevBanks => 
           prevBanks.map(bank => 
             bank._id === bankId ? { ...bank, qrCode: qrUrl } : bank
@@ -199,11 +222,25 @@ const BankDetails1 = () => {
         
         // Clear the QR file for this bank
         setQrFiles(prev => {
+=======
+        setBanks((prevBanks) =>
+          prevBanks.map((bank) =>
+            bank._id === bankId ? { ...bank, qrCode: qrUrl } : bank
+          )
+        );
+
+        // Clear the QR file for this bank
+        setQrFiles((prev) => {
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
           const newQrFiles = { ...prev };
           delete newQrFiles[bankId];
           return newQrFiles;
         });
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
         alert(
           updateRes.data.message || "QR code uploaded & saved successfully ✅"
         );
@@ -334,7 +371,11 @@ const BankDetails1 = () => {
           <h3 className="text-xl font-bold text-gray-700 mb-4">
             Bank Accounts
           </h3>
+<<<<<<< HEAD
           
+=======
+
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
           {banks.length === 0 ? (
             <div className="text-center py-8">
               <i className="fas fa-university text-4xl text-gray-300 mb-4"></i>
@@ -349,12 +390,26 @@ const BankDetails1 = () => {
           ) : (
             <div className="space-y-6">
               {banks.map((bank) => (
+<<<<<<< HEAD
                 <div key={bank._id} className="border border-gray-200 rounded-lg p-4">
+=======
+                <div
+                  key={bank._id}
+                  className="border border-gray-200 rounded-lg p-4"
+                >
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                   {editingBankId === bank._id ? (
                     <form onSubmit={handleSubmit} className="space-y-4">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {[
+<<<<<<< HEAD
                           { label: "Account Holder Name", name: "accountHolderName" },
+=======
+                          {
+                            label: "Account Holder Name",
+                            name: "accountHolderName",
+                          },
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                           { label: "Account Number", name: "accountNumber" },
                           { label: "IFSC Code", name: "ifscCode" },
                           { label: "Bank Name", name: "bankName" },
@@ -396,6 +451,7 @@ const BankDetails1 = () => {
                     <div className="grid grid-cols-1 gap-4">
                       {/* Bank Info Section */}
                       <div className="bg-gray-50 p-4 rounded-lg">
+<<<<<<< HEAD
                         <h4 className="font-bold text-lg text-gray-800">{bank.bankName}</h4>
                         <p className="text-gray-600 mb-2">{bank.branchName}</p>
                         <div className="space-y-1">
@@ -411,14 +467,46 @@ const BankDetails1 = () => {
                           {bank.upiId && (
                             <p className="text-sm">
                               <span className="font-medium">UPI ID:</span> {bank.upiId}
+=======
+                        <h4 className="font-bold text-lg text-gray-800">
+                          {bank.bankName}
+                        </h4>
+                        <p className="text-gray-600 mb-2">{bank.branchName}</p>
+                        <div className="space-y-1">
+                          <p className="text-sm">
+                            <span className="font-medium">Account Holder:</span>{" "}
+                            {bank.accountHolderName}
+                          </p>
+                          <p className="text-sm">
+                            <span className="font-medium">Account Number:</span>{" "}
+                            {bank.accountNumber}
+                          </p>
+                          <p className="text-sm">
+                            <span className="font-medium">IFSC:</span>{" "}
+                            {bank.ifscCode}
+                          </p>
+                          {bank.upiId && (
+                            <p className="text-sm">
+                              <span className="font-medium">UPI ID:</span>{" "}
+                              {bank.upiId}
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                             </p>
                           )}
                         </div>
                       </div>
+<<<<<<< HEAD
                       
                       {/* QR Code Section */}
                       <div className="bg-gray-50 p-4 rounded-lg">
                         <h4 className="font-medium text-gray-700 mb-2">QR Code</h4>
+=======
+
+                      {/* QR Code Section */}
+                      <div className="bg-gray-50 p-4 rounded-lg">
+                        <h4 className="font-medium text-gray-700 mb-2">
+                          QR Code
+                        </h4>
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                         {bank.qrCode ? (
                           <div className="flex flex-col items-center">
                             <img
@@ -426,9 +514,15 @@ const BankDetails1 = () => {
                               alt="QR Code"
                               className="w-32 h-32 object-contain border border-gray-200 rounded mb-2"
                             />
+<<<<<<< HEAD
                             <a 
                               href={bank.qrCode} 
                               target="_blank" 
+=======
+                            <a
+                              href={bank.qrCode}
+                              target="_blank"
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                               rel="noopener noreferrer"
                               className="text-blue-500 hover:text-blue-700 text-sm"
                             >
@@ -436,10 +530,19 @@ const BankDetails1 = () => {
                             </a>
                           </div>
                         ) : (
+<<<<<<< HEAD
                           <div className="text-gray-500 text-sm">No QR code uploaded</div>
                         )}
                       </div>
                       
+=======
+                          <div className="text-gray-500 text-sm">
+                            No QR code uploaded
+                          </div>
+                        )}
+                      </div>
+
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                       {/* Actions Section */}
                       <div className="bg-gray-50 p-4 rounded-lg">
                         <div className="flex flex-wrap gap-2 mb-4">
@@ -456,7 +559,11 @@ const BankDetails1 = () => {
                             Delete
                           </button>
                         </div>
+<<<<<<< HEAD
                         
+=======
+
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                         <div className="w-full">
                           <input
                             type="file"
@@ -465,8 +572,13 @@ const BankDetails1 = () => {
                             className="hidden"
                             id={`qr-upload-${bank._id}`}
                           />
+<<<<<<< HEAD
                           <label 
                             htmlFor={`qr-upload-${bank._id}`} 
+=======
+                          <label
+                            htmlFor={`qr-upload-${bank._id}`}
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                             className="cursor-pointer block mb-2 text-sm text-gray-700"
                           >
                             {qrFiles[bank._id]?.name || "Choose QR image"}
@@ -491,7 +603,13 @@ const BankDetails1 = () => {
         {status && (
           <p
             className={`mt-4 text-sm text-center p-2 rounded ${
+<<<<<<< HEAD
               status.includes("success") ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+=======
+              status.includes("success")
+                ? "bg-green-100 text-green-700"
+                : "bg-red-100 text-red-700"
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
             }`}
           >
             {status}

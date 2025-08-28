@@ -15,6 +15,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+<<<<<<< HEAD
 
 /* Custom responsive utilities */
 @media (max-width: 640px) {
@@ -68,3 +69,5 @@ code {
     white-space: nowrap;
   }
 }
+=======
+>>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
