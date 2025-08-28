@@ -182,10 +182,7 @@ const CustomerLogin = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-3 sm:py-4 text-white font-medium rounded-lg flex items-center justify-center transition-all duration-200 disabled:opacity-50 text-base sm:text-lg"
-                style={{
-                  background: "#1e293b",
-                }}
+                className="w-full py-3 sm:py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg flex items-center justify-center transition-all duration-200 disabled:opacity-50 text-base sm:text-lg shadow-lg"
               >
                 {isLoading ? (
                   <>
