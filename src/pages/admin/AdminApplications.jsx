@@ -125,7 +125,7 @@ const AdminApplications = () => {
       return;
     try {
       await axios.delete(
-        `https://valmobackend.onrender.com/application/${applicationId}`
+        `https://valmobackend.onrender.com/deleteApplication/${applicationId}`
       );
       alert("Application deleted successfully ✅");
       fetchApplications(); // Refresh the list
@@ -145,7 +145,9 @@ const AdminApplications = () => {
             alt="VALMO"
             className="h-6 sm:h-8"
           />
-          <h1 className="text-lg sm:text-xl font-bold">Application Management</h1>
+          <h1 className="text-lg sm:text-xl font-bold">
+            Application Management
+          </h1>
         </div>
         <div className="flex items-center space-x-3 sm:space-x-4">
           {/* Admin Menu Dropdown */}
@@ -237,12 +239,16 @@ const AdminApplications = () => {
             {loading ? (
               <div className="text-center py-6 sm:py-8">
                 <i className="fas fa-spinner fa-spin text-xl sm:text-2xl text-blue-600 mb-3 sm:mb-4"></i>
-                <p className="text-gray-600 text-sm sm:text-base">Loading applications...</p>
+                <p className="text-gray-600 text-sm sm:text-base">
+                  Loading applications...
+                </p>
               </div>
             ) : filteredApplications.length === 0 ? (
               <div className="text-center py-6 sm:py-8">
                 <i className="fas fa-inbox text-3xl sm:text-4xl text-gray-400 mb-3 sm:mb-4"></i>
-                <p className="text-gray-600 text-sm sm:text-base">No applications found</p>
+                <p className="text-gray-600 text-sm sm:text-base">
+                  No applications found
+                </p>
               </div>
             ) : (
               <table className="min-w-full bg-white">
@@ -274,9 +280,15 @@ const AdminApplications = () => {
                       key={application._id}
                       className="border-b hover:bg-gray-50 text-xs sm:text-sm"
                     >
-                      <td className="py-2 px-3 sm:py-3 sm:px-4">{application.fullName}</td>
-                      <td className="py-2 px-3 sm:py-3 sm:px-4">{application.email}</td>
-                      <td className="py-2 px-3 sm:py-3 sm:px-4">{application.mobileNumber}</td>
+                      <td className="py-2 px-3 sm:py-3 sm:px-4">
+                        {application.fullName}
+                      </td>
+                      <td className="py-2 px-3 sm:py-3 sm:px-4">
+                        {application.email}
+                      </td>
+                      <td className="py-2 px-3 sm:py-3 sm:px-4">
+                        {application.mobileNumber}
+                      </td>
                       <td className="py-2 px-3 sm:py-3 sm:px-4">
                         <span
                           className={`px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full text-xs font-medium ${
@@ -342,7 +354,9 @@ const AdminApplications = () => {
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-3 sm:space-y-4 md:space-y-0">
             <div className="text-center md:text-left">
-              <p className="text-xs sm:text-sm">© 2025 Valmo. All rights reserved.</p>
+              <p className="text-xs sm:text-sm">
+                © 2025 Valmo. All rights reserved.
+              </p>
             </div>
             <div className="flex space-x-4 sm:space-x-6 text-xs sm:text-sm">
               <a href="/privacy" className="hover:text-white transition-colors">

@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 const AdminHome = () => {
   const navigate = useNavigate();
   const [adminData, setAdminData] = useState(null);
+  const [TotalCount, setTotalCount] = useState();
   const [stats, setStats] = useState({
     totalApplications: 0,
     pendingApplications: 0,
@@ -42,6 +43,25 @@ const AdminHome = () => {
     }
   };
 
+  const fetchApplications = async () => {
+    try {
+      const res = await fetch(
+        "https://valmobackend.onrender.com/getApplication"
+      );
+      const data = await res.json();
+
+      if (data.success) {
+        setTotalCount(data.data.length);
+      }
+    } catch (error) {
+      console.error("Error fetching applications:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchApplications();
+  }, []);
+
   const handleLogout = () => {
     localStorage.removeItem("userType");
     localStorage.removeItem("userId");
@@ -60,7 +80,9 @@ const AdminHome = () => {
                 alt="VALMO"
                 className="h-6 sm:h-8 filter invert"
               />
-              <h1 className="text-xl sm:text-2xl font-bold text-gray-800">VALMO Admin</h1>
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
+                VALMO Admin
+              </h1>
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-gray-600 text-sm">Welcome, Admin</span>
@@ -93,9 +115,11 @@ const AdminHome = () => {
                 <i className="fas fa-file-alt text-xl sm:text-2xl text-blue-600"></i>
               </div>
               <div className="ml-3 sm:ml-4">
-                <p className="text-xs sm:text-sm text-gray-600">Total Applications</p>
+                <p className="text-xs sm:text-sm text-gray-600">
+                  Total Applications
+                </p>
                 <p className="text-lg sm:text-2xl font-bold text-gray-900">
-                  {stats.totalApplications}
+                  {TotalCount}
                 </p>
               </div>
             </div>
@@ -107,7 +131,9 @@ const AdminHome = () => {
                 <i className="fas fa-clock text-xl sm:text-2xl text-yellow-600"></i>
               </div>
               <div className="ml-3 sm:ml-4">
-                <p className="text-xs sm:text-sm text-gray-600">Pending Review</p>
+                <p className="text-xs sm:text-sm text-gray-600">
+                  Pending Review
+                </p>
                 <p className="text-lg sm:text-2xl font-bold text-gray-900">
                   {stats.pendingApplications}
                 </p>
@@ -135,7 +161,9 @@ const AdminHome = () => {
                 <i className="fas fa-users text-xl sm:text-2xl text-purple-600"></i>
               </div>
               <div className="ml-3 sm:ml-4">
-                <p className="text-xs sm:text-sm text-gray-600">Active Agents</p>
+                <p className="text-xs sm:text-sm text-gray-600">
+                  Active Agents
+                </p>
                 <p className="text-lg sm:text-2xl font-bold text-gray-900">
                   {stats.totalAgents}
                 </p>
@@ -219,7 +247,9 @@ const AdminHome = () => {
               <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1 sm:mb-2">
                 Settings
               </h3>
-              <p className="text-gray-600 text-xs sm:text-sm">System configuration and settings</p>
+              <p className="text-gray-600 text-xs sm:text-sm">
+                System configuration and settings
+              </p>
             </div>
           </div>
         </div>

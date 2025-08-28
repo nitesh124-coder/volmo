@@ -904,19 +904,22 @@ const Form = () => {
       {/* Toast Notification */}
       {showToast.show && (
         <div
-          className={`fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 transition-transform duration-300 ${
-            showToast.type === "success"
-              ? "bg-gradient-to-r from-green-500 to-green-600 text-white"
-              : "bg-gradient-to-r from-red-500 to-red-600 text-white"
-          }`}
+          className={`fixed top-6 right-6 p-4 rounded-lg shadow-xl z-50 
+      transform transition-all duration-300 ease-in-out
+      ${
+        showToast.type === "success"
+          ? "bg-gradient-to-r from-green-500 to-green-600 text-white"
+          : "bg-gradient-to-r from-red-500 to-red-600 text-white"
+      }
+    `}
         >
-          <div className="flex items-center">
+          <div className="flex items-center space-x-2">
             {showToast.type === "success" ? (
-              <i className="fas fa-check-circle mr-2"></i>
+              <i className="fas fa-check-circle text-lg"></i>
             ) : (
-              <i className="fas fa-exclamation-circle mr-2"></i>
+              <i className="fas fa-exclamation-circle text-lg"></i>
             )}
-            <span>{showToast.message}</span>
+            <span className="text-sm font-medium">{showToast.message}</span>
           </div>
         </div>
       )}
