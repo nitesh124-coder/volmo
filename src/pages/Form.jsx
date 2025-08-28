@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-=======
 /** @format */
 
->>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
 import React, { useState, useEffect, useRef } from "react";
 
 const Form = () => {
@@ -2026,7 +2023,7 @@ const Form = () => {
                     htmlFor="loanDetails"
                     className="block text-sm font-medium text-gray-700 mb-1"
                   >
-                    Loan/Liability Details*
+                    Please provide details of your loans/obligations*
                   </label>
                   <textarea
                     id="loanDetails"
@@ -2051,29 +2048,19 @@ const Form = () => {
                   htmlFor="expectedRevenue"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  Expected Monthly Revenue from Franchise (Approx.)*
+                  Expected Monthly Revenue (in ₹)*
                 </label>
-                <div className="relative rounded-md shadow-sm">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <span className="text-gray-500 sm:text-sm">₹</span>
-                  </div>
-                  <input
-                    type="number"
-                    id="expectedRevenue"
-                    name="expectedRevenue"
-                    value={formData.expectedRevenue || ""}
-                    onChange={handleInputChange}
-                    min="0"
-                    className={`block w-full pl-8 pr-12 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-                      errors.expectedRevenue
-                        ? "border-red-500"
-                        : "border-gray-300"
-                    } text-gray-900 bg-white`}
-                  />
-                  <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                    <span className="text-gray-500 sm:text-sm">.00</span>
-                  </div>
-                </div>
+                <input
+                  type="text"
+                  id="expectedRevenue"
+                  name="expectedRevenue"
+                  value={formData.expectedRevenue || ""}
+                  onChange={handleInputChange}
+                  required
+                  className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                    errors.expectedRevenue ? "border-red-500" : "border-gray-300"
+                  } text-gray-900 bg-white`}
+                />
                 {errors.expectedRevenue && (
                   <p className="text-red-500 text-sm mt-1">
                     {errors.expectedRevenue}
@@ -2084,17 +2071,13 @@ const Form = () => {
 
             {/* Section 7: Logistics & Operational Readiness */}
             <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center">
-              <img
-                src="https://www.valmo.in/static-assets/valmo-web/valmo-logo-white.svg"
-                alt="VALMO"
-                className="h-5 w-5 mr-2 filter invert"
-              />
-              Logistics & Operational Readiness
+              <i className="fas fa-truck mr-2 text-indigo-600"></i> Logistics &
+              Operational Readiness
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Do you own commercial vehicles for logistics?*
+                  Do you have commercial vehicles?*
                 </label>
                 <div className="flex space-x-4">
                   <label className="inline-flex items-center">
@@ -2134,18 +2117,17 @@ const Form = () => {
                     htmlFor="vehicleDetails"
                     className="block text-sm font-medium text-gray-700 mb-1"
                   >
-                    Vehicle Details*
+                    Please provide details of your vehicles*
                   </label>
                   <textarea
                     id="vehicleDetails"
                     name="vehicleDetails"
                     value={formData.vehicleDetails || ""}
                     onChange={handleInputChange}
+                    required
                     rows="3"
                     className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-                      errors.vehicleDetails
-                        ? "border-red-500"
-                        : "border-gray-300"
+                      errors.vehicleDetails ? "border-red-500" : "border-gray-300"
                     } text-gray-900 bg-white`}
                   ></textarea>
                   {errors.vehicleDetails && (
@@ -2157,8 +2139,7 @@ const Form = () => {
               )}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Are you familiar with logistics and transportation
-                  operations?*
+                  Are you familiar with logistics operations?*
                 </label>
                 <div className="flex space-x-4">
                   <label className="inline-flex items-center">
@@ -2194,7 +2175,7 @@ const Form = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Do you have experience with courier/logistics services?*
+                  Do you have prior experience in logistics?*
                 </label>
                 <div className="flex space-x-4">
                   <label className="inline-flex items-center">
@@ -2234,13 +2215,14 @@ const Form = () => {
                     htmlFor="experienceDetails"
                     className="block text-sm font-medium text-gray-700 mb-1"
                   >
-                    Company Details*
+                    Please describe your logistics experience*
                   </label>
                   <textarea
                     id="experienceDetails"
                     name="experienceDetails"
                     value={formData.experienceDetails || ""}
                     onChange={handleInputChange}
+                    required
                     rows="3"
                     className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
                       errors.experienceDetails
@@ -2260,7 +2242,7 @@ const Form = () => {
                   htmlFor="staffCount"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  Number of Staff You Can Employ for the Franchise*
+                  Number of staff you plan to employ*
                 </label>
                 <input
                   type="number"
@@ -2268,6 +2250,7 @@ const Form = () => {
                   name="staffCount"
                   value={formData.staffCount || ""}
                   onChange={handleInputChange}
+                  required
                   min="1"
                   className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
                     errors.staffCount ? "border-red-500" : "border-gray-300"
@@ -2283,46 +2266,30 @@ const Form = () => {
 
             {/* Section 8: Qualification Details */}
             <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center">
-              <i className="fas fa-graduation-cap mr-2 text-indigo-600"></i>
+              <i className="fas fa-graduation-cap mr-2 text-indigo-600"></i>{" "}
               Qualification Details
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Highest Educational Qualification*
+                <label
+                  htmlFor="education"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Highest Education Qualification*
                 </label>
-                <div className="flex flex-col space-y-2">
-                  {[
-                    "10th Pass",
-                    "12th Pass",
-                    "Diploma",
-                    "Graduate",
-                    "Postgraduate",
-                    "Other",
-                  ].map((qualification) => (
-                    <label
-                      key={qualification}
-                      className="inline-flex items-center"
-                    >
-                      <input
-                        type="radio"
-                        name="education"
-                        checked={formData.education === qualification}
-                        onChange={() =>
-                          handleRadioChange("education", qualification)
-                        }
-                        className="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
-                      />
-                      <span className="ml-2 text-gray-700">
-                        {qualification}
-                      </span>
-                    </label>
-                  ))}
-                </div>
+                <input
+                  type="text"
+                  id="education"
+                  name="education"
+                  value={formData.education || ""}
+                  onChange={handleInputChange}
+                  required
+                  className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                    errors.education ? "border-red-500" : "border-gray-300"
+                  } text-gray-900 bg-white`}
+                />
                 {errors.education && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.education}
-                  </p>
+                  <p className="text-red-500 text-sm mt-1">{errors.education}</p>
                 )}
               </div>
               <div>
@@ -2330,20 +2297,21 @@ const Form = () => {
                   htmlFor="professionalBackground"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  Professional Background (if any)*
+                  Professional Background*
                 </label>
-                <textarea
+                <input
+                  type="text"
                   id="professionalBackground"
                   name="professionalBackground"
                   value={formData.professionalBackground || ""}
                   onChange={handleInputChange}
-                  rows="4"
+                  required
                   className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
                     errors.professionalBackground
                       ? "border-red-500"
                       : "border-gray-300"
                   } text-gray-900 bg-white`}
-                ></textarea>
+                />
                 {errors.professionalBackground && (
                   <p className="text-red-500 text-sm mt-1">
                     {errors.professionalBackground}
@@ -2355,18 +2323,18 @@ const Form = () => {
                   htmlFor="certifications"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  Relevant Certifications (if any)*
+                  Relevant Certifications or Training (if any)
                 </label>
-                <textarea
+                <input
+                  type="text"
                   id="certifications"
                   name="certifications"
                   value={formData.certifications || ""}
                   onChange={handleInputChange}
-                  rows="3"
                   className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
                     errors.certifications ? "border-red-500" : "border-gray-300"
                   } text-gray-900 bg-white`}
-                ></textarea>
+                />
                 {errors.certifications && (
                   <p className="text-red-500 text-sm mt-1">
                     {errors.certifications}
@@ -2380,10 +2348,10 @@ const Form = () => {
               <i className="fas fa-history mr-2 text-indigo-600"></i> Past
               Business Experience & References
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Do you currently own any other franchise?*
+                  Do you own any other franchise or business?*
                 </label>
                 <div className="flex space-x-4">
                   <label className="inline-flex items-center">
@@ -2423,21 +2391,21 @@ const Form = () => {
                     htmlFor="franchiseDetails"
                     className="block text-sm font-medium text-gray-700 mb-1"
                   >
-                    Company Name*
+                    Please provide details of your other franchise/business*
                   </label>
-                  <input
-                    type="text"
+                  <textarea
                     id="franchiseDetails"
                     name="franchiseDetails"
                     value={formData.franchiseDetails || ""}
                     onChange={handleInputChange}
                     required
+                    rows="3"
                     className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
                       errors.franchiseDetails
                         ? "border-red-500"
                         : "border-gray-300"
                     } text-gray-900 bg-white`}
-                  />
+                  ></textarea>
                   {errors.franchiseDetails && (
                     <p className="text-red-500 text-sm mt-1">
                       {errors.franchiseDetails}
@@ -2447,8 +2415,7 @@ const Form = () => {
               )}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Have you been involved in any business disputes or legal
-                  issues?*
+                  Have you ever been involved in any legal issues?*
                 </label>
                 <div className="flex space-x-4">
                   <label className="inline-flex items-center">
@@ -2466,9 +2433,7 @@ const Form = () => {
                       type="radio"
                       name="hasLegalIssues"
                       checked={formData.hasLegalIssues === false}
-                      onChange={() =>
-                        handleRadioChange("hasLegalIssues", false)
-                      }
+                      onChange={() => handleRadioChange("hasLegalIssues", false)}
                       className="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
                     />
                     <span className="ml-2 text-gray-700">No</span>
@@ -2486,7 +2451,7 @@ const Form = () => {
                     htmlFor="legalDetails"
                     className="block text-sm font-medium text-gray-700 mb-1"
                   >
-                    Details*
+                    Please provide details of legal issues*
                   </label>
                   <textarea
                     id="legalDetails"
@@ -2506,174 +2471,157 @@ const Form = () => {
                   )}
                 </div>
               )}
-            </div>
-            <h3 className="text-lg font-semibold text-gray-800 mt-8 mb-4">
-              Business References
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h4 className="text-md font-medium text-gray-700 mb-3">
-                  Reference 1
-                </h4>
-                <div className="space-y-4">
-                  <div>
-                    <label
-                      htmlFor="reference1Name"
-                      className="block text-sm font-medium text-gray-700 mb-1"
-                    >
-                      Name*
-                    </label>
-                    <input
-                      type="text"
-                      id="reference1Name"
-                      name="reference1Name"
-                      value={formData.reference1Name || ""}
-                      onChange={handleInputChange}
-                      className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-                        errors.reference1Name
-                          ? "border-red-500"
-                          : "border-gray-300"
-                      } text-gray-900 bg-white`}
-                    />
-                    {errors.reference1Name && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {errors.reference1Name}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="reference1Contact"
-                      className="block text-sm font-medium text-gray-700 mb-1"
-                    >
-                      Contact No.*
-                    </label>
-                    <input
-                      type="tel"
-                      id="reference1Contact"
-                      name="reference1Contact"
-                      value={formData.reference1Contact || ""}
-                      onChange={handleInputChange}
-                      className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-                        errors.reference1Contact
-                          ? "border-red-500"
-                          : "border-gray-300"
-                      } text-gray-900 bg-white`}
-                    />
-                    {errors.reference1Contact && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {errors.reference1Contact}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="reference1Relationship"
-                      className="block text-sm font-medium text-gray-700 mb-1"
-                    >
-                      Relationship*
-                    </label>
-                    <input
-                      type="text"
-                      id="reference1Relationship"
-                      name="reference1Relationship"
-                      value={formData.reference1Relationship || ""}
-                      onChange={handleInputChange}
-                      className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-                        errors.reference1Relationship
-                          ? "border-red-500"
-                          : "border-gray-300"
-                      } text-gray-900 bg-white`}
-                    />
-                    {errors.reference1Relationship && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {errors.reference1Relationship}
-                      </p>
-                    )}
-                  </div>
-                </div>
+              <div>
+                <label
+                  htmlFor="reference1Name"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Reference 1 - Name*
+                </label>
+                <input
+                  type="text"
+                  id="reference1Name"
+                  name="reference1Name"
+                  value={formData.reference1Name || ""}
+                  onChange={handleInputChange}
+                  required
+                  className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                    errors.reference1Name ? "border-red-500" : "border-gray-300"
+                  } text-gray-900 bg-white`}
+                />
+                {errors.reference1Name && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.reference1Name}
+                  </p>
+                )}
               </div>
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h4 className="text-md font-medium text-gray-700 mb-3">
-                  Reference 2
-                </h4>
-                <div className="space-y-4">
-                  <div>
-                    <label
-                      htmlFor="reference2Name"
-                      className="block text-sm font-medium text-gray-700 mb-1"
-                    >
-                      Name*
-                    </label>
-                    <input
-                      type="text"
-                      id="reference2Name"
-                      name="reference2Name"
-                      value={formData.reference2Name || ""}
-                      onChange={handleInputChange}
-                      className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-                        errors.reference2Name
-                          ? "border-red-500"
-                          : "border-gray-300"
-                      } text-gray-900 bg-white`}
-                    />
-                    {errors.reference2Name && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {errors.reference2Name}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="reference2Contact"
-                      className="block text-sm font-medium text-gray-700 mb-1"
-                    >
-                      Contact No.*
-                    </label>
-                    <input
-                      type="tel"
-                      id="reference2Contact"
-                      name="reference2Contact"
-                      value={formData.reference2Contact || ""}
-                      onChange={handleInputChange}
-                      className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-                        errors.reference2Contact
-                          ? "border-red-500"
-                          : "border-gray-300"
-                      } text-gray-900 bg-white`}
-                    />
-                    {errors.reference2Contact && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {errors.reference2Contact}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="reference2Relationship"
-                      className="block text-sm font-medium text-gray-700 mb-1"
-                    >
-                      Relationship*
-                    </label>
-                    <input
-                      type="text"
-                      id="reference2Relationship"
-                      name="reference2Relationship"
-                      value={formData.reference2Relationship || ""}
-                      onChange={handleInputChange}
-                      className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
-                        errors.reference2Relationship
-                          ? "border-red-500"
-                          : "border-gray-300"
-                      } text-gray-900 bg-white`}
-                    />
-                    {errors.reference2Relationship && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {errors.reference2Relationship}
-                      </p>
-                    )}
-                  </div>
-                </div>
+              <div>
+                <label
+                  htmlFor="reference1Contact"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Reference 1 - Contact Number*
+                </label>
+                <input
+                  type="tel"
+                  id="reference1Contact"
+                  name="reference1Contact"
+                  value={formData.reference1Contact || ""}
+                  onChange={handleInputChange}
+                  required
+                  className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                    errors.reference1Contact
+                      ? "border-red-500"
+                      : "border-gray-300"
+                  } text-gray-900 bg-white`}
+                />
+                {errors.reference1Contact && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.reference1Contact}
+                  </p>
+                )}
+              </div>
+              <div>
+                <label
+                  htmlFor="reference1Relationship"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Reference 1 - Relationship*
+                </label>
+                <input
+                  type="text"
+                  id="reference1Relationship"
+                  name="reference1Relationship"
+                  value={formData.reference1Relationship || ""}
+                  onChange={handleInputChange}
+                  required
+                  className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                    errors.reference1Relationship
+                      ? "border-red-500"
+                      : "border-gray-300"
+                  } text-gray-900 bg-white`}
+                />
+                {errors.reference1Relationship && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.reference1Relationship}
+                  </p>
+                )}
+              </div>
+              <div>
+                <label
+                  htmlFor="reference2Name"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Reference 2 - Name*
+                </label>
+                <input
+                  type="text"
+                  id="reference2Name"
+                  name="reference2Name"
+                  value={formData.reference2Name || ""}
+                  onChange={handleInputChange}
+                  required
+                  className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                    errors.reference2Name ? "border-red-500" : "border-gray-300"
+                  } text-gray-900 bg-white`}
+                />
+                {errors.reference2Name && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.reference2Name}
+                  </p>
+                )}
+              </div>
+              <div>
+                <label
+                  htmlFor="reference2Contact"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Reference 2 - Contact Number*
+                </label>
+                <input
+                  type="tel"
+                  id="reference2Contact"
+                  name="reference2Contact"
+                  value={formData.reference2Contact || ""}
+                  onChange={handleInputChange}
+                  required
+                  className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                    errors.reference2Contact
+                      ? "border-red-500"
+                      : "border-gray-300"
+                  } text-gray-900 bg-white`}
+                />
+                {errors.reference2Contact && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.reference2Contact}
+                  </p>
+                )}
+              </div>
+              <div>
+                <label
+                  htmlFor="reference2Relationship"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Reference 2 - Relationship*
+                </label>
+                <input
+                  type="text"
+                  id="reference2Relationship"
+                  name="reference2Relationship"
+                  value={formData.reference2Relationship || ""}
+                  onChange={handleInputChange}
+                  required
+                  className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                    errors.reference2Relationship
+                      ? "border-red-500"
+                      : "border-gray-300"
+                  } text-gray-900 bg-white`}
+                />
+                {errors.reference2Relationship && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.reference2Relationship}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -2734,7 +2682,7 @@ const Form = () => {
                   htmlFor="accountHolderName"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  Account Holder's Name*
+                  Account Holder Name*
                 </label>
                 <input
                   type="text"
@@ -2806,7 +2754,7 @@ const Form = () => {
                   htmlFor="upiId"
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
-                  UPI ID (if any)*
+                  UPI ID (if applicable)
                 </label>
                 <input
                   type="text"
@@ -2824,244 +2772,233 @@ const Form = () => {
               </div>
             </div>
 
-            {/* Section 11: Document Upload */}
+            {/* Section 11: Document Uploads */}
             <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center">
               <i className="fas fa-file-upload mr-2 text-indigo-600"></i>{" "}
-              Document Upload
+              Document Uploads
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-              <div className="file-upload-container">
+              <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   PAN Card*
                 </label>
-                <div className="file-upload relative p-6 text-center cursor-pointer border-2 border-dashed border-gray-300 rounded-lg">
-                  <input
-                    type="file"
-                    id="panCard"
-                    name="panCard"
-                    required
-                    ref={fileInputRefs.panCard}
-                    accept="image/*,.pdf"
-                    onChange={(e) => handleFileUpload("panCard", e)}
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                  />
-                  <i className="fas fa-cloud-upload-alt text-4xl text-indigo-500 mb-2"></i>
-                  <p className="text-sm text-gray-600">
-                    Click to upload or drag and drop
-                  </p>
-                  <p className="text-xs text-gray-500 mt-1">
-                    PNG, JPG, PDF up to 5MB
-                  </p>
-                  {filePreviews.panCard && (
-                    <div className="mt-4 flex items-center justify-between bg-gray-100 p-2 rounded">
-                      <div className="flex items-center">
-                        <i className="fas fa-file text-indigo-500 mr-2"></i>
-                        <span className="text-sm text-gray-700 truncate">
-                          {filePreviews.panCard.name}
-                        </span>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => removeFile("panCard")}
-                        className="text-red-500 hover:text-red-700"
-                      >
-                        <i className="fas fa-times"></i>
-                      </button>
-                    </div>
-                  )}
-                </div>
+                <input
+                  type="file"
+                  ref={fileInputRefs.panCard}
+                  onChange={(e) => handleFileUpload("panCard", e)}
+                  accept=".pdf,.jpg,.jpeg,.png"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+                {filePreviews.panCard && (
+                  <div className="mt-2 flex items-center justify-between bg-gray-100 p-2 rounded">
+                    <span className="text-sm truncate">
+                      {filePreviews.panCard.name}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => removeFile("panCard")}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      <i className="fas fa-times"></i>
+                    </button>
+                  </div>
+                )}
+                <p className="text-xs text-gray-500 mt-1">
+                  Upload clear image or PDF (max 5MB)
+                </p>
               </div>
-              <div className="file-upload-container">
+
+              <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Aadhar Card Frontend*
+                  Aadhar Card (Front & Back)*
                 </label>
-                <div className="file-upload relative p-6 text-center cursor-pointer border-2 border-dashed border-gray-300 rounded-lg">
-                  <input
-                    type="file"
-                    id="aadharCard"
-                    name="aadharCard"
-                    required
-                    ref={fileInputRefs.aadharCard}
-                    accept="image/*,.pdf"
-                    onChange={(e) => handleFileUpload("aadharCard", e)}
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                  />
-                  <i className="fas fa-cloud-upload-alt text-4xl text-indigo-500 mb-2"></i>
-                  <p className="text-sm text-gray-600">
-                    Click to upload or drag and drop
-                  </p>
-                  <p className="text-xs text-gray-500 mt-1">
-                    PNG, JPG, PDF up to 5MB
-                  </p>
-                  {filePreviews.aadharCard && (
-                    <div className="mt-4 flex items-center justify-between bg-gray-100 p-2 rounded">
-                      <div className="flex items-center">
-                        <i className="fas fa-file text-indigo-500 mr-2"></i>
-                        <span className="text-sm text-gray-700 truncate">
-                          {filePreviews.aadharCard.name}
-                        </span>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => removeFile("aadharCard")}
-                        className="text-red-500 hover:text-red-700"
-                      >
-                        <i className="fas fa-times"></i>
-                      </button>
-                    </div>
-                  )}
-                </div>
+                <input
+                  type="file"
+                  ref={fileInputRefs.aadharCard}
+                  onChange={(e) => handleFileUpload("aadharCard", e)}
+                  accept=".pdf,.jpg,.jpeg,.png"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+                {filePreviews.aadharCard && (
+                  <div className="mt-2 flex items-center justify-between bg-gray-100 p-2 rounded">
+                    <span className="text-sm truncate">
+                      {filePreviews.aadharCard.name}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => removeFile("aadharCard")}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      <i className="fas fa-times"></i>
+                    </button>
+                  </div>
+                )}
+                <p className="text-xs text-gray-500 mt-1">
+                  Upload clear image or PDF (max 5MB)
+                </p>
               </div>
-              <div className="file-upload-container">
+
+              <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Aadhar Card Backside*
+                  Passport Size Photo*
                 </label>
-                <div className="file-upload relative p-6 text-center cursor-pointer border-2 border-dashed border-gray-300 rounded-lg">
-                  <input
-                    type="file"
-                    id="passport"
-                    name="passport"
-                    required
-                    ref={fileInputRefs.passport}
-                    accept="image/*,.pdf"
-                    onChange={(e) => handleFileUpload("passport", e)}
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                  />
-                  <i className="fas fa-cloud-upload-alt text-4xl text-indigo-500 mb-2"></i>
-                  <p className="text-sm text-gray-600">
-                    Click to upload or drag and drop
-                  </p>
-                  <p className="text-xs text-gray-500 mt-1">
-                    PNG, JPG, PDF up to 5MB
-                  </p>
-                  {filePreviews.passport && (
-                    <div className="mt-4 flex items-center justify-between bg-gray-100 p-2 rounded">
-                      <div className="flex items-center">
-                        <i className="fas fa-file text-indigo-500 mr-2"></i>
-                        <span className="text-sm text-gray-700 truncate">
-                          {filePreviews.passport.name}
-                        </span>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => removeFile("passport")}
-                        className="text-red-500 hover:text-red-700"
-                      >
-                        <i className="fas fa-times"></i>
-                      </button>
-                    </div>
-                  )}
-                </div>
+                <input
+                  type="file"
+                  ref={fileInputRefs.passport}
+                  onChange={(e) => handleFileUpload("passport", e)}
+                  accept=".pdf,.jpg,.jpeg,.png"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+                {filePreviews.passport && (
+                  <div className="mt-2 flex items-center justify-between bg-gray-100 p-2 rounded">
+                    <span className="text-sm truncate">
+                      {filePreviews.passport.name}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => removeFile("passport")}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      <i className="fas fa-times"></i>
+                    </button>
+                  </div>
+                )}
+                <p className="text-xs text-gray-500 mt-1">
+                  Upload clear image or PDF (max 5MB)
+                </p>
               </div>
-              <div className="file-upload-container">
+
+              <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Bank passbook /cheque*
+                  Business Proof (GST Certificate/Shop Act/Trade License)*
                 </label>
-                <div className="file-upload relative p-6 text-center cursor-pointer border-2 border-dashed border-gray-300 rounded-lg">
-                  <input
-                    type="file"
-                    id="cancelledCheque"
-                    name="cancelledCheque"
-                    ref={fileInputRefs.cancelledCheque}
-                    accept="image/*,.pdf"
-                    required
-                    onChange={(e) => handleFileUpload("cancelledCheque", e)}
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                  />
-                  <i className="fas fa-cloud-upload-alt text-4xl text-indigo-500 mb-2"></i>
-                  <p className="text-sm text-gray-600">
-                    Click to upload or drag and drop
-                  </p>
-                  <p className="text-xs text-gray-500 mt-1">
-                    PNG, JPG, PDF up to 5MB
-                  </p>
-                  {filePreviews.cancelledCheque && (
-                    <div className="mt-4 flex items-center justify-between bg-gray-100 p-2 rounded">
-                      <div className="flex items-center">
-                        <i className="fas fa-file text-indigo-500 mr-2"></i>
-                        <span className="text-sm text-gray-700 truncate">
-                          {filePreviews.cancelledCheque.name}
-                        </span>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => removeFile("cancelledCheque")}
-                        className="text-red-500 hover:text-red-700"
-                      >
-                        <i className="fas fa-times"></i>
-                      </button>
-                    </div>
-                  )}
-                </div>
+                <input
+                  type="file"
+                  ref={fileInputRefs.businessProof}
+                  onChange={(e) => handleFileUpload("businessProof", e)}
+                  accept=".pdf,.jpg,.jpeg,.png"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+                {filePreviews.businessProof && (
+                  <div className="mt-2 flex items-center justify-between bg-gray-100 p-2 rounded">
+                    <span className="text-sm truncate">
+                      {filePreviews.businessProof.name}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => removeFile("businessProof")}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      <i className="fas fa-times"></i>
+                    </button>
+                  </div>
+                )}
+                <p className="text-xs text-gray-500 mt-1">
+                  Upload clear image or PDF (max 5MB)
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Cancelled Cheque*
+                </label>
+                <input
+                  type="file"
+                  ref={fileInputRefs.cancelledCheque}
+                  onChange={(e) => handleFileUpload("cancelledCheque", e)}
+                  accept=".pdf,.jpg,.jpeg,.png"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+                {filePreviews.cancelledCheque && (
+                  <div className="mt-2 flex items-center justify-between bg-gray-100 p-2 rounded">
+                    <span className="text-sm truncate">
+                      {filePreviews.cancelledCheque.name}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => removeFile("cancelledCheque")}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      <i className="fas fa-times"></i>
+                    </button>
+                  </div>
+                )}
+                <p className="text-xs text-gray-500 mt-1">
+                  Upload clear image or PDF (max 5MB)
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Address Proof (Electricity Bill/Rent Agreement)*
+                </label>
+                <input
+                  type="file"
+                  ref={fileInputRefs.addressProof}
+                  onChange={(e) => handleFileUpload("addressProof", e)}
+                  accept=".pdf,.jpg,.jpeg,.png"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+                {filePreviews.addressProof && (
+                  <div className="mt-2 flex items-center justify-between bg-gray-100 p-2 rounded">
+                    <span className="text-sm truncate">
+                      {filePreviews.addressProof.name}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => removeFile("addressProof")}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      <i className="fas fa-times"></i>
+                    </button>
+                  </div>
+                )}
+                <p className="text-xs text-gray-500 mt-1">
+                  Upload clear image or PDF (max 5MB)
+                </p>
               </div>
             </div>
 
-            {/* Section 12: Review & Submit Content */}
+            {/* Section 12: Terms & Conditions */}
             <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center">
-              <i className="fas fa-check-circle mr-2 text-indigo-600"></i> Final
-              Review & Declaration
+              <i className="fas fa-file-contract mr-2 text-indigo-600"></i> Terms
+              & Conditions
             </h2>
-            <div className="bg-gray-50 p-6 rounded-lg mb-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">
-                Terms & Conditions
-              </h3>
-              <div className="bg-white p-4 rounded-lg shadow-sm max-h-64 overflow-y-auto">
-                <ol className="list-decimal pl-5 space-y-3 text-sm text-gray-700">
-                  <li>
-                    The applicant must meet the minimum space and investment
-                    requirements as set by Volmo Logistics.
-                  </li>
-                  <li>
-                    The franchisee is responsible for obtaining all necessary
-                    local business permits and legal clearances.
-                  </li>
-                  <li>
-                    The franchisee must operate under Volmo Logistics' branding,
-                    policies, and operational guidelines.
-                  </li>
-                  <li>
-                    Any false or misleading information provided in this form
-                    may lead to disqualification.
-                  </li>
-                  <li>
-                    The franchisee must maintain a minimum monthly operational
-                    standard as per company requirements.
-                  </li>
-                  <li>
-                    Volmo Logistics reserves the right to terminate the
-                    franchise agreement if performance benchmarks are not met.
-                  </li>
-                  <li>
-                    The franchisee must not engage in any competing business
-                    that directly affects Volmo Logistics' operations.
-                  </li>
-                  <li>
-                    The investment amount is refundable, except for the
-                    registration fee of ₹18,600.
-                  </li>
-                  <li>
-                    The security deposit earns 7.5% annual interest, and 90% of
-                    it is refundable after the agreement period.
-                  </li>
-                  <li>
-                    Any legal disputes will be resolved under the jurisdiction
-                    of Bangalore, Karnataka.
-                  </li>
-                </ol>
+            <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+              <div className="flex">
+                <div className="flex-shrink-0">
+                  <i className="fas fa-exclamation-triangle text-yellow-400"></i>
+                </div>
+                <div className="ml-3">
+                  <p className="text-sm text-yellow-700">
+                    <strong>Important:</strong> Please read the following terms
+                    carefully. By submitting this form, you agree to all terms
+                    and conditions.
+                  </p>
+                </div>
               </div>
-              <div className="mt-4">
-                <label className="inline-flex items-center">
+            </div>
+            <div className="mb-6">
+              <div className="mb-4">
+                <label className="inline-flex items-start">
                   <input
                     type="checkbox"
-                    id="agreeTerms"
                     name="agreeTerms"
-                    checked={formData.agreeTerms || false}
+                    checked={formData.agreeTerms}
                     onChange={handleInputChange}
-                    required
-                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                    className="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded mt-1"
                   />
-                  <span className="ml-2 text-gray-700">
-                    I agree to the terms and conditions*
+                  <span className="ml-2 text-gray-700 text-sm">
+                    I agree to the{" "}
+                    <a
+                      href="#"
+                      className="text-indigo-600 hover:text-indigo-800 font-medium"
+                    >
+                      Terms and Conditions
+                    </a>{" "}
+                    of VALMO Franchise. I understand that the franchise fee is
+                    non-refundable and I will be bound by the franchise
+                    agreement.
                   </span>
                 </label>
                 {errors.agreeTerms && (
@@ -3070,60 +3007,21 @@ const Form = () => {
                   </p>
                 )}
               </div>
-            </div>
-            <div className="bg-gray-50 p-6 rounded-lg mb-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">
-                Disclaimer
-              </h3>
-              <div className="bg-white p-4 rounded-lg shadow-sm max-h-64 overflow-y-auto">
-                <ul className="list-disc pl-5 space-y-3 text-sm text-gray-700">
-                  <li>
-                    Submission of this application does not guarantee approval
-                    of the franchise.
-                  </li>
-                  <li>
-                    Volmo Logistics reserves the right to verify the information
-                    provided and conduct background checks.
-                  </li>
-                  <li>
-                    The company is not liable for any investment made before
-                    official franchise approval.
-                  </li>
-                  <li>
-                    The one-time setup fee, agreement fee, and security deposit
-                    are fully refundable, except for the registration fee.
-                  </li>
-                  <li>
-                    The security deposit earns an annual interest of 7.5%.
-                  </li>
-                  <li>
-                    Any changes to policies, investment requirements, or
-                    operational guidelines will be communicated in writing.
-                  </li>
-                  <li>
-                    Any legal disputes or disagreements will be subject to the
-                    jurisdiction of Bangalore, Karnataka.
-                  </li>
-                  <li>
-                    This form and its contents remain the property of Volmo
-                    Logistics and must not be copied or shared without
-                    permission.
-                  </li>
-                </ul>
-              </div>
-              <div className="mt-4">
-                <label className="inline-flex items-center">
+              <div className="mb-4">
+                <label className="inline-flex items-start">
                   <input
                     type="checkbox"
-                    id="agreeDisclaimer"
                     name="agreeDisclaimer"
-                    checked={formData.agreeDisclaimer || false}
+                    checked={formData.agreeDisclaimer}
                     onChange={handleInputChange}
-                    required
-                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                    className="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded mt-1"
                   />
-                  <span className="ml-2 text-gray-700">
-                    I have read and understood the disclaimer*
+                  <span className="ml-2 text-gray-700 text-sm">
+                    I understand that VALMO will conduct a thorough background
+                    verification and that any false information provided in this
+                    application will result in immediate disqualification. I
+                    agree to provide additional documentation as required during
+                    the verification process.
                   </span>
                 </label>
                 {errors.agreeDisclaimer && (
@@ -3134,19 +3032,18 @@ const Form = () => {
               </div>
             </div>
 
-            {/* Final Submit Button (Centered) */}
+            {/* Submit Button */}
             <div className="flex justify-center mt-8">
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className={`px-8 py-4 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:from-green-700 hover:to-green-800 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-300 transform hover:scale-105 flex items-center font-semibold text-lg shadow-lg ${
+                className={`px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-lg shadow-lg hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-300 transform hover:scale-105 ${
                   isSubmitting ? "opacity-75 cursor-not-allowed" : ""
                 }`}
               >
                 {isSubmitting ? (
                   <>
-                    <i className="fas fa-spinner fa-spin mr-3"></i>{" "}
-                    Submitting...
+                    <i className="fas fa-spinner fa-spin mr-3"></i> Submitting...
                   </>
                 ) : (
                   <>
@@ -3174,12 +3071,7 @@ const Form = () => {
                 <span className="font-mono">{applicationNumber}</span>
               </p>
             </div>
-<<<<<<< HEAD
-            <div className="flex space-x-6 text-sm">
-            </div>
-=======
             <div className="flex space-x-6 text-sm"></div>
->>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
           </div>
         </div>
       </footer>

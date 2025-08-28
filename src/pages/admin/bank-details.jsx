@@ -1,11 +1,11 @@
 /** @format */
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
-const BankDetails1 = () => {
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+const BankDetails = () => {
   const navigate = useNavigate();
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [banks, setBanks] = useState([]);
   const [editingBankId, setEditingBankId] = useState(null);
   const [formData, setFormData] = useState({
@@ -17,45 +17,47 @@ const BankDetails1 = () => {
     upiId: "",
   });
   const [qrFiles, setQrFiles] = useState({});
-  const [status, setStatus] = useState("");
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [message, setMessage] = useState({ text: "", type: "" });
 
-  // Check auth on component mount
-  useEffect(() => {
-    const userType = localStorage.getItem("userType");
-    if (userType !== "admin") {
-      navigate("/multi-login");
-    }
-  }, [navigate]);
-
-  const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
-  const logout = () => {
-    localStorage.removeItem("userType");
-    localStorage.removeItem("userId");
-    navigate("/");
+  // Toggle dropdown menu
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
   };
 
+  // Close dropdown when clicking outside
   useEffect(() => {
-    fetchBankDetails();
-  }, []);
+    const handleClickOutside = (event) => {
+      if (dropdownOpen && !event.target.closest(".dropdown-container")) {
+        setDropdownOpen(false);
+      }
+    };
 
-  const fetchBankDetails = async () => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownOpen]);
+
+  // Show message
+  const showMessage = (text, type) => {
+    setMessage({ text, type });
+    setTimeout(() => setMessage({ text: "", type: "" }), 5000);
+  };
+
+  // Fetch bank details
+  const fetchBanks = async () => {
     try {
       const res = await axios.get(
-        "https://valmobackend.onrender.com/bankDetails"
+        "https://valmobackend.onrender.com/bank-details"
       );
       if (res.data.success) {
         // Handle both single bank object and array of banks
-<<<<<<< HEAD
-        const bankData = Array.isArray(res.data.data) 
-          ? res.data.data 
-          : res.data.data ? [res.data.data] : [];
-=======
         const bankData = Array.isArray(res.data.data)
           ? res.data.data
           : res.data.data
           ? [res.data.data]
           : [];
->>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
         setBanks(bankData);
       }
     } catch (err) {
@@ -69,15 +71,9 @@ const BankDetails1 = () => {
   };
 
   const handleQrFileChange = (e, bankId) => {
-<<<<<<< HEAD
-    setQrFiles(prev => ({
-      ...prev,
-      [bankId]: e.target.files[0]
-=======
     setQrFiles((prev) => ({
       ...prev,
       [bankId]: e.target.files[0],
->>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
     }));
   };
 
@@ -96,11 +92,11 @@ const BankDetails1 = () => {
   const handleEditBank = (bank) => {
     setEditingBankId(bank._id);
     setFormData({
-      accountHolderName: bank.accountHolderName || "",
-      accountNumber: bank.accountNumber || "",
-      ifscCode: bank.ifscCode || "",
-      bankName: bank.bankName || "",
-      branchName: bank.branchName || "",
+      accountHolderName: bank.accountHolderName,
+      accountNumber: bank.accountNumber,
+      ifscCode: bank.ifscCode,
+      bankName: bank.bankName,
+      branchName: bank.branchName,
       upiId: bank.upiId || "",
     });
   };
@@ -117,507 +113,450 @@ const BankDetails1 = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSaveBank = async () => {
     try {
-      setStatus("Saving...");
-
       let res;
+      const payload = { ...formData };
+
       if (editingBankId === "new") {
         // Add new bank
         res = await axios.post(
-          "https://valmobackend.onrender.com/addBankDetails",
-          formData
+          "https://valmobackend.onrender.com/bank-details",
+          payload
         );
       } else {
         // Update existing bank
         res = await axios.put(
-          `https://valmobackend.onrender.com/bankDetails/${editingBankId}`,
-          formData
+          `https://valmobackend.onrender.com/bank-details/${editingBankId}`,
+          payload
         );
       }
 
       if (res.data.success) {
-        alert("Bank details saved successfully ✅");
-        fetchBankDetails(); // Refresh the list
+        showMessage(
+          editingBankId === "new"
+            ? "Bank added successfully"
+            : "Bank updated successfully",
+          "success"
+        );
         setEditingBankId(null);
-        setStatus("Saved successfully!");
+        fetchBanks();
       }
     } catch (err) {
       console.error(err);
-      setStatus("Error saving bank details ❌");
+      showMessage("Error saving bank details", "error");
     }
   };
 
-  const handleDeleteBank = async (bankId) => {
-    if (!window.confirm("Are you sure you want to delete this bank?")) return;
-<<<<<<< HEAD
-    
-=======
-
->>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
-    try {
-      const res = await axios.delete(
-        `https://valmobackend.onrender.com/bankDetails/${bankId}`
-      );
-<<<<<<< HEAD
-      
-=======
-
->>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
-      if (res.data.success) {
-        alert("Bank deleted successfully ✅");
-        fetchBankDetails(); // Refresh the list
+  const handleDeleteBank = async (id) => {
+    if (window.confirm("Are you sure you want to delete this bank?")) {
+      try {
+        const res = await axios.delete(
+          `https://valmobackend.onrender.com/bank-details/${id}`
+        );
+        if (res.data.success) {
+          showMessage("Bank deleted successfully", "success");
+          fetchBanks();
+        }
+      } catch (err) {
+        console.error(err);
+        showMessage("Error deleting bank", "error");
       }
-    } catch (err) {
-      console.error(err);
-      alert("Error deleting bank details ❌");
     }
   };
 
-  const handleQrUpload = async (bankId) => {
-    const qrFile = qrFiles[bankId];
-    if (!qrFile) {
-      alert("Please select a QR file to upload.");
+  const handleUploadQr = async (bankId) => {
+    if (!qrFiles[bankId]) {
+      alert("Please select a QR code image first");
       return;
     }
 
-    try {
-      const data = new FormData();
-      data.append("file", qrFile);
+    const formData = new FormData();
+    formData.append("qrCode", qrFiles[bankId]);
 
-      // Upload QR code
+    try {
       const res = await axios.post(
-        "https://valmobackend.onrender.com/upload",
-        data,
+        `https://valmobackend.onrender.com/bank-details/${bankId}/qr-code`,
+        formData,
         {
-          headers: { "Content-Type": "multipart/form-data" },
-          validateStatus: () => true,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
       );
 
-      if (!res.data.success) {
-        alert(res.data.message || "Failed to upload QR ❌");
-        return;
-      }
-
-      const qrUrl = res.data.url;
-      console.log("Uploaded QR URL:", qrUrl);
-
-      // Update bank details with QR code
-      const updateRes = await axios.put(
-        `https://valmobackend.onrender.com/bankDetails/${bankId}`,
-        { qrCode: qrUrl },
-        { validateStatus: () => true }
-      );
-
-      if (updateRes.data.success) {
-        // Update local state
-<<<<<<< HEAD
-        setBanks(prevBanks => 
-          prevBanks.map(bank => 
-            bank._id === bankId ? { ...bank, qrCode: qrUrl } : bank
-          )
-        );
-        
-        // Clear the QR file for this bank
-        setQrFiles(prev => {
-=======
-        setBanks((prevBanks) =>
-          prevBanks.map((bank) =>
-            bank._id === bankId ? { ...bank, qrCode: qrUrl } : bank
-          )
-        );
-
-        // Clear the QR file for this bank
+      if (res.data.success) {
+        showMessage("QR code uploaded successfully", "success");
+        fetchBanks();
+        // Clear the file input
         setQrFiles((prev) => {
->>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
-          const newQrFiles = { ...prev };
-          delete newQrFiles[bankId];
-          return newQrFiles;
+          const newFiles = { ...prev };
+          delete newFiles[bankId];
+          return newFiles;
         });
-<<<<<<< HEAD
-        
-=======
-
->>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
-        alert(
-          updateRes.data.message || "QR code uploaded & saved successfully ✅"
-        );
-      } else {
-        alert(updateRes.data.message || "Failed to save bank details ❌");
       }
     } catch (err) {
-      console.error("Upload error:", err.response?.data || err.message);
-      alert("Error uploading QR code ❌");
+      console.error(err);
+      showMessage("Error uploading QR code", "error");
     }
   };
 
+  useEffect(() => {
+    fetchBanks();
+  }, []);
+
   return (
-    <div className="min-h-screen bg-gray-50 font-sans">
-      {/* Navbar */}
-      <header className="bg-blue-600 shadow-md">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center">
-            <button
-              onClick={toggleDropdown}
-              className="text-white hover:text-blue-200 flex items-center"
-            >
-              <i className="fas fa-bars mr-2" />
-              Menu
-              <i className="fas fa-chevron-down ml-2" />
-            </button>
-            {isDropdownOpen && (
-              <ul className="absolute mt-10 bg-white shadow-lg rounded w-48">
-                <li>
-                  <a
-                    href="/admin/admin-home"
-                    className="block px-4 py-2 hover:bg-gray-100 flex items-center"
-                  >
-                    <i className="fas fa-home mr-2" />
-                    Dashboard
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/admin/admin-bank-details"
-                    className="block px-4 py-2 hover:bg-gray-100 bg-blue-50 flex items-center"
-                  >
-                    <i className="fas fa-university mr-2" />
-                    Bank Details
-                  </a>
-                </li>
-              </ul>
-            )}
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="bg-blue-600 text-white shadow-lg">
+        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+          <div className="flex items-center space-x-3">
+            <img
+              src="/images/valmo-logo.svg"
+              alt="VALMO"
+              className="h-6 sm:h-8"
+            />
+            <h1 className="text-lg sm:text-xl font-bold">Bank Management</h1>
           </div>
-          <button
-            onClick={logout}
-            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-          >
-            <i className="fas fa-sign-out-alt mr-2" />
-            Logout
-          </button>
+          <div className="flex items-center space-x-4">
+            {/* Admin Menu Dropdown */}
+            <div className="relative dropdown-container">
+              <button
+                onClick={toggleDropdown}
+                className="text-white hover:text-blue-200 flex items-center text-sm"
+              >
+                <i className="fas fa-bars mr-2" />
+                Menu
+                <i className="fas fa-chevron-down ml-2" />
+              </button>
+              {dropdownOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50">
+                  <div className="py-1">
+                    <a
+                      href="/admin/admin-home"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+                    >
+                      <i className="fas fa-home mr-2" />
+                      Home
+                    </a>
+                    <a
+                      href="/admin/admin-agent-management"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+                    >
+                      <i className="fas fa-users mr-2" />
+                      Add Agent
+                    </a>
+                    <a
+                      href="/admin/admin-applications"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+                    >
+                      <i className="fas fa-file-alt mr-2" />
+                      Applications
+                    </a>
+                    <a
+                      href="/admin/admin-bank-details"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 bg-blue-50 flex items-center"
+                    >
+                      <i className="fas fa-university mr-2" />
+                      Bank Details
+                    </a>
+                    <button
+                      onClick={() => {
+                        localStorage.removeItem("userType");
+                        localStorage.removeItem("userId");
+                        navigate("/");
+                      }}
+                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+                    >
+                      <i className="fas fa-sign-out-alt mr-2" />
+                      Logout
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto py-10 px-4">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-          <h2 className="text-2xl font-bold text-gray-700">
-            Bank Details Management
-          </h2>
-          <button
-            onClick={handleAddBank}
-            className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors flex items-center w-full sm:w-auto justify-center"
+      {/* Main Content */}
+      <main className="container mx-auto px-4 py-6 sm:py-8">
+        {/* Alert Message */}
+        {message.text && (
+          <div
+            className={`mb-6 p-4 rounded-lg ${
+              message.type === "success"
+                ? "bg-green-100 text-green-800 border border-green-200"
+                : "bg-red-100 text-red-800 border border-red-200"
+            }`}
           >
-            <i className="fas fa-plus mr-2"></i>
-            Add Bank
-          </button>
-        </div>
-
-        {/* Add/Edit Bank Form */}
-        {(editingBankId === "new" || editingBankId) && (
-          <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
-            <h3 className="text-xl font-bold text-gray-700 mb-4">
-              {editingBankId === "new" ? "Add New Bank" : "Edit Bank Details"}
-            </h3>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Form fields */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {[
-                  { label: "Account Holder Name", name: "accountHolderName" },
-                  { label: "Account Number", name: "accountNumber" },
-                  { label: "IFSC Code", name: "ifscCode" },
-                  { label: "Bank Name", name: "bankName" },
-                  { label: "Branch Name", name: "branchName" },
-                  { label: "UPI ID (Optional)", name: "upiId" },
-                ].map((field) => (
-                  <div key={field.name}>
-                    <label className="block font-medium text-gray-700 mb-1">
-                      {field.label}
-                    </label>
-                    <input
-                      type="text"
-                      name={field.name}
-                      value={formData[field.name]}
-                      onChange={handleChange}
-                      className="border rounded-lg w-full p-2 mt-1 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      required={field.name !== "upiId"}
-                    />
-                  </div>
-                ))}
-              </div>
-
-              <div className="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-3 mt-6">
-                <button
-                  type="button"
-                  onClick={handleCancelEdit}
-                  className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors w-full sm:w-auto text-center"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors w-full sm:w-auto text-center"
-                >
-                  Save Bank Details
-                </button>
-              </div>
-            </form>
+            {message.text}
           </div>
         )}
 
-        {/* Bank List */}
-        <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
-          <h3 className="text-xl font-bold text-gray-700 mb-4">
-            Bank Accounts
-          </h3>
-<<<<<<< HEAD
-          
-=======
-
->>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
-          {banks.length === 0 ? (
-            <div className="text-center py-8">
-              <i className="fas fa-university text-4xl text-gray-300 mb-4"></i>
-              <p className="text-gray-500">No bank accounts added yet</p>
-              <button
-                onClick={handleAddBank}
-                className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors w-full sm:w-auto"
-              >
-                Add Your First Bank
-              </button>
+        <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6">
+          {/* Page Header */}
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+            <div>
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-800">
+                Bank Accounts
+              </h2>
+              <p className="text-gray-600 text-sm mt-1">
+                Manage bank account details for franchise payments
+              </p>
             </div>
-          ) : (
-            <div className="space-y-6">
-              {banks.map((bank) => (
-<<<<<<< HEAD
-                <div key={bank._id} className="border border-gray-200 rounded-lg p-4">
-=======
-                <div
-                  key={bank._id}
-                  className="border border-gray-200 rounded-lg p-4"
-                >
->>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
-                  {editingBankId === bank._id ? (
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {[
-<<<<<<< HEAD
-                          { label: "Account Holder Name", name: "accountHolderName" },
-=======
-                          {
-                            label: "Account Holder Name",
-                            name: "accountHolderName",
-                          },
->>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
-                          { label: "Account Number", name: "accountNumber" },
-                          { label: "IFSC Code", name: "ifscCode" },
-                          { label: "Bank Name", name: "bankName" },
-                          { label: "Branch Name", name: "branchName" },
-                          { label: "UPI ID (Optional)", name: "upiId" },
-                        ].map((field) => (
-                          <div key={field.name}>
-                            <label className="block font-medium text-gray-700 mb-1">
-                              {field.label}
-                            </label>
-                            <input
-                              type="text"
-                              name={field.name}
-                              value={formData[field.name]}
-                              onChange={handleChange}
-                              className="border rounded-lg w-full p-2 mt-1 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                              required={field.name !== "upiId"}
-                            />
-                          </div>
-                        ))}
-                      </div>
-                      <div className="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-3 mt-4">
-                        <button
-                          type="button"
-                          onClick={handleCancelEdit}
-                          className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors w-full sm:w-auto text-center"
-                        >
-                          Cancel
-                        </button>
-                        <button
-                          type="submit"
-                          className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors w-full sm:w-auto text-center"
-                        >
-                          Save Changes
-                        </button>
-                      </div>
-                    </form>
-                  ) : (
-                    <div className="grid grid-cols-1 gap-4">
-                      {/* Bank Info Section */}
-                      <div className="bg-gray-50 p-4 rounded-lg">
-<<<<<<< HEAD
-                        <h4 className="font-bold text-lg text-gray-800">{bank.bankName}</h4>
-                        <p className="text-gray-600 mb-2">{bank.branchName}</p>
-                        <div className="space-y-1">
-                          <p className="text-sm">
-                            <span className="font-medium">Account Holder:</span> {bank.accountHolderName}
-                          </p>
-                          <p className="text-sm">
-                            <span className="font-medium">Account Number:</span> {bank.accountNumber}
-                          </p>
-                          <p className="text-sm">
-                            <span className="font-medium">IFSC:</span> {bank.ifscCode}
-                          </p>
-                          {bank.upiId && (
-                            <p className="text-sm">
-                              <span className="font-medium">UPI ID:</span> {bank.upiId}
-=======
-                        <h4 className="font-bold text-lg text-gray-800">
-                          {bank.bankName}
-                        </h4>
-                        <p className="text-gray-600 mb-2">{bank.branchName}</p>
-                        <div className="space-y-1">
-                          <p className="text-sm">
-                            <span className="font-medium">Account Holder:</span>{" "}
-                            {bank.accountHolderName}
-                          </p>
-                          <p className="text-sm">
-                            <span className="font-medium">Account Number:</span>{" "}
-                            {bank.accountNumber}
-                          </p>
-                          <p className="text-sm">
-                            <span className="font-medium">IFSC:</span>{" "}
-                            {bank.ifscCode}
-                          </p>
-                          {bank.upiId && (
-                            <p className="text-sm">
-                              <span className="font-medium">UPI ID:</span>{" "}
-                              {bank.upiId}
->>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
-                            </p>
-                          )}
-                        </div>
-                      </div>
-<<<<<<< HEAD
-                      
-                      {/* QR Code Section */}
-                      <div className="bg-gray-50 p-4 rounded-lg">
-                        <h4 className="font-medium text-gray-700 mb-2">QR Code</h4>
-=======
+            <button
+              onClick={handleAddBank}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center transition-colors text-sm"
+            >
+              <i className="fas fa-plus mr-2"></i>
+              Add Bank Account
+            </button>
+          </div>
 
-                      {/* QR Code Section */}
-                      <div className="bg-gray-50 p-4 rounded-lg">
-                        <h4 className="font-medium text-gray-700 mb-2">
-                          QR Code
-                        </h4>
->>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
-                        {bank.qrCode ? (
-                          <div className="flex flex-col items-center">
-                            <img
-                              src={bank.qrCode}
-                              alt="QR Code"
-                              className="w-32 h-32 object-contain border border-gray-200 rounded mb-2"
-                            />
-<<<<<<< HEAD
-                            <a 
-                              href={bank.qrCode} 
-                              target="_blank" 
-=======
+          {/* Add/Edit Form */}
+          {editingBankId && (
+            <div className="mb-8 bg-gray-50 rounded-lg p-4 sm:p-6">
+              <h3 className="text-lg font-bold text-gray-800 mb-4">
+                {editingBankId === "new" ? "Add New Bank" : "Edit Bank"}
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Account Holder Name
+                  </label>
+                  <input
+                    type="text"
+                    name="accountHolderName"
+                    value={formData.accountHolderName}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Account Number
+                  </label>
+                  <input
+                    type="text"
+                    name="accountNumber"
+                    value={formData.accountNumber}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    IFSC Code
+                  </label>
+                  <input
+                    type="text"
+                    name="ifscCode"
+                    value={formData.ifscCode}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Bank Name
+                  </label>
+                  <input
+                    type="text"
+                    name="bankName"
+                    value={formData.bankName}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Branch Name
+                  </label>
+                  <input
+                    type="text"
+                    name="branchName"
+                    value={formData.branchName}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    UPI ID (Optional)
+                  </label>
+                  <input
+                    type="text"
+                    name="upiId"
+                    value={formData.upiId}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
+              <div className="flex space-x-3 mt-4">
+                <button
+                  onClick={handleSaveBank}
+                  className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors"
+                >
+                  Save
+                </button>
+                <button
+                  onClick={handleCancelEdit}
+                  className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Banks List */}
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th
+                    scope="col"
+                    className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Account Holder
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Bank Name
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Account Number
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    IFSC Code
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    QR Code
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {banks.length === 0 ? (
+                  <tr>
+                    <td
+                      colSpan="6"
+                      className="px-4 py-6 text-center text-gray-500"
+                    >
+                      No bank accounts found
+                    </td>
+                  </tr>
+                ) : (
+                  banks.map((bank) => (
+                    <tr key={bank._id} className="hover:bg-gray-50">
+                      <td className="px-4 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900">
+                          {bank.accountHolderName}
+                        </div>
+                      </td>
+                      <td className="px-4 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-900">
+                          {bank.bankName}
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          {bank.branchName}
+                        </div>
+                      </td>
+                      <td className="px-4 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-900">
+                          {bank.accountNumber}
+                        </div>
+                      </td>
+                      <td className="px-4 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-900">
+                          {bank.ifscCode}
+                        </div>
+                      </td>
+                      <td className="px-4 py-4 whitespace-nowrap">
+                        <div className="flex items-center space-x-2">
+                          {bank.qrCode && (
                             <a
                               href={bank.qrCode}
                               target="_blank"
->>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                               rel="noopener noreferrer"
-                              className="text-blue-500 hover:text-blue-700 text-sm"
+                              className="text-blue-600 hover:text-blue-900 text-sm"
                             >
-                              View Full Size
+                              View QR
                             </a>
+                          )}
+                          <div className="flex flex-col">
+                            <input
+                              type="file"
+                              accept="image/*"
+                              onChange={(e) =>
+                                handleQrFileChange(e, bank._id)
+                              }
+                              className="text-xs"
+                            />
+                            {qrFiles[bank._id] && (
+                              <button
+                                onClick={() => handleUploadQr(bank._id)}
+                                className="mt-1 bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded text-xs"
+                              >
+                                Upload
+                              </button>
+                            )}
                           </div>
-                        ) : (
-<<<<<<< HEAD
-                          <div className="text-gray-500 text-sm">No QR code uploaded</div>
-                        )}
-                      </div>
-                      
-=======
-                          <div className="text-gray-500 text-sm">
-                            No QR code uploaded
-                          </div>
-                        )}
-                      </div>
-
->>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
-                      {/* Actions Section */}
-                      <div className="bg-gray-50 p-4 rounded-lg">
-                        <div className="flex flex-wrap gap-2 mb-4">
+                        </div>
+                      </td>
+                      <td className="px-4 py-4 whitespace-nowrap text-sm font-medium">
+                        <div className="flex space-x-2">
                           <button
                             onClick={() => handleEditBank(bank)}
-                            className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm flex-1 min-w-[80px]"
+                            className="text-blue-600 hover:text-blue-900"
                           >
-                            Edit
+                            <i className="fas fa-edit"></i>
                           </button>
                           <button
                             onClick={() => handleDeleteBank(bank._id)}
-                            className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm flex-1 min-w-[80px]"
+                            className="text-red-600 hover:text-red-900"
                           >
-                            Delete
+                            <i className="fas fa-trash"></i>
                           </button>
                         </div>
-<<<<<<< HEAD
-                        
-=======
-
->>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
-                        <div className="w-full">
-                          <input
-                            type="file"
-                            accept="image/*"
-                            onChange={(e) => handleQrFileChange(e, bank._id)}
-                            className="hidden"
-                            id={`qr-upload-${bank._id}`}
-                          />
-<<<<<<< HEAD
-                          <label 
-                            htmlFor={`qr-upload-${bank._id}`} 
-=======
-                          <label
-                            htmlFor={`qr-upload-${bank._id}`}
->>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
-                            className="cursor-pointer block mb-2 text-sm text-gray-700"
-                          >
-                            {qrFiles[bank._id]?.name || "Choose QR image"}
-                          </label>
-                          <button
-                            type="button"
-                            onClick={() => handleQrUpload(bank._id)}
-                            className="bg-purple-500 text-white px-3 py-1 rounded hover:bg-purple-600 text-sm w-full"
-                          >
-                            Upload QR
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
-
-        {status && (
-          <p
-            className={`mt-4 text-sm text-center p-2 rounded ${
-<<<<<<< HEAD
-              status.includes("success") ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
-=======
-              status.includes("success")
-                ? "bg-green-100 text-green-700"
-                : "bg-red-100 text-red-700"
->>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
-            }`}
-          >
-            {status}
-          </p>
-        )}
       </main>
+
+      {/* Footer */}
+      <footer className="bg-gray-800 text-gray-300 py-6 mt-8">
+        <div className="container mx-auto px-4 text-center">
+          <p className="text-sm">
+            © {new Date().getFullYear()} VALMO. All rights reserved.
+          </p>
+        </div>
+      </footer>
     </div>
   );
 };
 
-export default BankDetails1;
+export default BankDetails;

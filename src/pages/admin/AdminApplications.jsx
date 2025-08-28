@@ -2,402 +2,361 @@
 
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 const AdminApplications = () => {
   const navigate = useNavigate();
-  const [dropdownOpen, setDropdownOpen] = useState(false);
   const [applications, setApplications] = useState([]);
-  const [filteredApplications, setFilteredApplications] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterStatus, setFilterStatus] = useState("all");
 
-  // Toggle Admin Dropdown
-  const toggleDropdown = () => setDropdownOpen((prev) => !prev);
-
-  // Logout Function
-  const logout = () => {
-    localStorage.removeItem("userType");
-    localStorage.removeItem("userId");
-    navigate("/");
+  // Toggle dropdown menu
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
   };
 
-  // Fetch all applications
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownOpen && !event.target.closest(".dropdown-container")) {
+        setDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownOpen]);
+
+  // Fetch applications
   const fetchApplications = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(
-        "https://valmobackend.onrender.com/getApplication"
+      const response = await fetch(
+        "https://valmobackend.onrender.com/applications"
       );
-      setApplications(res.data.data || []);
-      setFilteredApplications(res.data.data || []);
-    } catch (error) {
-      console.error("Error fetching applications:", error);
-      alert("Failed to fetch applications ❌");
+      const data = await response.json();
+      setApplications(data);
+      setError("");
+    } catch (err) {
+      setError("Failed to fetch applications");
+      console.error("Error fetching applications:", err);
     } finally {
       setLoading(false);
     }
   };
 
-  // Search and filter applications
   useEffect(() => {
-    if (searchTerm.trim() === "") {
-      setFilteredApplications(applications);
-    } else {
-      const q = searchTerm.toLowerCase();
-      const filtered = applications.filter((application) => {
-        const name = (application.fullName || "").toLowerCase();
-        const email = (application.email || "").toLowerCase();
-        const phone = String(application.mobileNumber || "").toLowerCase();
-        return name.includes(q) || email.includes(q) || phone.includes(q);
-      });
-      setFilteredApplications(filtered);
-    }
-  }, [searchTerm, applications]);
-
-  // Check if user is admin
-  useEffect(() => {
-    const userType = localStorage.getItem("userType");
-    if (userType !== "admin") {
-      navigate("/multi-login");
-      return;
-    }
     fetchApplications();
   }, []);
 
-  // Handle application actions
-  const handleApprove = async (application) => {
+  // Filter applications based on search and filter
+  const filteredApplications = applications.filter((app) => {
+    const matchesSearch = app.fullName
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+    const matchesFilter =
+      filterStatus === "all" ||
+      (filterStatus === "pending" && !app.approved && !app.rejected) ||
+      (filterStatus === "approved" && app.approved) ||
+      (filterStatus === "rejected" && app.rejected);
+    return matchesSearch && matchesFilter;
+  });
+
+  // Handle application approval
+  const handleApprove = async (id) => {
     try {
-      await axios.post(
-        "https://valmobackend.onrender.com/application/approve",
+      const response = await fetch(
+        `https://valmobackend.onrender.com/applications/${id}/approve`,
         {
-          email: application.email,
-          name: application.name,
+          method: "PUT",
         }
       );
-      alert("Application approved successfully ✅");
-      fetchApplications(); // Refresh the list
-    } catch (error) {
-      console.error("Error approving application:", error);
-      alert("Failed to approve application ❌");
+      if (response.ok) {
+        fetchApplications(); // Refresh the list
+      }
+    } catch (err) {
+      console.error("Error approving application:", err);
     }
   };
 
-  const handleReject = async (application) => {
+  // Handle application rejection
+  const handleReject = async (id) => {
     try {
-      await axios.post("https://valmobackend.onrender.com/application/reject", {
-        email: application.email,
-        name: application.name,
-      });
-      alert("Application rejected successfully ✅");
-      fetchApplications(); // Refresh the list
-    } catch (error) {
-      console.error("Error rejecting application:", error);
-      alert("Failed to reject application ❌");
-    }
-  };
-
-  const handleAgreement = async (application) => {
-    try {
-      await axios.post(
-        "https://valmobackend.onrender.com/application/agreement",
+      const response = await fetch(
+        `https://valmobackend.onrender.com/applications/${id}/reject`,
         {
-          email: application.email,
-          name: application.name,
+          method: "PUT",
         }
       );
-      alert("Agreement sent successfully ✅");
-      fetchApplications(); // Refresh the list
-    } catch (error) {
-      console.error("Error sending agreement:", error);
-      alert("Failed to send agreement ❌");
+      if (response.ok) {
+        fetchApplications(); // Refresh the list
+      }
+    } catch (err) {
+      console.error("Error rejecting application:", err);
     }
   };
 
-  // View Application
-  const handleViewApplication = (applicationId) => {
-    // Navigate to view application page
-    navigate(`/view-application/${encodeURIComponent(applicationId)}`);
-  };
-
-  // Edit Application (placeholder - would typically open edit modal)
-  const handleEditApplication = (application) => {
-    // For now, we'll just show an alert - you can implement edit modal later
-    alert("Edit functionality would open here");
-  };
-
-  const handleDelete = async (applicationId) => {
-    if (!window.confirm("Are you sure you want to delete this application?"))
-      return;
-    try {
-      await axios.delete(
-        `https://valmobackend.onrender.com/application/${applicationId}`
-      );
-      alert("Application deleted successfully ✅");
-      fetchApplications(); // Refresh the list
-    } catch (error) {
-      console.error("Error deleting application:", error);
-      alert("Failed to delete application ❌");
-    }
+  // Format date
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString();
   };
 
   return (
-    <>
-      {/* HEADER */}
-      <header className="bg-blue-600 shadow-md py-3 sm:py-4 px-4 sm:px-6 flex items-center justify-between text-white">
-        <div className="flex items-center space-x-3 sm:space-x-4">
-          <img
-            src="https://registrations-meesho-valmo.in/valmologo.png"
-            alt="VALMO"
-            className="h-6 sm:h-8"
-          />
-<<<<<<< HEAD
-          <h1 className="text-lg sm:text-xl font-bold">Application Management</h1>
-=======
-          <h1 className="text-lg sm:text-xl font-bold">
-            Application Management
-          </h1>
->>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
-        </div>
-        <div className="flex items-center space-x-3 sm:space-x-4">
-          {/* Admin Menu Dropdown */}
-          <div className="relative">
-            <button
-              onClick={toggleDropdown}
-              className="text-white hover:text-blue-200 flex items-center text-sm"
-            >
-              <i className="fas fa-bars mr-1 sm:mr-2" />
-              Menu
-              <i className="fas fa-chevron-down ml-1 sm:ml-2" />
-            </button>
-            {dropdownOpen && (
-              <div className="absolute right-0 mt-1 sm:mt-2 w-48 bg-white rounded-md shadow-lg z-50">
-                <div className="py-1">
-                  <a
-                    href="/admin/admin-home"
-                    className="block px-3 py-2 sm:px-4 sm:py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-100 flex items-center"
-                  >
-                    <i className="fas fa-home mr-1 sm:mr-2" />
-                    Home
-                  </a>
-                  <a
-                    href="/admin/admin-agent-management"
-                    className="block px-3 py-2 sm:px-4 sm:py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-100 flex items-center"
-                  >
-                    <i className="fas fa-users mr-1 sm:mr-2" />
-                    Add Agent
-                  </a>
-                  <a
-                    href="/admin/admin-applications"
-                    className="block px-3 py-2 sm:px-4 sm:py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-100 bg-blue-50 flex items-center"
-                  >
-                    <i className="fas fa-file-alt mr-1 sm:mr-2" />
-                    Applications
-                  </a>
-                  <a
-                    href="/admin/admin-bank-details"
-                    className="block px-3 py-2 sm:px-4 sm:py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-100 flex items-center"
-                  >
-                    <i className="fas fa-university mr-1 sm:mr-2" />
-                    Bank Details
-                  </a>
-                </div>
-              </div>
-            )}
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="bg-blue-600 text-white shadow-lg">
+        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+          <div className="flex items-center space-x-3">
+            <img
+              src="/images/valmo-logo.svg"
+              alt="VALMO"
+              className="h-6 sm:h-8"
+            />
+            <h1 className="text-lg sm:text-xl font-bold">
+              Application Management
+            </h1>
           </div>
-          <button
-            onClick={logout}
-            className="bg-red-500 text-white px-3 py-1 sm:px-4 sm:py-2 rounded text-xs sm:text-sm hover:bg-red-600 flex items-center"
-          >
-            <i className="fas fa-sign-out-alt mr-1 sm:mr-2" />
-            Logout
-          </button>
+          <div className="flex items-center space-x-3 sm:space-x-4">
+            {/* Admin Menu Dropdown */}
+            <div className="relative dropdown-container">
+              <button
+                onClick={toggleDropdown}
+                className="text-white hover:text-blue-200 flex items-center text-sm"
+              >
+                <i className="fas fa-bars mr-1 sm:mr-2" />
+                Menu
+                <i className="fas fa-chevron-down ml-1 sm:ml-2" />
+              </button>
+              {dropdownOpen && (
+                <div className="absolute right-0 mt-1 sm:mt-2 w-48 bg-white rounded-md shadow-lg z-50">
+                  <div className="py-1">
+                    <a
+                      href="/admin/admin-home"
+                      className="block px-3 py-2 sm:px-4 sm:py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+                    >
+                      <i className="fas fa-home mr-1 sm:mr-2" />
+                      Home
+                    </a>
+                    <a
+                      href="/admin/admin-agent-management"
+                      className="block px-3 py-2 sm:px-4 sm:py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+                    >
+                      <i className="fas fa-users mr-1 sm:mr-2" />
+                      Add Agent
+                    </a>
+                    <a
+                      href="/admin/admin-applications"
+                      className="block px-3 py-2 sm:px-4 sm:py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-100 bg-blue-50 flex items-center"
+                    >
+                      <i className="fas fa-file-alt mr-1 sm:mr-2" />
+                      Applications
+                    </a>
+                    <a
+                      href="/admin/admin-bank-details"
+                      className="block px-3 py-2 sm:px-4 sm:py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+                    >
+                      <i className="fas fa-university mr-1 sm:mr-2" />
+                      Bank Details
+                    </a>
+                    <button
+                      onClick={() => {
+                        localStorage.removeItem("userType");
+                        localStorage.removeItem("userId");
+                        navigate("/");
+                      }}
+                      className="w-full text-left px-3 py-2 sm:px-4 sm:py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+                    >
+                      <i className="fas fa-sign-out-alt mr-1 sm:mr-2" />
+                      Logout
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </header>
 
-      <div className="container mx-auto p-4 sm:p-6">
-        {/* Search Section */}
-        <div className="bg-white p-4 sm:p-6 rounded-lg shadow mb-4 sm:mb-6">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 sm:gap-4">
-            <h2 className="text-lg sm:text-2xl font-semibold text-blue-600">
-              <i className="fas fa-file-alt mr-1 sm:mr-2" />
-              All Applications
+      {/* Main Content */}
+      <main className="container mx-auto px-4 py-6 sm:py-8">
+        <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6">
+          {/* Page Header */}
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-800">
+              Application List
             </h2>
-            <div className="relative w-full md:w-1/3">
-              <input
-                type="text"
-                placeholder="Search by name, email, or phone..."
-                className="w-full p-2 sm:p-3 pl-8 sm:pl-10 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <i className="fas fa-search absolute left-2 sm:left-3 top-2.5 sm:top-4 text-gray-400 text-xs sm:text-sm"></i>
+            <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+              {/* Search Input */}
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Search by name..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full sm:w-64 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                />
+                <i className="fas fa-search absolute right-3 top-3 text-gray-400"></i>
+              </div>
+              {/* Status Filter */}
+              <select
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value)}
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+              >
+                <option value="all">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="approved">Approved</option>
+                <option value="rejected">Rejected</option>
+              </select>
             </div>
-            <button
-              onClick={fetchApplications}
-              className="bg-green-500 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded hover:bg-green-600 flex items-center text-xs sm:text-sm"
-            >
-              <i className="fas fa-refresh mr-1 sm:mr-2" />
-              Refresh
-            </button>
           </div>
-        </div>
 
-        {/* Applications List Section */}
-        <div className="bg-white p-4 sm:p-6 rounded-lg shadow">
-          <div className="overflow-x-auto">
-            {loading ? (
-              <div className="text-center py-6 sm:py-8">
-                <i className="fas fa-spinner fa-spin text-xl sm:text-2xl text-blue-600 mb-3 sm:mb-4"></i>
-<<<<<<< HEAD
-                <p className="text-gray-600 text-sm sm:text-base">Loading applications...</p>
-=======
-                <p className="text-gray-600 text-sm sm:text-base">
-                  Loading applications...
-                </p>
->>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
-              </div>
-            ) : filteredApplications.length === 0 ? (
-              <div className="text-center py-6 sm:py-8">
-                <i className="fas fa-inbox text-3xl sm:text-4xl text-gray-400 mb-3 sm:mb-4"></i>
-<<<<<<< HEAD
-                <p className="text-gray-600 text-sm sm:text-base">No applications found</p>
-=======
-                <p className="text-gray-600 text-sm sm:text-base">
-                  No applications found
-                </p>
->>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
-              </div>
-            ) : (
-              <table className="min-w-full bg-white">
+          {/* Applications Table */}
+          {loading ? (
+            <div className="text-center py-8">
+              <i className="fas fa-spinner fa-spin text-3xl text-blue-600 mb-3"></i>
+              <p className="text-gray-600">Loading applications...</p>
+            </div>
+          ) : error ? (
+            <div className="text-center py-8">
+              <i className="fas fa-exclamation-circle text-3xl text-red-600 mb-3"></i>
+              <p className="text-red-600">{error}</p>
+              <button
+                onClick={fetchApplications}
+                className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
+              >
+                Retry
+              </button>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="py-2 px-3 sm:py-3 sm:px-4 text-left font-medium text-gray-700 text-xs sm:text-sm">
-                      Applicant Name
+                    <th
+                      scope="col"
+                      className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Applicant
                     </th>
-                    <th className="py-2 px-3 sm:py-3 sm:px-4 text-left font-medium text-gray-700 text-xs sm:text-sm">
-                      Email ID
+                    <th
+                      scope="col"
+                      className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Email
                     </th>
-                    <th className="py-2 px-3 sm:py-3 sm:px-4 text-left font-medium text-gray-700 text-xs sm:text-sm">
-                      Phone
+                    <th
+                      scope="col"
+                      className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Applied On
                     </th>
-                    <th className="py-2 px-3 sm:py-3 sm:px-4 text-left font-medium text-gray-700 text-xs sm:text-sm">
+                    <th
+                      scope="col"
+                      className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
                       Status
                     </th>
-                    <th className="py-2 px-3 sm:py-3 sm:px-4 text-left font-medium text-gray-700 text-xs sm:text-sm">
-                      Submitted Date
-                    </th>
-                    <th className="py-2 px-3 sm:py-3 sm:px-4 text-left font-medium text-gray-700 text-xs sm:text-sm">
+                    <th
+                      scope="col"
+                      className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
                       Actions
                     </th>
                   </tr>
                 </thead>
-                <tbody>
-                  {filteredApplications.map((application) => (
-                    <tr
-                      key={application._id}
-                      className="border-b hover:bg-gray-50 text-xs sm:text-sm"
-                    >
-<<<<<<< HEAD
-                      <td className="py-2 px-3 sm:py-3 sm:px-4">{application.fullName}</td>
-                      <td className="py-2 px-3 sm:py-3 sm:px-4">{application.email}</td>
-                      <td className="py-2 px-3 sm:py-3 sm:px-4">{application.mobileNumber}</td>
-=======
-                      <td className="py-2 px-3 sm:py-3 sm:px-4">
-                        {application.fullName}
-                      </td>
-                      <td className="py-2 px-3 sm:py-3 sm:px-4">
-                        {application.email}
-                      </td>
-                      <td className="py-2 px-3 sm:py-3 sm:px-4">
-                        {application.mobileNumber}
-                      </td>
->>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
-                      <td className="py-2 px-3 sm:py-3 sm:px-4">
-                        <span
-                          className={`px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full text-xs font-medium ${
-                            application.approved
-                              ? "bg-green-100 text-green-800"
-                              : application.rejected
-                              ? "bg-red-100 text-red-800"
-                              : "bg-yellow-100 text-yellow-800"
-                          }`}
-                        >
-                          {application.approved
-                            ? "Approved"
-                            : application.rejected
-                            ? "Rejected"
-                            : "Pending"}
-                        </span>
-                      </td>
-                      <td className="py-2 px-3 sm:py-3 sm:px-4">
-                        {application.createdAt
-                          ? new Date(application.createdAt).toLocaleDateString()
-                          : "-"}
-                      </td>
-                      <td className="py-2 px-3 sm:py-3 sm:px-4">
-                        <div className="flex items-center space-x-1">
-                          <button
-                            onClick={() =>
-                              handleViewApplication(application.email)
-                            }
-                            className="text-blue-600 hover:text-blue-900 bg-gray-100 hover:bg-gray-200 p-1.5 sm:p-2 rounded-full transition-all duration-200 shadow-sm hover:shadow-md"
-                            title="View Application"
-                          >
-                            <i className="fas fa-eye text-xs sm:text-sm"></i>
-                          </button>
-
-                          <button
-                            onClick={() => handleEditApplication(application)}
-                            className="text-yellow-600 hover:text-yellow-900 bg-gray-100 hover:bg-gray-200 p-1.5 sm:p-2 rounded-full transition-all duration-200 shadow-sm hover:shadow-md"
-                            title="Edit Application"
-                          >
-                            <i className="fas fa-edit text-xs sm:text-sm"></i>
-                          </button>
-
-                          <button
-                            onClick={() => handleDelete(application._id)}
-                            className="text-red-600 hover:text-red-900 bg-gray-100 hover:bg-gray-200 p-1.5 sm:p-2 rounded-full transition-all duration-200 shadow-sm hover:shadow-md"
-                            title="Delete Application"
-                          >
-                            <i className="fas fa-trash text-xs sm:text-sm"></i>
-                          </button>
-                        </div>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {filteredApplications.length === 0 ? (
+                    <tr>
+                      <td
+                        colSpan="5"
+                        className="px-4 py-6 text-center text-gray-500"
+                      >
+                        No applications found
                       </td>
                     </tr>
-                  ))}
+                  ) : (
+                    filteredApplications.map((app) => (
+                      <tr key={app._id} className="hover:bg-gray-50">
+                        <td className="px-4 py-4 whitespace-nowrap">
+                          <div className="text-sm font-medium text-gray-900">
+                            {app.fullName}
+                          </div>
+                        </td>
+                        <td className="px-4 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-900">{app.email}</div>
+                        </td>
+                        <td className="px-4 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-900">
+                            {formatDate(app.createdAt)}
+                          </div>
+                        </td>
+                        <td className="px-4 py-4 whitespace-nowrap">
+                          <span
+                            className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                              app.approved
+                                ? "bg-green-100 text-green-800"
+                                : app.rejected
+                                ? "bg-red-100 text-red-800"
+                                : "bg-yellow-100 text-yellow-800"
+                            }`}
+                          >
+                            {app.approved
+                              ? "Approved"
+                              : app.rejected
+                              ? "Rejected"
+                              : "Pending"}
+                          </span>
+                        </td>
+                        <td className="px-4 py-4 whitespace-nowrap text-sm font-medium">
+                          <div className="flex space-x-2">
+                            <button
+                              onClick={() => navigate(`/admin/application/${app._id}`)}
+                              className="text-blue-600 hover:text-blue-900"
+                            >
+                              <i className="fas fa-eye"></i>
+                            </button>
+                            {!app.approved && !app.rejected && (
+                              <>
+                                <button
+                                  onClick={() => handleApprove(app._id)}
+                                  className="text-green-600 hover:text-green-900"
+                                >
+                                  <i className="fas fa-check"></i>
+                                </button>
+                                <button
+                                  onClick={() => handleReject(app._id)}
+                                  className="text-red-600 hover:text-red-900"
+                                >
+                                  <i className="fas fa-times"></i>
+                                </button>
+                              </>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
-            )}
-          </div>
+            </div>
+          )}
         </div>
-      </div>
+      </main>
 
-      {/* FOOTER */}
-      <footer className="bg-gray-900 text-gray-300 py-4 sm:py-6 mt-6 sm:mt-8">
-        <div className="container mx-auto px-4 max-w-6xl">
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-3 sm:space-y-4 md:space-y-0">
-            <div className="text-center md:text-left">
-<<<<<<< HEAD
-              <p className="text-xs sm:text-sm">© 2025 Valmo. All rights reserved.</p>
-=======
-              <p className="text-xs sm:text-sm">
-                © 2025 Valmo. All rights reserved.
-              </p>
->>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
-            </div>
-            <div className="flex space-x-4 sm:space-x-6 text-xs sm:text-sm">
-              <a href="/privacy" className="hover:text-white transition-colors">
-                Privacy Policy
-              </a>
-              <a href="/terms" className="hover:text-white transition-colors">
-                Terms of Use
-              </a>
-            </div>
-          </div>
+      {/* Footer */}
+      <footer className="bg-gray-800 text-gray-300 py-6 mt-8">
+        <div className="container mx-auto px-4 text-center">
+          <p className="text-sm">
+            © {new Date().getFullYear()} VALMO. All rights reserved.
+          </p>
         </div>
       </footer>
-    </>
+    </div>
   );
 };
 

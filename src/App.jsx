@@ -28,7 +28,7 @@ import AgentDashboard from "./pages/agent/agent-dashboard";
 
 function App() {
   return (
-    <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+    <Router>
       <div className="App">
         <Routes>
           <Route path="/" element={<HomePage />} />

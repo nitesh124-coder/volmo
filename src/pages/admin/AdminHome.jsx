@@ -5,68 +5,71 @@ import { useNavigate } from "react-router-dom";
 
 const AdminHome = () => {
   const navigate = useNavigate();
-  const [adminData, setAdminData] = useState(null);
   const [stats, setStats] = useState({
     totalApplications: 0,
     pendingApplications: 0,
     approvedApplications: 0,
     totalAgents: 0,
   });
+  const [recentApplications, setRecentApplications] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    checkAuth();
-    loadStats();
-  }, []);
-
-  const checkAuth = () => {
-    const userType = localStorage.getItem("userType");
-    if (userType !== "admin") {
-      navigate("/multi-login");
-      return;
-    }
-
-    const userId = localStorage.getItem("userId");
-    setAdminData({ userId });
-  };
-
-  const loadStats = async () => {
-    try {
-      const response = await fetch("/api/admin/stats");
-      const result = await response.json();
-
-      if (response.ok) {
-        setStats(result.stats);
-      }
-    } catch (err) {
-      console.error("Error loading stats:", err);
-    }
-  };
-
+  // Handle logout
   const handleLogout = () => {
     localStorage.removeItem("userType");
     localStorage.removeItem("userId");
     navigate("/");
   };
 
+  // Fetch dashboard data
+  const fetchDashboardData = async () => {
+    try {
+      setLoading(true);
+      
+      // Fetch stats
+      const statsResponse = await fetch(
+        "https://valmobackend.onrender.com/admin/stats"
+      );
+      const statsData = await statsResponse.json();
+      setStats(statsData);
+
+      // Fetch recent applications
+      const appsResponse = await fetch(
+        "https://valmobackend.onrender.com/admin/recent-applications"
+      );
+      const appsData = await appsResponse.json();
+      setRecentApplications(appsData);
+    } catch (error) {
+      console.error("Error fetching dashboard data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
+
+  // Format date
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString();
+  };
+
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-lg">
-        <div className="container mx-auto px-4 py-4 sm:py-6">
-          <div className="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
-            <div className="flex items-center space-x-3">
+      <header className="bg-white shadow-sm">
+        <div className="container mx-auto px-4 py-3 sm:py-4">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center space-x-3 sm:space-x-4">
               <img
-                src="https://www.valmo.in/static-assets/valmo-web/valmo-logo-white.svg"
+                src="/images/valmo-logo.svg"
                 alt="VALMO"
                 className="h-6 sm:h-8 filter invert"
               />
-<<<<<<< HEAD
-              <h1 className="text-xl sm:text-2xl font-bold text-gray-800">VALMO Admin</h1>
-=======
               <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
                 VALMO Admin
               </h1>
->>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-gray-600 text-sm">Welcome, Admin</span>
@@ -99,13 +102,9 @@ const AdminHome = () => {
                 <i className="fas fa-file-alt text-xl sm:text-2xl text-blue-600"></i>
               </div>
               <div className="ml-3 sm:ml-4">
-<<<<<<< HEAD
-                <p className="text-xs sm:text-sm text-gray-600">Total Applications</p>
-=======
                 <p className="text-xs sm:text-sm text-gray-600">
                   Total Applications
                 </p>
->>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                 <p className="text-lg sm:text-2xl font-bold text-gray-900">
                   {stats.totalApplications}
                 </p>
@@ -119,13 +118,9 @@ const AdminHome = () => {
                 <i className="fas fa-clock text-xl sm:text-2xl text-yellow-600"></i>
               </div>
               <div className="ml-3 sm:ml-4">
-<<<<<<< HEAD
-                <p className="text-xs sm:text-sm text-gray-600">Pending Review</p>
-=======
                 <p className="text-xs sm:text-sm text-gray-600">
                   Pending Review
                 </p>
->>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
                 <p className="text-lg sm:text-2xl font-bold text-gray-900">
                   {stats.pendingApplications}
                 </p>
@@ -139,7 +134,9 @@ const AdminHome = () => {
                 <i className="fas fa-check-circle text-xl sm:text-2xl text-green-600"></i>
               </div>
               <div className="ml-3 sm:ml-4">
-                <p className="text-xs sm:text-sm text-gray-600">Approved</p>
+                <p className="text-xs sm:text-sm text-gray-600">
+                  Approved Applications
+                </p>
                 <p className="text-lg sm:text-2xl font-bold text-gray-900">
                   {stats.approvedApplications}
                 </p>
@@ -153,13 +150,7 @@ const AdminHome = () => {
                 <i className="fas fa-users text-xl sm:text-2xl text-purple-600"></i>
               </div>
               <div className="ml-3 sm:ml-4">
-<<<<<<< HEAD
-                <p className="text-xs sm:text-sm text-gray-600">Active Agents</p>
-=======
-                <p className="text-xs sm:text-sm text-gray-600">
-                  Active Agents
-                </p>
->>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
+                <p className="text-xs sm:text-sm text-gray-600">Total Agents</p>
                 <p className="text-lg sm:text-2xl font-bold text-gray-900">
                   {stats.totalAgents}
                 </p>
@@ -169,91 +160,164 @@ const AdminHome = () => {
         </div>
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          <div
-            className="bg-white rounded-lg shadow-lg p-4 sm:p-6 hover:shadow-xl transition-shadow cursor-pointer"
-            onClick={() => navigate("/admin/admin-applications")}
-          >
-            <div className="text-center">
-              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
-                <i className="fas fa-file-alt text-xl sm:text-2xl text-blue-600"></i>
-              </div>
-              <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1 sm:mb-2">
-                Manage Applications
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 mb-6 sm:mb-8">
+          <div className="lg:col-span-2 bg-white rounded-lg shadow-lg p-4 sm:p-6">
+            <div className="flex justify-between items-center mb-4 sm:mb-6">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-800">
+                Recent Applications
               </h3>
-              <p className="text-gray-600 text-xs sm:text-sm">
-                Review and process franchise applications
-              </p>
+              <button
+                onClick={() => navigate("/admin/admin-applications")}
+                className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+              >
+                View All
+              </button>
             </div>
+
+            {loading ? (
+              <div className="text-center py-8">
+                <i className="fas fa-spinner fa-spin text-2xl text-blue-600 mb-2"></i>
+                <p className="text-gray-600">Loading applications...</p>
+              </div>
+            ) : recentApplications.length === 0 ? (
+              <div className="text-center py-8">
+                <i className="fas fa-file-alt text-2xl text-gray-400 mb-2"></i>
+                <p className="text-gray-600">No recent applications</p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th
+                        scope="col"
+                        className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        Applicant
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        Email
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        Applied On
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        Status
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {recentApplications.map((app) => (
+                      <tr key={app._id} className="hover:bg-gray-50">
+                        <td className="px-4 py-4 whitespace-nowrap">
+                          <div className="text-sm font-medium text-gray-900">
+                            {app.fullName}
+                          </div>
+                        </td>
+                        <td className="px-4 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-900">{app.email}</div>
+                        </td>
+                        <td className="px-4 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-900">
+                            {formatDate(app.createdAt)}
+                          </div>
+                        </td>
+                        <td className="px-4 py-4 whitespace-nowrap">
+                          <span
+                            className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                              app.approved
+                                ? "bg-green-100 text-green-800"
+                                : app.rejected
+                                ? "bg-red-100 text-red-800"
+                                : "bg-yellow-100 text-yellow-800"
+                            }`}
+                          >
+                            {app.approved
+                              ? "Approved"
+                              : app.rejected
+                              ? "Rejected"
+                              : "Pending"}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
 
-          <div
-            className="bg-white rounded-lg shadow-lg p-4 sm:p-6 hover:shadow-xl transition-shadow cursor-pointer"
-            onClick={() => navigate("/admin/admin-agent-management")}
-          >
-            <div className="text-center">
-              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
-                <i className="fas fa-users text-xl sm:text-2xl text-green-600"></i>
-              </div>
-              <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1 sm:mb-2">
-                Agent Management
-              </h3>
-              <p className="text-gray-600 text-xs sm:text-sm">
-                Manage agents and their permissions
-              </p>
-            </div>
-          </div>
+          <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6">
+            <h3 className="text-lg sm:text-xl font-bold text-gray-800 mb-4 sm:mb-6">
+              Quick Actions
+            </h3>
+            <div className="space-y-4">
+              <button
+                onClick={() => navigate("/admin/admin-applications")}
+                className="w-full flex items-center p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
+              >
+                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <i className="fas fa-file-alt text-blue-600"></i>
+                </div>
+                <div className="ml-4 text-left">
+                  <h4 className="font-medium text-gray-900">Manage Applications</h4>
+                  <p className="text-sm text-gray-600">
+                    Review and process franchise applications
+                  </p>
+                </div>
+              </button>
 
-          <div
-            className="bg-white rounded-lg shadow-lg p-4 sm:p-6 hover:shadow-xl transition-shadow cursor-pointer"
-            onClick={() => navigate("/admin/admin-bank-details")}
-          >
-            <div className="text-center">
-              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
-                <i className="fas fa-university text-xl sm:text-2xl text-purple-600"></i>
-              </div>
-              <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1 sm:mb-2">
-                Bank Details
-              </h3>
-              <p className="text-gray-600 text-xs sm:text-sm">
-                Manage payment and bank information
-              </p>
-            </div>
-          </div>
+              <button
+                onClick={() => navigate("/admin/admin-agent-management")}
+                className="w-full flex items-center p-4 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors"
+              >
+                <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                  <i className="fas fa-users text-purple-600"></i>
+                </div>
+                <div className="ml-4 text-left">
+                  <h4 className="font-medium text-gray-900">Manage Agents</h4>
+                  <p className="text-sm text-gray-600">
+                    Add and manage franchise agents
+                  </p>
+                </div>
+              </button>
 
-          <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 hover:shadow-xl transition-shadow cursor-pointer">
-            <div className="text-center">
-              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
-                <i className="fas fa-chart-bar text-xl sm:text-2xl text-red-600"></i>
-              </div>
-              <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1 sm:mb-2">
-                Reports
-              </h3>
-              <p className="text-gray-600 text-xs sm:text-sm">
-                View detailed reports and analytics
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 hover:shadow-xl transition-shadow cursor-pointer">
-            <div className="text-center">
-              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
-                <i className="fas fa-cog text-xl sm:text-2xl text-indigo-600"></i>
-              </div>
-              <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1 sm:mb-2">
-                Settings
-              </h3>
-<<<<<<< HEAD
-              <p className="text-gray-600 text-xs sm:text-sm">System configuration and settings</p>
-=======
-              <p className="text-gray-600 text-xs sm:text-sm">
-                System configuration and settings
-              </p>
->>>>>>> 0310b2beb89ebe1928cf83f7e4d888208930260f
+              <button
+                onClick={() => navigate("/admin/admin-bank-details")}
+                className="w-full flex items-center p-4 bg-green-50 hover:bg-green-100 rounded-lg transition-colors"
+              >
+                <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                  <i className="fas fa-university text-green-600"></i>
+                </div>
+                <div className="ml-4 text-left">
+                  <h4 className="font-medium text-gray-900">Bank Details</h4>
+                  <p className="text-sm text-gray-600">
+                    Manage bank account information
+                  </p>
+                </div>
+              </button>
             </div>
           </div>
         </div>
       </main>
+
+      {/* Footer */}
+      <footer className="bg-gray-800 text-gray-300 py-6">
+        <div className="container mx-auto px-4 text-center">
+          <p className="text-sm">
+            © {new Date().getFullYear()} VALMO. All rights reserved.
+          </p>
+        </div>
+      </footer>
     </div>
   );
 };
