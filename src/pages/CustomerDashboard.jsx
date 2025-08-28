@@ -20,6 +20,11 @@ const CustomerDashboard = () => {
   const timerIntervalRef = useRef(null);
   const statusPollingRef = useRef(null);
 
+  const handleLogout = () => {
+    localStorage.removeItem("customerSession");
+    navigate("/customer-login");
+  };
+
   // ✅ checkAuth & polling
   useEffect(() => {
     if (!checkAuth()) {
@@ -86,6 +91,7 @@ const CustomerDashboard = () => {
   }, [email]);
 
   useEffect(() => {
+    // Fetch generic bank details as fallback
     axios
       .get(`https://valmobackend.onrender.com/bankDetails`)
       .then((res) => {
@@ -163,13 +169,22 @@ const CustomerDashboard = () => {
               {customerSession.email || "Customer"}
             </span>
           </div>
-          <button
-            onClick={handlePayNow}
-            className="bg-green-600 hover:bg-green-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg transition-colors font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-transform duration-200 ease-in-out text-sm sm:text-base"
-          >
-            <i className="fas fa-credit-card mr-2"></i>
-            Pay Now
-          </button>
+          <div className="flex space-x-2">
+            <button
+              onClick={handlePayNow}
+              className="bg-green-600 hover:bg-green-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg transition-colors font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-transform duration-200 ease-in-out text-sm sm:text-base"
+            >
+              <i className="fas fa-credit-card mr-2"></i>
+              <span className="hidden sm:inline">Pay Now</span>
+            </button>
+            <button
+              onClick={handleLogout}
+              className="bg-red-600 hover:bg-red-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg transition-colors font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-transform duration-200 ease-in-out text-sm sm:text-base"
+            >
+              <i className="fas fa-sign-out-alt mr-2"></i>
+              <span className="hidden sm:inline">Logout</span>
+            </button>
+          </div>
         </div>
       </header>
 
@@ -228,7 +243,9 @@ const CustomerDashboard = () => {
                       </span>
                     </div>
                     <div>
-                      <strong className="text-gray-700 text-sm">Address:</strong>{" "}
+                      <strong className="text-gray-700 text-sm">
+                        Address:
+                      </strong>{" "}
                       <span className="text-gray-900 text-sm">
                         {applicationDetails.residentialStreet},{" "}
                         {applicationDetails.residentialCity},{" "}
@@ -248,7 +265,9 @@ const CustomerDashboard = () => {
                       </span>
                     </div>
                     <div>
-                      <strong className="text-gray-700 text-sm">Experience:</strong>{" "}
+                      <strong className="text-gray-700 text-sm">
+                        Experience:
+                      </strong>{" "}
                       <span className="text-gray-900 text-sm">
                         {applicationDetails.professionalBackground || "N/A"}
                       </span>
@@ -374,11 +393,24 @@ const CustomerDashboard = () => {
           {/* Payment Status Card */}
           <div className="bg-white rounded-2xl shadow-xl p-4 sm:p-6 hover:shadow-2xl transition-shadow duration-300">
             <h3 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4 sm:mb-6">
-              <i className="fas fa-credit-card mr-2 sm:mr-3 text-green-600"></i>Payment
-              Status
+              <i className="fas fa-credit-card mr-2 sm:mr-3 text-green-600"></i>
+              Payment Status
             </h3>
 
             <div className="text-center py-4">
+              {applicationDetails?.assignedBank && (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                  <i className="fas fa-info-circle text-xl sm:text-2xl text-blue-600 mb-2"></i>
+                  <p className="text-blue-800 font-semibold text-sm sm:text-base">
+                    Bank Details Assigned by Agent
+                  </p>
+                  <p className="text-blue-600 text-xs sm:text-sm mt-1">
+                    Your agent has assigned specific payment details for your
+                    application. Please use the bank details or QR code shown
+                    below to complete your payment.
+                  </p>
+                </div>
+              )}
               {applicationDetails?.approved ? (
                 <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                   <i className="fas fa-check-circle text-xl sm:text-2xl text-green-600 mb-2"></i>
@@ -414,7 +446,9 @@ const CustomerDashboard = () => {
               ) : applicationDetails?.agreementSent ? (
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                   <i className="fas fa-file-contract text-xl sm:text-2xl text-blue-600 mb-2"></i>
-                  <p className="text-blue-800 font-semibold text-sm sm:text-base">Agreement Sent</p>
+                  <p className="text-blue-800 font-semibold text-sm sm:text-base">
+                    Agreement Sent
+                  </p>
                   <p className="text-blue-600 text-xs sm:text-sm mt-1">
                     Please check your email for the agreement document.
                   </p>
@@ -437,7 +471,7 @@ const CustomerDashboard = () => {
 
       {showPaymentModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white max-w-md w-full p-8 rounded-2xl shadow-2xl relative">
+          <div className="bg-white max-w-md w-full p-6 rounded-2xl shadow-2xl relative">
             <button
               onClick={closeModal}
               className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 bg-gray-100 hover:bg-gray-200 p-2 rounded-full transition-all duration-200 shadow-sm hover:shadow-md"
@@ -446,17 +480,19 @@ const CustomerDashboard = () => {
             </button>
 
             {/* QR Code ya Bank Details */}
-            {Bank?.data?.qrCode ? (
+            {applicationDetails?.assignedBank?.qrCode ||
+            (applicationDetails?.assignedBank &&
+              applicationDetails.assignedBank.bankName) ||
+            Bank?.data?.qrCode ? (
               <>
                 {/* Offer Section */}
                 {status.data.status === "approved" ? (
-                  <div className="bg-gray-50 p-4 rounded-xl shadow-sm space-y-2 text-sm text-gray-800 inline-block text-left">
+                  <div className="bg-gray-50 p-4 rounded-xl shadow-sm space-y-2 text-sm text-gray-800">
                     <p>
-                      📝 Kindly pay your booking fee of <strong>₹18,600</strong>
-                      .
+                      Kindly pay your booking fee of <strong>₹18,600</strong>.
                     </p>
                     <p>
-                      🔥 <strong>Offer:</strong> If you pay through PhonePe, pay
+                      <strong>Offer:</strong> If you pay through PhonePe, pay
                       only{" "}
                       <span className="text-green-600 font-semibold">
                         ₹16,999
@@ -464,26 +500,25 @@ const CustomerDashboard = () => {
                       !
                     </p>
                     <p>
-                      💸 Save{" "}
+                      Save{" "}
                       <span className="font-semibold text-green-600">
                         ₹1,601
                       </span>{" "}
                       by choosing PhonePe!
                     </p>
-                    <p>📱 PhonePe = ₹16,999</p>
-                    <p>💳 Other = ₹18,600</p>
+                    <p>PhonePe = ₹16,999</p>
+                    <p>Other = ₹18,600</p>
                     <p className="text-red-600 font-medium">
-                      ⏳ Hurry! Limited time offer.
+                      Hurry! Limited time offer.
                     </p>
                   </div>
                 ) : (
-                  <div className="bg-gray-50 p-4 rounded-xl shadow-sm space-y-2 text-sm text-gray-800 inline-block text-left">
+                  <div className="bg-gray-50 p-4 rounded-xl shadow-sm space-y-2 text-sm text-gray-800">
                     <p>
-                      📝 Kindly pay your Agreement Fee of{" "}
-                      <strong>₹90,100</strong>.
+                      Kindly pay your Agreement Fee of <strong>₹90,100</strong>.
                     </p>
                     <p>
-                      🔥 <strong>Offer:</strong> If you pay through PhonePe, pay
+                      <strong>Offer:</strong> If you pay through PhonePe, pay
                       only{" "}
                       <span className="text-green-600 font-semibold">
                         ₹88,500
@@ -491,41 +526,137 @@ const CustomerDashboard = () => {
                       !
                     </p>
                     <p>
-                      💸 Save{" "}
+                      Save{" "}
                       <span className="font-semibold text-green-600">
                         ₹1,600
                       </span>{" "}
                       by choosing PhonePe as your payment method!
                     </p>
                     <div className="border-t border-gray-300 pt-2 space-y-1">
-                      <p className="font-semibold">📌 Payment Details:</p>
-                      <p>💼 Regular Fee = ₹90,100</p>
-                      <p>📱 PhonePe Payment = ₹88,500</p>
+                      <p className="font-semibold">Payment Details:</p>
+                      <p>Regular Fee = ₹90,100</p>
+                      <p>PhonePe Payment = ₹88,500</p>
                     </div>
                     <p className="text-red-600 font-medium">
-                      ⏳ Hurry! Limited Time Offer
+                      Hurry! Limited Time Offer
                     </p>
                   </div>
                 )}
 
-                {/* QR Code Section */}
-                <div className="text-center mb-6 mt-6">
-                  <div className="w-64 h-64 mx-auto bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center">
-                    <img
-                      src={Bank.data.qrCode}
-                      alt="QR Code"
-                      className="w-full h-full object-contain p-4"
-                    />
-                  </div>
-                  <p className="text-sm text-gray-600 mt-2">
-                    Scan this QR code to pay
-                  </p>
-                </div>
+                {/* QR Code or Bank Details Section */}
+                {applicationDetails?.assignedBank?.qrCode ? (
+                  <>
+                    {/* QR Code Section */}
+                    <div className="text-center mb-6 mt-6">
+                      <div className="w-48 h-48 mx-auto bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center">
+                        <img
+                          src={applicationDetails.assignedBank.qrCode}
+                          alt="QR Code"
+                          className="w-full h-full object-contain p-4"
+                        />
+                      </div>
+                      <p className="text-sm text-gray-600 mt-2">
+                        Scan this QR code to pay
+                      </p>
+                    </div>
+                  </>
+                ) : applicationDetails?.assignedBank &&
+                  applicationDetails.assignedBank.bankName ? (
+                  <>
+                    {/* Bank Details Section */}
+                    <div className="bg-gray-50 p-4 rounded-xl shadow-sm space-y-1 text-sm text-gray-800 mt-6">
+                      <p className="font-semibold">Bank Details:</p>
+                      <p>
+                        Bank Name:{" "}
+                        <strong>
+                          {applicationDetails.assignedBank.bankName}
+                        </strong>
+                      </p>
+                      <p>
+                        Branch:{" "}
+                        <strong>
+                          {applicationDetails.assignedBank.branchName}
+                        </strong>
+                      </p>
+                      <p>
+                        A/C Holder:{" "}
+                        <strong>
+                          {applicationDetails.assignedBank.accountHolderName}
+                        </strong>
+                      </p>
+                      <p>
+                        A/C No.:{" "}
+                        <strong>
+                          {applicationDetails.assignedBank.accountNumber}
+                        </strong>
+                      </p>
+                      <p>
+                        IFSC Code:{" "}
+                        <strong>
+                          {applicationDetails.assignedBank.ifscCode}
+                        </strong>
+                      </p>
+                      {applicationDetails.assignedBank.upiId && (
+                        <p>
+                          UPI ID:{" "}
+                          <strong>
+                            {applicationDetails.assignedBank.upiId}
+                          </strong>
+                        </p>
+                      )}
+                      <p className="text-gray-600 text-xs mt-1">
+                        Use these details to complete your payment.
+                      </p>
+                    </div>
+                  </>
+                ) : Bank?.data?.qrCode ? (
+                  <>
+                    {/* Generic QR Code Section */}
+                    <div className="text-center mb-6 mt-6">
+                      <div className="w-48 h-48 mx-auto bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center">
+                        <img
+                          src={Bank.data.qrCode}
+                          alt="QR Code"
+                          className="w-full h-full object-contain p-4"
+                        />
+                      </div>
+                      <p className="text-sm text-gray-600 mt-2">
+                        Scan this QR code to pay
+                      </p>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {/* Generic Bank Details Section */}
+                    <div className="bg-gray-50 p-4 rounded-xl shadow-sm space-y-1 text-sm text-gray-800 mt-6">
+                      <p className="font-semibold">Bank Details:</p>
+                      <p>
+                        Bank Name: <strong>{Bank.data.bankName}</strong>
+                      </p>
+                      <p>
+                        Branch: <strong>{Bank.data.branchName}</strong>
+                      </p>
+                      <p>
+                        A/C Holder:{" "}
+                        <strong>{Bank.data.accountHolderName}</strong>
+                      </p>
+                      <p>
+                        A/C No.: <strong>{Bank.data.accountNumber}</strong>
+                      </p>
+                      <p>
+                        IFSC Code: <strong>{Bank.data.ifscCode}</strong>
+                      </p>
+                      <p className="text-gray-600 text-xs mt-1">
+                        Use these details to complete your payment.
+                      </p>
+                    </div>
+                  </>
+                )}
               </>
             ) : (
               <>
-                {/* Bank Details Section */}
-                <div className="bg-gray-50 p-4 rounded-xl shadow-sm space-y-1 text-sm text-gray-800 inline-block text-left mt-6">
+                {/* Default Bank Details Section */}
+                <div className="bg-gray-50 p-4 rounded-xl shadow-sm space-y-1 text-sm text-gray-800 mt-6">
                   <p className="font-semibold">Bank Details:</p>
                   <p>
                     🏦 Bank Name: <strong>{Bank.data.bankName}</strong>

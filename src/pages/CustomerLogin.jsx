@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 
@@ -9,6 +9,16 @@ const CustomerLogin = () => {
   const [formData, setFormData] = useState({ userId: "", password: "" });
   const [message, setMessage] = useState({ text: "", type: "" });
   const [isLoading, setIsLoading] = useState(false);
+
+  // Check if customer is already logged in
+  useEffect(() => {
+    const session = localStorage.getItem("customerSession");
+    if (session) {
+      const parsedSession = JSON.parse(session);
+      // Redirect to customer dashboard
+      navigate(`/customer-dashboard/${parsedSession.email}`);
+    }
+  }, [navigate]);
 
   const handleInputChange = (e) => {
     setFormData({
@@ -116,8 +126,12 @@ const CustomerLogin = () => {
                   className="h-6 sm:h-8"
                 />
               </div>
-              <p className="text-gray-600 text-xs sm:text-sm mb-1 sm:mb-2">Welcome back !!</p>
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Sign In</h2>
+              <p className="text-gray-600 text-xs sm:text-sm mb-1 sm:mb-2">
+                Welcome back !!
+              </p>
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
+                Sign In
+              </h2>
             </div>
 
             {message.text && (
@@ -186,13 +200,31 @@ const CustomerLogin = () => {
               >
                 {isLoading ? (
                   <>
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    <svg
+                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
                     </svg>
                     Signing In...
                   </>
-                ) : "Sign In"}
+                ) : (
+                  "Sign In"
+                )}
               </button>
             </form>
 

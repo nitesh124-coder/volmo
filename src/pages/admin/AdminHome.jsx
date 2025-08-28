@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 const AdminHome = () => {
   const navigate = useNavigate();
   const [adminData, setAdminData] = useState(null);
-  const [TotalCount, setTotalCount] = useState();
   const [stats, setStats] = useState({
     totalApplications: 0,
     pendingApplications: 0,
@@ -42,25 +41,6 @@ const AdminHome = () => {
       console.error("Error loading stats:", err);
     }
   };
-
-  const fetchApplications = async () => {
-    try {
-      const res = await fetch(
-        "https://valmobackend.onrender.com/getApplication"
-      );
-      const data = await res.json();
-
-      if (data.success) {
-        setTotalCount(data.data.length);
-      }
-    } catch (error) {
-      console.error("Error fetching applications:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchApplications();
-  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("userType");
@@ -119,7 +99,7 @@ const AdminHome = () => {
                   Total Applications
                 </p>
                 <p className="text-lg sm:text-2xl font-bold text-gray-900">
-                  {TotalCount}
+                  {stats.totalApplications}
                 </p>
               </div>
             </div>

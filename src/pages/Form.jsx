@@ -904,39 +904,36 @@ const Form = () => {
       {/* Toast Notification */}
       {showToast.show && (
         <div
-          className={`fixed top-6 right-6 p-4 rounded-lg shadow-xl z-50 
-      transform transition-all duration-300 ease-in-out
-      ${
-        showToast.type === "success"
-          ? "bg-gradient-to-r from-green-500 to-green-600 text-white"
-          : "bg-gradient-to-r from-red-500 to-red-600 text-white"
-      }
-    `}
+          className={`fixed top-4 left-1/2 transform -translate-x-1/2 p-4 rounded-lg shadow-lg z-50 transition-transform duration-300 ${
+            showToast.type === "success"
+              ? "bg-gradient-to-r from-green-500 to-green-600 text-white"
+              : "bg-gradient-to-r from-red-500 to-red-600 text-white"
+          }`}
         >
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center">
             {showToast.type === "success" ? (
-              <i className="fas fa-check-circle text-lg"></i>
+              <i className="fas fa-check-circle mr-2"></i>
             ) : (
-              <i className="fas fa-exclamation-circle text-lg"></i>
+              <i className="fas fa-exclamation-circle mr-2"></i>
             )}
-            <span className="text-sm font-medium">{showToast.message}</span>
+            <span>{showToast.message}</span>
           </div>
         </div>
       )}
 
       {/* Header */}
-      <header className="bg-indigo-700 text-white py-6 shadow-lg">
+      <header className="bg-indigo-700 text-white py-3 shadow-lg">
         <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
-          <div className="flex items-center space-x-3 mb-4 md:mb-0">
+          <div className="flex items-center space-x-3 mb-2 md:mb-0">
             <img
               src="https://www.valmo.in/static-assets/valmo-web/valmo-logo-white.svg"
               alt="VALMO"
-              className="h-8"
+              className="h-6"
             />
-            <h1 className="text-2xl font-bold">VALMO Logistics</h1>
+            <h1 className="text-xl font-bold">VALMO Logistics</h1>
           </div>
           <div className="text-center md:text-right">
-            <div className="text-sm">
+            <div className="text-xs">
               Application No:{" "}
               <span className="font-mono">{applicationNumber}</span>
             </div>
@@ -999,7 +996,7 @@ const Form = () => {
                   required
                   className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
                     errors.fullName ? "border-red-500" : "border-gray-300"
-                  }`}
+                  } text-gray-900 bg-white`}
                 />
                 {errors.fullName && (
                   <p className="text-red-500 text-sm mt-1">{errors.fullName}</p>
@@ -1023,7 +1020,7 @@ const Form = () => {
                     errors.fatherHusbandName
                       ? "border-red-500"
                       : "border-gray-300"
-                  }`}
+                  } text-gray-900 bg-white`}
                 />
                 {errors.fatherHusbandName && (
                   <p className="text-red-500 text-sm mt-1">
@@ -1047,7 +1044,7 @@ const Form = () => {
                   required
                   className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
                     errors.dateOfBirth ? "border-red-500" : "border-gray-300"
-                  }`}
+                  } text-gray-900 bg-white`}
                 />
                 {errors.dateOfBirth && (
                   <p className="text-red-500 text-sm mt-1">
@@ -1092,7 +1089,7 @@ const Form = () => {
                   onChange={handleInputChange}
                   className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
                     errors.nationality ? "border-red-500" : "border-gray-300"
-                  }`}
+                  } text-gray-900 bg-white`}
                 />
                 {errors.nationality && (
                   <p className="text-red-500 text-sm mt-1">
@@ -1142,7 +1139,7 @@ const Form = () => {
                   required
                   className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 uppercase ${
                     errors.panNumber ? "border-red-500" : "border-gray-300"
-                  }`}
+                  } text-gray-900 bg-white`}
                 />
                 {errors.panNumber && (
                   <p className="text-red-500 text-sm mt-1">
@@ -1166,7 +1163,7 @@ const Form = () => {
                   required
                   className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
                     errors.aadharNumber ? "border-red-500" : "border-gray-300"
-                  }`}
+                  } text-gray-900 bg-white`}
                 />
                 {errors.aadharNumber && (
                   <p className="text-red-500 text-sm mt-1">
@@ -1189,7 +1186,7 @@ const Form = () => {
                   onChange={handleInputChange}
                   className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
                     errors.passportNumber ? "border-red-500" : "border-gray-300"
-                  }`}
+                  } text-gray-900 bg-white`}
                 />
                 {errors.passportNumber && (
                   <p className="text-red-500 text-sm mt-1">
@@ -1268,7 +1265,7 @@ const Form = () => {
                   required
                   className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                     errors.mobileNumber ? "border-red-500" : "border-gray-300"
-                  }`}
+                  } text-gray-900 bg-white`}
                 />
                 {errors.mobileNumber && (
                   <p className="text-red-500 text-sm mt-1">
@@ -1293,7 +1290,7 @@ const Form = () => {
                     errors.alternateMobileNumber
                       ? "border-red-500"
                       : "border-gray-300"
-                  }`}
+                  } text-gray-900 bg-white`}
                 />
                 {errors.alternateMobileNumber && (
                   <p className="text-red-500 text-sm mt-1">
@@ -1317,7 +1314,7 @@ const Form = () => {
                   required
                   className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                     errors.email ? "border-red-500" : "border-gray-300"
-                  }`}
+                  } text-gray-900 bg-white`}
                 />
                 {errors.email && (
                   <p className="text-red-500 text-sm mt-1">{errors.email}</p>
@@ -1375,7 +1372,7 @@ const Form = () => {
                     errors.residentialStreet
                       ? "border-red-500"
                       : "border-gray-300"
-                  }`}
+                  } text-gray-900 bg-white`}
                 />
                 {errors.residentialStreet && (
                   <p className="text-red-500 text-sm mt-1">
@@ -1401,7 +1398,7 @@ const Form = () => {
                     errors.residentialCity
                       ? "border-red-500"
                       : "border-gray-300"
-                  }`}
+                  } text-gray-900 bg-white`}
                 />
                 {errors.residentialCity && (
                   <p className="text-red-500 text-sm mt-1">
@@ -1427,7 +1424,7 @@ const Form = () => {
                     errors.residentialDistrict
                       ? "border-red-500"
                       : "border-gray-300"
-                  }`}
+                  } text-gray-900 bg-white`}
                 />
                 {errors.residentialDistrict && (
                   <p className="text-red-500 text-sm mt-1">
@@ -1453,7 +1450,7 @@ const Form = () => {
                     errors.residentialState
                       ? "border-red-500"
                       : "border-gray-300"
-                  }`}
+                  } text-gray-900 bg-white`}
                 />
                 {errors.residentialState && (
                   <p className="text-red-500 text-sm mt-1">
@@ -1482,7 +1479,7 @@ const Form = () => {
                     errors.residentialPinCode
                       ? "border-red-500"
                       : "border-gray-300"
-                  }`}
+                  } text-gray-900 bg-white`}
                 />
                 {errors.residentialPinCode && (
                   <p className="text-red-500 text-sm mt-1">
@@ -1513,7 +1510,7 @@ const Form = () => {
                   onChange={handleInputChange}
                   className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
                     errors.businessName ? "border-red-500" : "border-gray-300"
-                  }`}
+                  } text-gray-900 bg-white`}
                 />
                 {errors.businessName && (
                   <p className="text-red-500 text-sm mt-1">
@@ -1566,7 +1563,7 @@ const Form = () => {
                   onChange={handleInputChange}
                   className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 uppercase ${
                     errors.gstNumber ? "border-red-500" : "border-gray-300"
-                  }`}
+                  } text-gray-900 bg-white`}
                 />
                 {errors.gstNumber && (
                   <p className="text-red-500 text-sm mt-1">
@@ -1590,7 +1587,7 @@ const Form = () => {
                   required
                   className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
                     errors.officeAddress ? "border-red-500" : "border-gray-300"
-                  }`}
+                  } text-gray-900 bg-white`}
                 />
                 {errors.officeAddress && (
                   <p className="text-red-500 text-sm mt-1">
@@ -1614,7 +1611,7 @@ const Form = () => {
                   required
                   className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
                     errors.officeCity ? "border-red-500" : "border-gray-300"
-                  }`}
+                  } text-gray-900 bg-white`}
                 />
                 {errors.officeCity && (
                   <p className="text-red-500 text-sm mt-1">
@@ -1638,7 +1635,7 @@ const Form = () => {
                   required
                   className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
                     errors.officeDistrict ? "border-red-500" : "border-gray-300"
-                  }`}
+                  } text-gray-900 bg-white`}
                 />
                 {errors.officeDistrict && (
                   <p className="text-red-500 text-sm mt-1">
@@ -1662,7 +1659,7 @@ const Form = () => {
                   required
                   className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
                     errors.officeState ? "border-red-500" : "border-gray-300"
-                  }`}
+                  } text-gray-900 bg-white`}
                 />
                 {errors.officeState && (
                   <p className="text-red-500 text-sm mt-1">
@@ -1687,7 +1684,7 @@ const Form = () => {
                   required
                   className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
                     errors.officePinCode ? "border-red-500" : "border-gray-300"
-                  }`}
+                  } text-gray-900 bg-white`}
                 />
                 {errors.officePinCode && (
                   <p className="text-red-500 text-sm mt-1">
@@ -1714,7 +1711,7 @@ const Form = () => {
                     errors.numberOfEmployees
                       ? "border-red-500"
                       : "border-gray-300"
-                  }`}
+                  } text-gray-900 bg-white`}
                 />
                 {errors.numberOfEmployees && (
                   <p className="text-red-500 text-sm mt-1">
@@ -1748,7 +1745,7 @@ const Form = () => {
                     errors.franchisePinCode
                       ? "border-red-500"
                       : "border-gray-300"
-                  }`}
+                  } text-gray-900 bg-white`}
                 />
                 {errors.franchisePinCode && (
                   <p className="text-red-500 text-sm mt-1">
@@ -1799,7 +1796,7 @@ const Form = () => {
                   min="100"
                   className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
                     errors.totalSpace ? "border-red-500" : "border-gray-300"
-                  }`}
+                  } text-gray-900 bg-white`}
                 />
                 {errors.totalSpace && (
                   <p className="text-red-500 text-sm mt-1">
@@ -1824,7 +1821,7 @@ const Form = () => {
                   min="0"
                   className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
                     errors.warehouseSpace ? "border-red-500" : "border-gray-300"
-                  }`}
+                  } text-gray-900 bg-white`}
                 />
                 {errors.warehouseSpace && (
                   <p className="text-red-500 text-sm mt-1">
@@ -2037,7 +2034,7 @@ const Form = () => {
                     rows="3"
                     className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
                       errors.loanDetails ? "border-red-500" : "border-gray-300"
-                    }`}
+                    } text-gray-900 bg-white`}
                   ></textarea>
                   {errors.loanDetails && (
                     <p className="text-red-500 text-sm mt-1">
@@ -2068,7 +2065,7 @@ const Form = () => {
                       errors.expectedRevenue
                         ? "border-red-500"
                         : "border-gray-300"
-                    }`}
+                    } text-gray-900 bg-white`}
                   />
                   <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                     <span className="text-gray-500 sm:text-sm">.00</span>
@@ -2146,7 +2143,7 @@ const Form = () => {
                       errors.vehicleDetails
                         ? "border-red-500"
                         : "border-gray-300"
-                    }`}
+                    } text-gray-900 bg-white`}
                   ></textarea>
                   {errors.vehicleDetails && (
                     <p className="text-red-500 text-sm mt-1">
@@ -2246,7 +2243,7 @@ const Form = () => {
                       errors.experienceDetails
                         ? "border-red-500"
                         : "border-gray-300"
-                    }`}
+                    } text-gray-900 bg-white`}
                   ></textarea>
                   {errors.experienceDetails && (
                     <p className="text-red-500 text-sm mt-1">
@@ -2271,7 +2268,7 @@ const Form = () => {
                   min="1"
                   className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
                     errors.staffCount ? "border-red-500" : "border-gray-300"
-                  }`}
+                  } text-gray-900 bg-white`}
                 />
                 {errors.staffCount && (
                   <p className="text-red-500 text-sm mt-1">
@@ -2342,7 +2339,7 @@ const Form = () => {
                     errors.professionalBackground
                       ? "border-red-500"
                       : "border-gray-300"
-                  }`}
+                  } text-gray-900 bg-white`}
                 ></textarea>
                 {errors.professionalBackground && (
                   <p className="text-red-500 text-sm mt-1">
@@ -2365,7 +2362,7 @@ const Form = () => {
                   rows="3"
                   className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
                     errors.certifications ? "border-red-500" : "border-gray-300"
-                  }`}
+                  } text-gray-900 bg-white`}
                 ></textarea>
                 {errors.certifications && (
                   <p className="text-red-500 text-sm mt-1">
@@ -2436,7 +2433,7 @@ const Form = () => {
                       errors.franchiseDetails
                         ? "border-red-500"
                         : "border-gray-300"
-                    }`}
+                    } text-gray-900 bg-white`}
                   />
                   {errors.franchiseDetails && (
                     <p className="text-red-500 text-sm mt-1">
@@ -2497,7 +2494,7 @@ const Form = () => {
                     rows="3"
                     className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
                       errors.legalDetails ? "border-red-500" : "border-gray-300"
-                    }`}
+                    } text-gray-900 bg-white`}
                   ></textarea>
                   {errors.legalDetails && (
                     <p className="text-red-500 text-sm mt-1">
@@ -2533,7 +2530,7 @@ const Form = () => {
                         errors.reference1Name
                           ? "border-red-500"
                           : "border-gray-300"
-                      }`}
+                      } text-gray-900 bg-white`}
                     />
                     {errors.reference1Name && (
                       <p className="text-red-500 text-sm mt-1">
@@ -2558,7 +2555,7 @@ const Form = () => {
                         errors.reference1Contact
                           ? "border-red-500"
                           : "border-gray-300"
-                      }`}
+                      } text-gray-900 bg-white`}
                     />
                     {errors.reference1Contact && (
                       <p className="text-red-500 text-sm mt-1">
@@ -2583,7 +2580,7 @@ const Form = () => {
                         errors.reference1Relationship
                           ? "border-red-500"
                           : "border-gray-300"
-                      }`}
+                      } text-gray-900 bg-white`}
                     />
                     {errors.reference1Relationship && (
                       <p className="text-red-500 text-sm mt-1">
@@ -2615,7 +2612,7 @@ const Form = () => {
                         errors.reference2Name
                           ? "border-red-500"
                           : "border-gray-300"
-                      }`}
+                      } text-gray-900 bg-white`}
                     />
                     {errors.reference2Name && (
                       <p className="text-red-500 text-sm mt-1">
@@ -2640,7 +2637,7 @@ const Form = () => {
                         errors.reference2Contact
                           ? "border-red-500"
                           : "border-gray-300"
-                      }`}
+                      } text-gray-900 bg-white`}
                     />
                     {errors.reference2Contact && (
                       <p className="text-red-500 text-sm mt-1">
@@ -2665,7 +2662,7 @@ const Form = () => {
                         errors.reference2Relationship
                           ? "border-red-500"
                           : "border-gray-300"
-                      }`}
+                      } text-gray-900 bg-white`}
                     />
                     {errors.reference2Relationship && (
                       <p className="text-red-500 text-sm mt-1">
@@ -2699,7 +2696,7 @@ const Form = () => {
                   required
                   className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
                     errors.bankName ? "border-red-500" : "border-gray-300"
-                  }`}
+                  } text-gray-900 bg-white`}
                 />
                 {errors.bankName && (
                   <p className="text-red-500 text-sm mt-1">{errors.bankName}</p>
@@ -2721,7 +2718,7 @@ const Form = () => {
                   required
                   className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
                     errors.bankBranch ? "border-red-500" : "border-gray-300"
-                  }`}
+                  } text-gray-900 bg-white`}
                 />
                 {errors.bankBranch && (
                   <p className="text-red-500 text-sm mt-1">
@@ -2747,7 +2744,7 @@ const Form = () => {
                     errors.accountHolderName
                       ? "border-red-500"
                       : "border-gray-300"
-                  }`}
+                  } text-gray-900 bg-white`}
                 />
                 {errors.accountHolderName && (
                   <p className="text-red-500 text-sm mt-1">
@@ -2771,7 +2768,7 @@ const Form = () => {
                   required
                   className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
                     errors.accountNumber ? "border-red-500" : "border-gray-300"
-                  }`}
+                  } text-gray-900 bg-white`}
                 />
                 {errors.accountNumber && (
                   <p className="text-red-500 text-sm mt-1">
@@ -2795,7 +2792,7 @@ const Form = () => {
                   required
                   className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 uppercase ${
                     errors.ifscCode ? "border-red-500" : "border-gray-300"
-                  }`}
+                  } text-gray-900 bg-white`}
                 />
                 {errors.ifscCode && (
                   <p className="text-red-500 text-sm mt-1">{errors.ifscCode}</p>
@@ -2816,7 +2813,7 @@ const Form = () => {
                   onChange={handleInputChange}
                   className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
                     errors.upiId ? "border-red-500" : "border-gray-300"
-                  }`}
+                  } text-gray-900 bg-white`}
                 />
                 {errors.upiId && (
                   <p className="text-red-500 text-sm mt-1">{errors.upiId}</p>
@@ -3174,14 +3171,7 @@ const Form = () => {
                 <span className="font-mono">{applicationNumber}</span>
               </p>
             </div>
-            <div className="flex space-x-6 text-sm">
-              <a href="/privacy" className="hover:text-white transition-colors">
-                Privacy Policy
-              </a>
-              <a href="/terms" className="hover:text-white transition-colors">
-                Terms of Use
-              </a>
-            </div>
+            <div className="flex space-x-6 text-sm"></div>
           </div>
         </div>
       </footer>

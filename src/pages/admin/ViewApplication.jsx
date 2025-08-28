@@ -1,9 +1,10 @@
 /** @format */
 
 import React, { useState, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const ViewApplication = () => {
+  const navigate = useNavigate();
   const { email } = useParams();
   const decodedEmail = decodeURIComponent(email);
   // State management
@@ -204,7 +205,13 @@ const ViewApplication = () => {
     }
   };
 
+  // Check if user is admin
   useEffect(() => {
+    const userType = localStorage.getItem("userType");
+    if (userType !== "admin") {
+      navigate("/multi-login");
+      return;
+    }
     loadApplicationDetails();
   }, []);
 
@@ -885,6 +892,20 @@ const ViewApplication = () => {
     validateInviteToken();
   }, []);
 
+  // Check auth on component mount
+  useEffect(() => {
+    const userType = localStorage.getItem("userType");
+    if (userType !== "admin") {
+      navigate("/multi-login");
+    }
+  }, [navigate]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("userType");
+    localStorage.removeItem("userId");
+    navigate("/");
+  };
+
   // Handle conditional field changes
   useEffect(() => {
     if (formData.hasLoans === true) {
@@ -957,19 +978,28 @@ const ViewApplication = () => {
             />
             <h1 className="text-xl sm:text-2xl font-bold">VALMO Logistics</h1>
           </div>
-          <div className="text-center sm:text-right">
-            <div className="text-xs sm:text-sm">
-              Application No:{" "}
-              <span className="font-mono">{applicationNumber}</span>
-            </div>
-            {agentInfo && (
-              <div className="text-xs mt-1">
-                <p>
-                  Referred by: <strong>{agentInfo.agentName}</strong>
-                </p>
-                <p>Agent ID: {agentInfo.agentId}</p>
+          <div className="flex items-center space-x-4">
+            <div className="text-center sm:text-right">
+              <div className="text-xs sm:text-sm">
+                Application No:{" "}
+                <span className="font-mono">{applicationNumber}</span>
               </div>
-            )}
+              {agentInfo && (
+                <div className="text-xs mt-1">
+                  <p>
+                    Referred by: <strong>{agentInfo.agentName}</strong>
+                  </p>
+                  <p>Agent ID: {agentInfo.agentId}</p>
+                </div>
+              )}
+            </div>
+            <button
+              onClick={handleLogout}
+              className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 sm:px-4 sm:py-2 rounded-lg transition-colors text-sm"
+            >
+              <i className="fas fa-sign-out-alt mr-1 sm:mr-2"></i>
+              <span className="hidden sm:inline">Logout</span>
+            </button>
           </div>
         </div>
       </header>

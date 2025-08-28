@@ -17,8 +17,9 @@ const AdminApplications = () => {
 
   // Logout Function
   const logout = () => {
-    alert("Logged out successfully!");
-    // navigate("/login") if using react-router
+    localStorage.removeItem("userType");
+    localStorage.removeItem("userId");
+    navigate("/");
   };
 
   // Fetch all applications
@@ -54,8 +55,13 @@ const AdminApplications = () => {
     }
   }, [searchTerm, applications]);
 
-  // Load applications on mount
+  // Check if user is admin
   useEffect(() => {
+    const userType = localStorage.getItem("userType");
+    if (userType !== "admin") {
+      navigate("/multi-login");
+      return;
+    }
     fetchApplications();
   }, []);
 
@@ -125,7 +131,7 @@ const AdminApplications = () => {
       return;
     try {
       await axios.delete(
-        `https://valmobackend.onrender.com/deleteApplication/${applicationId}`
+        `https://valmobackend.onrender.com/application/${applicationId}`
       );
       alert("Application deleted successfully ✅");
       fetchApplications(); // Refresh the list
@@ -161,32 +167,32 @@ const AdminApplications = () => {
               <i className="fas fa-chevron-down ml-1 sm:ml-2" />
             </button>
             {dropdownOpen && (
-              <div className="absolute right-0 mt-1 sm:mt-2 w-40 sm:w-48 bg-white rounded-md shadow-lg z-50">
+              <div className="absolute right-0 mt-1 sm:mt-2 w-48 bg-white rounded-md shadow-lg z-50">
                 <div className="py-1">
                   <a
-                    href="/admin/admin-home.html"
-                    className="block px-3 py-2 sm:px-4 sm:py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-100"
+                    href="/admin/admin-home"
+                    className="block px-3 py-2 sm:px-4 sm:py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-100 flex items-center"
                   >
                     <i className="fas fa-home mr-1 sm:mr-2" />
                     Home
                   </a>
                   <a
-                    href="/admin/admin-agent-management.html"
-                    className="block px-3 py-2 sm:px-4 sm:py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-100"
+                    href="/admin/admin-agent-management"
+                    className="block px-3 py-2 sm:px-4 sm:py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-100 flex items-center"
                   >
                     <i className="fas fa-users mr-1 sm:mr-2" />
                     Add Agent
                   </a>
                   <a
-                    href="/admin/admin-applications.html"
-                    className="block px-3 py-2 sm:px-4 sm:py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-100 bg-blue-50"
+                    href="/admin/admin-applications"
+                    className="block px-3 py-2 sm:px-4 sm:py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-100 bg-blue-50 flex items-center"
                   >
                     <i className="fas fa-file-alt mr-1 sm:mr-2" />
                     Applications
                   </a>
                   <a
-                    href="/admin/admin-bank-details.html"
-                    className="block px-3 py-2 sm:px-4 sm:py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-100"
+                    href="/admin/admin-bank-details"
+                    className="block px-3 py-2 sm:px-4 sm:py-2 text-xs sm:text-sm text-gray-700 hover:bg-gray-100 flex items-center"
                   >
                     <i className="fas fa-university mr-1 sm:mr-2" />
                     Bank Details
@@ -197,7 +203,7 @@ const AdminApplications = () => {
           </div>
           <button
             onClick={logout}
-            className="bg-red-500 text-white px-3 py-1 sm:px-4 sm:py-2 rounded text-xs sm:text-sm hover:bg-red-600"
+            className="bg-red-500 text-white px-3 py-1 sm:px-4 sm:py-2 rounded text-xs sm:text-sm hover:bg-red-600 flex items-center"
           >
             <i className="fas fa-sign-out-alt mr-1 sm:mr-2" />
             Logout

@@ -19,8 +19,9 @@ const AdminAgentManagement = () => {
 
   // Logout Function
   const logout = () => {
-    alert("Logged out successfully!");
-    // navigate("/login") if using react-router
+    localStorage.removeItem("userType");
+    localStorage.removeItem("userId");
+    window.location.href = "/";
   };
 
   // ✅ Fix: Form Change Handler using "name"
@@ -60,6 +61,12 @@ const AdminAgentManagement = () => {
 
   // Load agents on mount
   useEffect(() => {
+    // Check if user is admin
+    const userType = localStorage.getItem("userType");
+    if (userType !== "admin") {
+      window.location.href = "/multi-login";
+      return;
+    }
     fetchAgents();
   }, []);
 
