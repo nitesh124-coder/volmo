@@ -245,9 +245,7 @@ const AgentDashboard = () => {
     }
   };
 
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
+  const handleReject = async (appObj) => {
     // Prevent double submission
     if (rejectingApplications.has(`${appObj.email}-${appObj.name}`)) {
       return;
@@ -386,15 +384,6 @@ const AgentDashboard = () => {
 
     if (name === "pincode" && value.length === 6) {
       fetchLocation(value);
-    }
-  };
-
-  const handleEditInputChange = (e) => {
-    const { name, value } = e.target;
-    setEditFormData((prev) => ({ ...prev, [name]: value }));
-
-    if (name === "pincode" && value.length === 6) {
-      fetchEditLocation(value);
     }
   };
 
@@ -672,7 +661,16 @@ VALMO Team`;
     setIsModalOpen(false);
   };
 
-  const handleSearchChange = (e) => setSearchTerm(e.target.value);
+  const handleCopyEmailContent = () => {
+    navigator.clipboard.writeText(emailContent)
+      .then(() => {
+        alert('Email content copied to clipboard!');
+      })
+      .catch(err => {
+        console.error('Failed to copy: ', err);
+        alert('Failed to copy email content');
+      });
+  };
 
   const showMessage = (text, type) => {
     setMessage({ text, type });
